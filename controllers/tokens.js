@@ -1,4 +1,4 @@
-const Tokens = require("../models");
+const models = require("../models");
 function createToken(
   token,
   expiresIn,
@@ -6,18 +6,18 @@ function createToken(
   refreshTokenExpiresIn,
   user_id
 ) {
-  return Tokens.create(
+  return models.Token.create({
     token,
     expiresIn,
     refreshToken,
     refreshTokenExpiresIn,
-    user_id
+    user_id}
   )
     .then(data => {
       // console.log(data);
-      return Tokens.findtoken(user_id)
+      return models.Token.find({where:{user_id:user_id}})
         .then(data => {
-          return data.rows[0];
+          return data;
         })
         .catch(err => {
           throw "no token found";
@@ -29,9 +29,9 @@ function createToken(
 }
 
 function findRefreshToken(refresh_token) {
-  return Tokens.findRefreshToken(refresh_token)
+  return models.Token.find({where:{refresh_token:refresh_token}})
     .then(data => {
-      return data.rows[0];
+      return data;
     })
     .catch(err => {
       throw "refresh token not Found";
@@ -45,12 +45,12 @@ function updateToken(
   newRefreshTokenExpiryDate,
   user_id
 ) {
-  return Tokens.updateToken(
+  return models.Token.update({
     newtoken,
     newExpiryTokenDate,
     newRefreshToken,
     newRefreshTokenExpiryDate,
-    user_id
+    user_id}
   )
     .then(data => {
       return "user was updates";
@@ -62,7 +62,7 @@ function updateToken(
 
 function deleteToken(id) {
   // console.log("zezooooo", id)
-  return Tokens.deleteToken(id)
+  return models.Token.destroy({where:{id:id}})
     .then(data => {
       return " token was deleted successfully";
     })

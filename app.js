@@ -442,14 +442,14 @@ app.delete("/:id/chat/:chatId/message", (req, res) => {
 // ];
 // createCatWithProds(newCategory, newProducts)
 // app.post("/getuser", User.find);
-app.post("/signup", User.signUp);
-app.post("/login", User.logIn);
-//app.get("/", User.enter);
-app.post("/logout", User.logOut);
-app.get("/refreshtoken", User.refreshToken);
-app.get("/uploads/:name", (req, res) => {
-  res.sendFile(path.resolve("folders/uploaded", req.params.name));
-});
+// app.post("/signup", User.signUp);
+// app.post("/login", User.logIn);
+// //app.get("/", User.enter);
+// app.post("/logout", User.logOut);
+// app.get("/refreshtoken", User.refreshToken);
+// app.get("/uploads/:name", (req, res) => {
+//   res.sendFile(path.resolve("folders/uploaded", req.params.name));
+// });
 // app.post("/posts/post", isAuth, Post.create);
 // app.post("/posts/get", isAuth, Post.find);
 // app.patch("/posts/update/:id", isAuth, Post.update);
