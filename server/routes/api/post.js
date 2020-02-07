@@ -17,7 +17,7 @@ function createPost(req, res) {
     if (err) {
       res.send(err);
     }
-    res.end();
+    // res.end();
   });
 
   form.on("fileBegin", function(name, file) {
@@ -38,6 +38,14 @@ function createPost(req, res) {
     Post.create(postObj)
       .then(data => {
         if (data) {
+          // res.send(postObj);
+          Post.getAllPosts()
+            .then(data => {
+              res.send(data);
+            })
+            .catch(err => {
+              res.send(err);
+            });
         }
       })
       .catch(err => {
@@ -80,12 +88,11 @@ function updatePost(req, res) {
 }
 
 function deletePost(req, res) {
-  let { user_id } = req.body;
-  let id = req.params.id;
+  var { user_id, id } = req.body;
   Post.delete(id, user_id)
     .then(data => {
       if (data) {
-        return res.send("Deleted");
+        return res.json("Deleted");
       }
     })
     .catch(err => {

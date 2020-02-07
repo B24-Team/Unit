@@ -9,7 +9,7 @@ import { HttpClient } from "@angular/common/http";
 export class AppComponent {
   title = "Unit";
   refreshValue = "";
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     setInterval(() => {
@@ -27,6 +27,6 @@ export class AppComponent {
           localStorage.setItem("refreshtoken", data["refreshToken"]);
           console.log("localSrtorage", localStorage);
         });
-    }, 60000);
+    }, 30 * 60 * 1000); // keep it  30 * 60 * 1000
   }
 }
