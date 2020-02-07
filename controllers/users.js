@@ -3,10 +3,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const randToken = require("rand-token");
 
-const User = require("./../../../controllers/users");
-const Token = require("./../../../controllers/tokens");
-const regiteryValidation = require("./../../validation/registryValidation");
-const loginValidation = require("./../../validation/loginValidation");
+const models = require("../models");
+const regiteryValidation = require("./../server/validation/registryValidation");
+const loginValidation = require("./../server/validation/loginValidation");
 //
 const IncomingForm = require("formidable").IncomingForm;
 const path = require("path");

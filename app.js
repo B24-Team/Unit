@@ -4,7 +4,11 @@ const cors = require("cors");
 const dotenv = require("dotenv").config();
 const cookieParser = require("cookie-parser");
 var Sequelize = require('sequelize');
-const models = require('C:/Users/RBK/Desktop/Unit/models');
+const models = require('./models');
+
+const Post = require('./server/routes/api/post.js');
+const Follow = require('./server/routes/api/follow.js');
+const User = require('./server/routes/api/user.js');
 
 
 app.use(
@@ -28,7 +32,7 @@ app.use(function (req, res, next) {
 
 const port = process.env.PORT || 5000;
 
-app.use('/posts', Post)
+
 
 // const User = require("./server/routes/api/user");
 // const Post = require("./server/routes/api/post.js");
@@ -446,21 +450,23 @@ app.get("/refreshtoken", User.refreshToken);
 app.get("/uploads/:name", (req, res) => {
   res.sendFile(path.resolve("folders/uploaded", req.params.name));
 });
-app.post("/posts/post", isAuth, Post.create);
-app.post("/posts/get", isAuth, Post.find);
-app.patch("/posts/update/:id", isAuth, Post.update);
-app.post("/posts/delete", isAuth, Post.delete);
-app.get("/getAllPosts", isAuth, Post.getAllPosts);
+// app.post("/posts/post", isAuth, Post.create);
+// app.post("/posts/get", isAuth, Post.find);
+// app.patch("/posts/update/:id", isAuth, Post.update);
+// app.post("/posts/delete", isAuth, Post.delete);
+// app.get("/getAllPosts", isAuth, Post.getAllPosts);
 //
 app.use("/follow", Follow);
+app.use('/posts', Post)
+app.use('', User)
 
 //
-app.get("/getAllUsers", isAuth, User.getAll);
-app.post("/findUser", isAuth, User.getUserByName);
-app.post("/findById/", isAuth, User.findById); // doesnt return password
-// app.post("/findByIdandUpdateUser", User.findByIdandUpdateUser); // returns password too
-app.post("/updatePhoto", isAuth, User.UpdateProfilePhoto);
-app.post("/updatepassword", isAuth, User.updatePass);
-app.post("/updateprofile", isAuth, User.updateProfile);
+// app.get("/getAllUsers", isAuth, User.getAll);
+// app.post("/findUser", isAuth, User.getUserByName);
+// app.post("/findById/", isAuth, User.findById); // doesnt return password
+// // app.post("/findByIdandUpdateUser", User.findByIdandUpdateUser); // returns password too
+// app.post("/updatePhoto", isAuth, User.UpdateProfilePhoto);
+// app.post("/updatepassword", isAuth, User.updatePass);
+// app.post("/updateprofile", isAuth, User.updateProfile);
 
 app.listen(port, () => console.log(`Unit :) app listening on port ${port}!`));

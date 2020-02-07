@@ -1,4 +1,4 @@
-const Tokens = require("../models/token");
+const Tokens = require("../models");
 function createToken(
   token,
   expiresIn,
