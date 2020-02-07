@@ -1,4 +1,4 @@
-const Post = require("./../../../controllers/users.js");
+const User = require("./../../../controllers/users.js");
 const express = require('express');
 const router = express.Router();
 const isAuth = require("../../validation/tokenValidation.js");

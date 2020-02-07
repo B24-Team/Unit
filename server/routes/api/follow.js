@@ -1,16 +1,16 @@
-const FollowUp = require("./../../../controllers/follows.js");
+const Follow = require("./../../../controllers/follows.js");
 
 const express = require('express');
 const router = express.Router();
 
 
  
-router.post('/create', Post.create)
+router.post('/create', Follow.create)
 
-router.get('/getfollowers', Post.getfollowers)
+router.get('/getfollowers', Follow.getfollowers)
 
-router.patch('/getfollowersInfo', Post.getInfoOfFollowers)
+router.patch('/getfollowersInfo', Follow.getInfoOfFollowers)
 
-router.delete('/delete',Post.delete)
+router.delete('/delete',Follow.delete)
 
 module.exports = router
