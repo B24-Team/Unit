@@ -1,61 +1,93 @@
-const Post = require("../models/posts");
+const models = require("../models");
+const IncomingForm = require('formidable').IncomingForm;
+const path = require('path')
+const uniqueId = require('uuid'); 
 
-function createPost(postObj) {
-  var post = postObj.post;
-  var link = postObj.link;
-  var user_id = postObj.user_id;
-  var type = postObj.type;
-  return Post.create(post, link, user_id, type)
-    .then(data => {
-      return data;
+function createPost(req, res) {
+    const form = new IncomingForm();
+    var user_id;
+    var post;
+    var link;
+    form.parse(req, function (err, fields, files) {
+        user_id = fields.user_id
+        post = fields.post_text
+
+        if (err) {
+            res.send(err)
+        }
+        res.end();
+    });
+
+    form.on('fileBegin', function (name, file) {
+        var id = uniqueId()
+        file.path = 'folders/uploaded/' + id + "." + file.name.split(".")[1];
+        console.log(path.join(__dirname, "/../../../../Unit/folders/uploaded/", id + "." + file.name.split(".")[1]))
+        link = path.join(__dirname, "/../../../../Unit/folders/uploaded/", id + "." + file.name.split(".")[1])
+    });
+   
+    form.on('end', (err, data) => {
+        var postObj = {post : post, link : link, user_id : user_id}
+    models.Post.create(postObj).then(data => {
+        if (data) {}
     })
     .catch(err => {
-      throw err;
-    });
+        if (err) {
+            console.error(err)
+        }
+    })
+    })
 }
 
-function findPost(user_id) {
-  return Post.find(user_id)
-    .then(data => {
-      return data.rows;
+function  findPost(req, res) {
+    let { user_id } = req.body
+    models.Post.findAll({where:{user_id:user_id},include: {
+        model: User,
+      }}).then(data => {
+        if (data) {
+            return res.send(data)
+        } 
     })
-    .catch(err => {
-      throw "post not Found";
-    });
+        .catch(err => {
+            if (err) {
+                console.error(err)
+            }
+        })
 }
 
-function getAllPosts() {
-  return Post.getAllPosts()
-    .then(data => {
-      return data.rows;
+
+
+
+function updatePost(req, res) {
+    let { post , user_id } = req.body;
+    let {id} = req.params.id;
+    models.Post.update({post , user_id},{where:{id:id}}).then(data => {
+        if (data) {
+            return res.send(data)
+        } 
     })
-    .catch(err => {
-      throw new Error();
-    });
+        .catch(err => {
+            if (err) {
+                console.error(err)
+            }
+        })
 }
 
-function updatePost(post, id, user_id) {
-  return Post.update(post, id, user_id)
-    .then(data => {
-      return "post was updated";
+function deletePost(req, res) {
+    let { user_id } = req.body;
+    let id = req.params.id;
+    models.Post.destroy({where:{id:id,user_id:user_id}}).then(data => {
+        if (data) {
+            return res.send('Deleted');
+        }
     })
-    .catch(err => {
-      throw "post not found";
-    });
-}
-
-function deletePost(id, user_id) {
-  return Post.delete(id, user_id)
-    .then(data => {
-      return "post was deleted";
-    })
-    .catch(err => {
-      throw "post not found";
-    });
+        .catch(err => {
+            if (err) {
+                console.error(err)
+            }
+        })
 }
 
 module.exports.create = createPost;
 module.exports.find = findPost;
-module.exports.delete = deletePost;
+module.exports.remove = deletePost;
 module.exports.update = updatePost;
-module.exports.getAllPosts = getAllPosts;

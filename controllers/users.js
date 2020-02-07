@@ -1,4 +1,17 @@
-const User = require("../models/users");
+const models = require("../models");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const randToken = require("rand-token");
+
+const User = require("./../../../controllers/users");
+const Token = require("./../../../controllers/tokens");
+const regiteryValidation = require("./../../validation/registryValidation");
+const loginValidation = require("./../../validation/loginValidation");
+//
+const IncomingForm = require("formidable").IncomingForm;
+const path = require("path");
+const uniqueId = require("uuid");
+
 //const tokens = require("../models/token");
 
 function createUser(userObj) {

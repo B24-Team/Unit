@@ -1,52 +1,57 @@
-const FollowController = require("../models/follows");
+const models = require("../models");
 
-function followUser(obj) {
-  var follower_id = obj.follower_id;
-  var followed_id = obj.followed_id;
-  return FollowController.follow(follower_id, followed_id)
+function follow(req, res) {
+  FollowUp.follow(req.body)
     .then(data => {
-      return data;
+      if (data.rowCount > 0) {
+        return res.json("Its working");
+      }
     })
     .catch(err => {
-      throw "following failed";
+      if (err) {
+        console.error(err);
+      }
     });
 }
 
-function unFollowUser(obj) {
-  var follower_id = obj.follower_id;
-  var followed_id = obj.followed_id;
-  return FollowController.unfollow(follower_id, followed_id)
+function unfollow(req, res) {
+  FollowUp.unfollow(req.body)
     .then(data => {
-      return data;
+      return res.json("Its working");
     })
     .catch(err => {
-      throw "unfollowing failed";
+      if (err) {
+        console.error(err);
+      }
     });
 }
 
-function getUserFollowers(obj) {
-  var followed_id = obj.followed_id;
-  return FollowController.getfollowres(followed_id)
+function getfollowers(req, res) {
+  FollowUp.find(req.body)
     .then(data => {
-      return data;
+      return res.send(data.rows);
     })
     .catch(err => {
-      throw "could not get followers";
+      if (err) {
+        console.error(err);
+      }
     });
 }
 
-function getfollowersInfo() {
-  return FollowController.getfollowersInfo()
+function getInfoOfFollowers(req, res) {
+  FollowUp.getfollowersInfo()
     .then(data => {
-      return data;
+      return res.send(data.rows);
     })
     .catch(err => {
-      throw "could not get followers";
+      if (err) {
+        console.error(err);
+      }
     });
 }
 
-module.exports.follow = followUser;
-module.exports.find = getUserFollowers;
-module.exports.unfollow = unFollowUser;
 
-module.exports.getfollowersInfo = getfollowersInfo;
+module.exports.create = follow;
+module.exports.delete = unfollow;
+module.exports.getfollowers = getfollowers;
+module.exports.getInfoOfFollowers = getInfoOfFollowers;

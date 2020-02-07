@@ -28,6 +28,8 @@ app.use(function (req, res, next) {
 
 const port = process.env.PORT || 5000;
 
+app.use('/posts', Post)
+
 // const User = require("./server/routes/api/user");
 // const Post = require("./server/routes/api/post.js");
 // const Follow = require("./server/routes/api/follow.js");

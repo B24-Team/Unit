@@ -1,57 +1,16 @@
 const FollowUp = require("./../../../controllers/follows.js");
 
-function follow(req, res) {
-  FollowUp.follow(req.body)
-    .then(data => {
-      if (data.rowCount > 0) {
-        return res.json("Its working");
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-}
-
-function unfollow(req, res) {
-  FollowUp.unfollow(req.body)
-    .then(data => {
-      return res.json("Its working");
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-}
-
-function getfollowers(req, res) {
-  FollowUp.find(req.body)
-    .then(data => {
-      return res.send(data.rows);
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-}
-
-function getInfoOfFollowers(req, res) {
-  FollowUp.getfollowersInfo()
-    .then(data => {
-      return res.send(data.rows);
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-}
+const express = require('express');
+const router = express.Router();
 
 
-module.exports.create = follow;
-module.exports.delete = unfollow;
-module.exports.getfollowers = getfollowers;
-module.exports.getInfoOfFollowers = getInfoOfFollowers;
+ 
+router.post('/follow', Post.create)
+
+router.get('/get', Post.find)
+
+router.patch('/update/:id', Post.update)
+
+router.delete('/delete/:id',Post.remove)
+
+module.exports = router
