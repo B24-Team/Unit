@@ -5,12 +5,12 @@ const router = express.Router();
 
 
  
-router.post('/follow', Post.create)
+router.post('/create', Post.create)
 
-router.get('/get', Post.find)
+router.get('/getfollowers', Post.getfollowers)
 
-router.patch('/update/:id', Post.update)
+router.patch('/getfollowersInfo', Post.getInfoOfFollowers)
 
-router.delete('/delete/:id',Post.remove)
+router.delete('/delete',Post.delete)
 
 module.exports = router

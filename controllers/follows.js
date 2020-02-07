@@ -1,7 +1,7 @@
 const models = require("../models");
 
 function follow(req, res) {
-  FollowUp.follow(req.body)
+  models.follow.create(req.body)
     .then(data => {
       if (data.rowCount > 0) {
         return res.json("Its working");
@@ -15,7 +15,7 @@ function follow(req, res) {
 }
 
 function unfollow(req, res) {
-  FollowUp.unfollow(req.body)
+  models.follow.destroy({where:{followed_id:req.body.followed_id,follower_id:req.body.follower_id}})
     .then(data => {
       return res.json("Its working");
     })
@@ -27,7 +27,7 @@ function unfollow(req, res) {
 }
 
 function getfollowers(req, res) {
-  FollowUp.find(req.body)
+  models.follow.find({where:{followed_id:req.body.followed_id}})
     .then(data => {
       return res.send(data.rows);
     })
@@ -39,7 +39,9 @@ function getfollowers(req, res) {
 }
 
 function getInfoOfFollowers(req, res) {
-  FollowUp.getfollowersInfo()
+  models.follow.findAll({where:{follower_id:user_id},include: {
+    model: User,
+  }})
     .then(data => {
       return res.send(data.rows);
     })

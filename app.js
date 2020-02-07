@@ -452,10 +452,7 @@ app.patch("/posts/update/:id", isAuth, Post.update);
 app.post("/posts/delete", isAuth, Post.delete);
 app.get("/getAllPosts", isAuth, Post.getAllPosts);
 //
-app.post("/follow/create", Follow.create);
-app.post("/follow/delete", isAuth, Follow.delete);
-app.post("/follow/getfollowers", isAuth, Follow.getfollowers);
-app.get("/follow/getfollowersInfo", Follow.getInfoOfFollowers);
+app.use("/follow", Follow);
 
 //
 app.get("/getAllUsers", isAuth, User.getAll);
