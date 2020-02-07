@@ -2,7 +2,7 @@
   "name": "ppp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "concurrently \"nodemon app.js\" \"npm run client\"",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -23,14 +23,17 @@
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "path": "^0.12.7",
-    "pg": "^7.17.1",
+    "pg": "^7.18.1",
+    "pg-hstore": "^2.3.3",
     "postgres": "^1.0.2",
     "rand-token": "^0.4.0",
     "save": "^2.4.0",
+    "sequelize": "^5.21.3",
     "uuid": "^3.4.0",
     "validator": "^12.2.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "sequelize-cli": "^5.5.1"
   }
 }
