@@ -103,7 +103,7 @@ function logIn(req, res) {
   let { errors, isValid } = loginValidation(req.body);
   if (isValid) {
     var { email, password } = req.body;
-    User.find(email)
+    models.User.find(email)
       .then(data => {
         // console.log(data.rows);
         if (data.rows.length > 0) {
@@ -219,7 +219,7 @@ function refreshToken(req, res) {
       var comparison = expirydate.getTime() > newDate.getTime() ? true : false;
       // console.log(comparison);
       if (comparison) {
-        User.findById(result.user_id)
+        models.User.findById(result.user_id)
           .then(data => {
             // console.log(data.rows);
             if (data.rows.length > 0) {
@@ -279,7 +279,7 @@ function refreshToken(req, res) {
 /// malik's
 
 function getAll(req, res) {
-  User.getAll()
+  models.User.getAll()
     .then(result => {
       res.send(result.rows);
     })
@@ -289,7 +289,7 @@ function getAll(req, res) {
 }
 function getUserByName(req, res) {
   var username = req.body.username;
-  User.getUserByName(username)
+  models.User.getUserByName(username)
     .then(result => {
       res.send(result.rows);
     })
@@ -300,7 +300,7 @@ function getUserByName(req, res) {
 
 function findById(req, res) {
   var user_id = req.body.user_id;
-  User.findById(user_id)
+  models.User.findById(user_id)
     .then(result => {
       delete result.rows[0]["password"];
       res.send(result.rows);
@@ -345,7 +345,7 @@ function UpdateProfilePhoto(req, res) {
   form.on("end", (err, data) => {
     var userObj = { photo: link, user_id: user_id };
 
-    User.updatePhoto(userObj)
+    models.User.updatePhoto(userObj)
       .then(data => {
         if (data) {
         }
@@ -364,7 +364,7 @@ function updatePass(req, res) {
   var password = req.body.password;
   let hash = bcrypt.hashSync(password, 12);
   var obj = { user_id, password: hash };
-  User.update(obj)
+  models.User.update(obj)
     .then(data => {
       res.json(data);
     })
@@ -374,7 +374,7 @@ function updatePass(req, res) {
 }
 
 function updateProfile(req, res) {
-  User.updateProfile(req)
+  models.User.updateProfile(req)
     .then(data => {
       res.json("Profile Updated !!");
     })
