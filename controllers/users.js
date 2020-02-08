@@ -288,10 +288,10 @@ function refreshToken(req, res) {
 
 function getAll(req, res) {
   models.User.findAll({attributes: {
-    exclude: ['password','createdAt','updatedAt']
-  }})
+    include:['id','photo','username','age','is_active','bio','gender'],
+    exclude: ['password','createdAt','updatedAt']}})
     .then(result => {
-      res.send(result.dataValues);
+      res.send(result);
     })
     .catch(err => {
       res.send(err);
@@ -312,9 +312,10 @@ function getUserByName(req, res) {
 
 function findById(req, res) {
   var user_id = req.body.user_id;
-  models.User.findOne({where:{id:user_id}})
+  models.User.findOne({attributes: {
+    exclude: ['password','createdAt','updatedAt']
+  },where:{id:user_id}})
     .then(result => {
-      delete result.dataValues.password;
       res.send(result.dataValues);
     })
     .catch(err => {
