@@ -254,7 +254,6 @@ function refreshToken(req, res) {
                     new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000),
                     data.dataValues.id
                   );
-                  console.log("it works")
                   res.cookie("refreshtoken", refreshToken, {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
                     httpOnly: true
