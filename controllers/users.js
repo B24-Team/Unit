@@ -141,6 +141,7 @@ function logIn(req, res) {
                     new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000),
                     data.dataValues.id
                   );
+                  console.log('that is it',refreshTokenYolo);
                   res.cookie("refreshtoken", refreshToken, {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
                     httpOnly: true
@@ -154,12 +155,12 @@ function logIn(req, res) {
                     payload,
                     success: true,
                     token: "Bearer " + token,
-                    refreshToken: refreshTokenYolo
+                    refreshToken: refreshToken
                   });
                   //) res.status(200).send(result);
                 }
               );
-              return res.send(data.dataValues);
+              // return res.send(data.dataValues);
             } else {
               return res.send("wrong password");
             }
