@@ -103,20 +103,23 @@ function logIn(req, res) {
   let { errors, isValid } = loginValidation(req.body);
   if (isValid) {
     var { email, password } = req.body;
-    models.User.find(email)
+    models.User.findOne({
+      attributes:['email', 'password']
+      ,where:{email:email}})
       .then(data => {
-        // console.log(data.rows);
-        if (data.rows.length > 0) {
-          var pass = data.rows[0].password;
+        console.log("sddshsdjsdjbds",data);
+        if (data) {
+          var pass = data.password;
           var password = req.body.password;
           bcrypt.compare(password, pass).then(isMatch => {
-            // console.log(isMatch);
+            console.log("isMatch",isMatch);
             if (isMatch) {
-              //return res.send("you logged in successfully");
+              // return res.send(data);
               var payload = {
-                id: data.rows[0].id,
-                email: data.rows[0].email
+                id: data.id,
+                email: data.email
               };
+              // return res.send(data);
               //console.log(process.env.secretOrkey);
               jwt.sign(
                 payload,
@@ -144,7 +147,7 @@ function logIn(req, res) {
                     httpOnly: false
                   });
 
-                  return res.json({
+                  return res.send({
                     payload,
                     success: true,
                     token: "Bearer " + token,
@@ -153,6 +156,7 @@ function logIn(req, res) {
                   //) res.status(200).send(result);
                 }
               );
+              return res.send(data);
             } else {
               return res.send("wrong password");
             }
@@ -160,7 +164,7 @@ function logIn(req, res) {
         } else {
           res.status(200).json("no user with such email found");
         }
-      })
+       })
       .catch(err => console.log(err));
   } else {
     res.status(404).json(errors);
