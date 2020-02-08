@@ -399,6 +399,7 @@ function updateProfile(req, res) {
 
 //
 
+
 module.exports.signUp = signUp;
 module.exports.logIn = logIn;
 // module.exports.enter = enter;
