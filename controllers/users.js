@@ -22,7 +22,7 @@ function signUp(req, res) {
     res.status(200).json(errors);
   } else {
     // console.log("is valid");
-    var { name, username, email, password, ConfirmPassword } = req.body;
+    var { name, username, email, password, confirmPassword } = req.body;
     models.User.findOne({where:{email:email}})
       .then(data => {
         //console.log(data);

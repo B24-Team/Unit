@@ -20,13 +20,13 @@ const registeryInputValidation = function(data) {
   if (Validator.isEmpty(data.password)) {
     errors.password = "enter your password please";
   }
-  if (!Validator.isEmpty(data.confirmPassword)) {
+  if (Validator.isEmpty(data.confirmPassword)) {
     errors.confirmPassword = "confirm your password please";
   }
   if (!Validator.isLength(data.password, { min: 6, max: 30 })) {
     errors.password = "the password must contain 6 characters at least";
   }
-  if (Validator.equals(data.password, data.confirmPassword)) {
+  if (!Validator.equals(data.password, data.confirmPassword)) {
     errors.confirmPassword = "the 2 passwords must be the same";
   }
   return {
