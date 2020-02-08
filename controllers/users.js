@@ -228,14 +228,14 @@ function refreshToken(req, res) {
       if (comparison) {
         models.User.findOne({where:{id:result.dataValues.user_id}})
           .then(data => {
-            console.log(data.dataValues);
+            // console.log(data.dataValues);
             if (data) {
               // res.send("you logged in successfully");
               var payload = {
                 id: data.dataValues.id,
                 email: data.dataValues.email
               };
-              console.log(payload);
+              // console.log(payload);
               //console.log(process.env.secretOrkey);
               jwt.sign(
                 payload,
@@ -244,15 +244,16 @@ function refreshToken(req, res) {
                 (err, token) => {
                   var refreshToken = randToken.uid(250);
                   var date = new Date();
-                  // console.log(refreshToken);
-                  // console.log('here it is');
-                  Token.update(
+                  // console.log(data.dataValues.id);
+                  // console.log(token);
+                  Token.updateToken(
                     token,
                     new Date(date.getTime() + 5 * 60 * 1000),
                     refreshToken,
                     new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000),
                     data.dataValues.id
                   );
+                  console.log("it works")
                   res.cookie("refreshtoken", refreshToken, {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
                     httpOnly: true
@@ -261,7 +262,7 @@ function refreshToken(req, res) {
                     maxAge: 60 * 60 * 1000, // keep it 60 * 60 * 1000
                     httpOnly: true
                   });
-                  return res.json({
+                  return res.send({
                     payload,
                     success: true,
                     token: "Bearer " + token

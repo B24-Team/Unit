@@ -36,7 +36,7 @@ function findRefreshToken(refresh_token) {
       return data;
     })
     .catch(err => {
-      throw "refresh token not Found";
+      return "refresh token not Found";
     });
 }
 
@@ -47,19 +47,19 @@ function updateToken(
   newRefreshTokenExpiryDate,
   user_id
 ) {
-  console,log("it works")
+  // console.log("it works")
   return models.Token.update({
     tokenValue : newtoken,
     token_expires_at : newExpiryTokenDate,
     refresh_token : newRefreshToken,
-    refresh_token_expires_at : newRefreshTokenExpiryDate,
-    user_id : user_id
-  })
+    refresh_token_expires_at : newRefreshTokenExpiryDate},
+    {where:{user_id:user_id}}
+  )
     .then(data => {
       return "user was updated";
     })
     .catch(err => {
-      throw "USER NOT FOUND";
+      return "USER NOT FOUND";
     });
 }
 
@@ -77,4 +77,4 @@ function deleteToken(id) {
 module.exports.create = createToken;
 module.exports.findRefreshToken = findRefreshToken;
 module.exports.deleteIT = deleteToken;
-module.exports.update = updateToken;
+module.exports.updateToken = updateToken;
