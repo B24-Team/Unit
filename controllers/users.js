@@ -287,7 +287,9 @@ function refreshToken(req, res) {
 /// malik's
 
 function getAll(req, res) {
-  models.User.findAll()
+  models.User.findAll({attributes: {
+    exclude: ['password','createdAt','updatedAt']
+  }})
     .then(result => {
       res.send(result.dataValues);
     })
@@ -297,7 +299,9 @@ function getAll(req, res) {
 }
 function getUserByName(req, res) {
   var username = req.body.username;
-  models.User.findOne({where:{username:username}})
+  models.User.findOne({attributes: {
+    exclude: ['password','createdAt','updatedAt']
+  },where:{username:username}})
     .then(result => {
       res.send(result.dataValues);
     })
