@@ -10,5 +10,11 @@ router.post("/findById/", isAuth, User.findById); // doesnt return password
 router.post("/updatePhoto", isAuth, User.UpdateProfilePhoto);
 router.post("/updatepassword", isAuth, User.updatePass);
 router.post("/updateprofile", isAuth, User.updateProfile);
+// router.post("/getuser", User.find);
+router.post("/signup", User.signUp);
+router.post("/login", User.logIn);
+//router.get("/", User.enter);
+router.post("/logout", User.logOut);
+router.get("/refreshtoken", User.refreshToken);
 
 module.exports = router

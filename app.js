@@ -457,8 +457,8 @@ app.delete("/:id/chat/:chatId/message", (req, res) => {
 // app.get("/getAllPosts", isAuth, Post.getAllPosts);
 //
 app.use("/follow", Follow);
-app.use('/posts', Post)
-app.use('', User)
+app.use('/posts', Post);
+app.use('', User);
 
 //
 // app.get("/getAllUsers", isAuth, User.getAll);

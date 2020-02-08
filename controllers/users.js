@@ -23,10 +23,10 @@ function signUp(req, res) {
   } else {
     // console.log("is valid");
     var { name, username, email, password, ConfirmPassword } = req.body;
-    models.User.find(email)
+    models.User.findOne({where:{email:email}})
       .then(data => {
         //console.log(data);
-        if (data.rows.length > 0) {
+        if (data) {
           res
             .status(200)
             .json({ message: "user already exists", success: false });
