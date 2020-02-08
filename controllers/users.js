@@ -356,9 +356,9 @@ function UpdateProfilePhoto(req, res) {
   });
 
   form.on("end", (err, data) => {
-    var userObj = { photo: link, user_id: user_id };
+    // var userObj = { photo: link, user_id: user_id };
 
-    models.User.update(userObj)
+    models.User.update({photo:link},{where:{id:user_id}})
       .then(data => {
         if (data) {
         }
