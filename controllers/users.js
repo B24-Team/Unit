@@ -376,10 +376,9 @@ function updatePass(req, res) {
   var user_id = req.body.user_id;
   var password = req.body.password;
   let hash = bcrypt.hashSync(password, 12);
-  var obj = { user_id, password: hash };
-  models.User.update(obj)
+  models.User.update({password:hash},{where:{id:user_id}})
     .then(data => {
-      res.json(data);
+      res.send('updated');
     })
     .catch(err => {
       res.send(" something wrong happened");
