@@ -7,9 +7,9 @@ router.get("/getAllUsers", isAuth, User.getAll);
 router.post("/findUser", isAuth, User.getUserByName);
 router.post("/findById/", isAuth, User.findById); // doesnt return password
 // router.post("/findByIdandUpdateUser", User.findByIdandUpdateUser); // returns password too
-router.post("/updatePhoto", isAuth, User.UpdateProfilePhoto);
-router.post("/updatepassword", isAuth, User.updatePass);
-router.post("/updateprofile", isAuth, User.updateProfile);
+router.post("/:id/updatePhoto", isAuth, User.UpdateProfilePhoto);
+router.post("/:id/updatepassword", isAuth, User.updatePass);
+router.post("/:id/updateprofile", isAuth, User.updateProfile);
 // router.post("/getuser", User.find);
 router.post("/signup", User.signUp);
 router.post("/login", User.logIn);

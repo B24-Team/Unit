@@ -386,7 +386,9 @@ function updatePass(req, res) {
 }
 
 function updateProfile(req, res) {
-  models.User.update(req)
+  var id = req.params.id;
+  var {photo} = req.body.photo;
+  models.User.update({photo:photo},{where:{id:id}})
     .then(data => {
       res.json("Profile Updated !!");
     })
