@@ -7,20 +7,20 @@ function createToken(
   user_id
 ) {
   return models.Token.create({
-    token,
-    expiresIn,
-    refreshToken,
-    refreshTokenExpiresIn,
-    user_id}
-  )
+    tokenValue : token,
+    token_expires_at : expiresIn,
+    refresh_token : refreshToken,
+    refresh_token_expires_at : refreshTokenExpiresIn,
+    user_id : user_id
+  })
     .then(data => {
       // console.log(data);
-      return models.Token.find({where:{user_id:user_id}})
+      return models.Token.findOne({where:{user_id:user_id}})
         .then(data => {
           return data;
         })
         .catch(err => {
-          throw "no token found";
+          return err;
         });
     })
     .catch(err => {
@@ -29,7 +29,9 @@ function createToken(
 }
 
 function findRefreshToken(refresh_token) {
-  return models.Token.find({where:{refresh_token:refresh_token}})
+  return models.Token.findOne({
+    attributes:['user_id','refresh_token_expires_at']
+    ,where:{refresh_token:refresh_token}})
     .then(data => {
       return data;
     })
@@ -45,15 +47,16 @@ function updateToken(
   newRefreshTokenExpiryDate,
   user_id
 ) {
+  console,log("it works")
   return models.Token.update({
-    newtoken,
-    newExpiryTokenDate,
-    newRefreshToken,
-    newRefreshTokenExpiryDate,
-    user_id}
-  )
+    tokenValue : newtoken,
+    token_expires_at : newExpiryTokenDate,
+    refresh_token : newRefreshToken,
+    refresh_token_expires_at : newRefreshTokenExpiryDate,
+    user_id : user_id
+  })
     .then(data => {
-      return "user was updates";
+      return "user was updated";
     })
     .catch(err => {
       throw "USER NOT FOUND";
@@ -64,10 +67,10 @@ function deleteToken(id) {
   // console.log("zezooooo", id)
   return models.Token.destroy({where:{id:id}})
     .then(data => {
-      return " token was deleted successfully";
+      return "token was deleted successfully";
     })
     .catch(err => {
-      throw "token NOT FOUND";
+      return "token NOT FOUND";
     });
 }
 

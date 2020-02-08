@@ -45,7 +45,7 @@ function signUp(req, res) {
             .then(result => {
               if (result) {
                 // res.redirect('/login')
-                //console.log(result);
+                // console.log("Result :",result);
                 var payload = {
                   id: result.id,
                   email: result.email
@@ -59,8 +59,9 @@ function signUp(req, res) {
                     var refreshToken = randToken.uid(250);
                     var date = new Date();
                     // console.log(refreshToken);
-                    //console.log(token);
+                    // console.log(token);
                     refreshTokenYolo = refreshToken;
+                    // console.log("the thing is :", new Date(date.getTime() + 5 * 60 * 1000))
                     Token.create(
                       token,
                       new Date(date.getTime() + 5 * 60 * 1000),
@@ -99,26 +100,28 @@ function signUp(req, res) {
 }
 ///////////////////////////////////////////////////////////////////////////////////// LOGIN SECTION
 function logIn(req, res) {
-  console.log(req.body);
+  // console.log(req.body);
   let { errors, isValid } = loginValidation(req.body);
   if (isValid) {
     var { email, password } = req.body;
     models.User.findOne({
-      attributes:['email', 'password']
+      attributes:['email', 'id','password']
       ,where:{email:email}})
       .then(data => {
-        console.log("sddshsdjsdjbds",data);
+        // console.log("nobody got time for this",data.dataValues);
+        // console.log("sddshsdjsdjbds",data);
         if (data) {
-          var pass = data.password;
+          var pass = data.dataValues.password;
           var password = req.body.password;
           bcrypt.compare(password, pass).then(isMatch => {
-            console.log("isMatch",isMatch);
+            // console.log("isMatch",isMatch);
             if (isMatch) {
               // return res.send(data);
               var payload = {
-                id: data.id,
-                email: data.email
+                id: data.dataValues.id,
+                email: data.dataValues.email
               };
+              
               // return res.send(data);
               //console.log(process.env.secretOrkey);
               jwt.sign(
@@ -136,15 +139,15 @@ function logIn(req, res) {
                     new Date(date.getTime() + 5 * 60 * 1000),
                     refreshToken,
                     new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000),
-                    data.rows[0].id
+                    data.dataValues.id
                   );
                   res.cookie("refreshtoken", refreshToken, {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
-                    httpOnly: false
+                    httpOnly: true
                   });
                   res.cookie("token", token, {
                     maxAge: 60 * 60 * 1000, // 60 * 60 * 1000
-                    httpOnly: false
+                    httpOnly: true
                   });
 
                   return res.send({
@@ -156,7 +159,7 @@ function logIn(req, res) {
                   //) res.status(200).send(result);
                 }
               );
-              return res.send(data);
+              return res.send(data.dataValues);
             } else {
               return res.send("wrong password");
             }
@@ -171,25 +174,25 @@ function logIn(req, res) {
   }
 }
 /////////////////////////////////////////////////////////////////////////////////////first request
-function enter(req, res) {
-  //console.log(req.cookies.refreshtoken, "we have it");
-  var cookieValue = req.cookies.refreshtoken;
-  //console.log(cookieValue, "we have it'oot");
+// function enter(req, res) {
+//   //console.log(req.cookies.refreshtoken, "we have it");
+//   var cookieValue = req.cookies.refreshtoken;
+//   //console.log(cookieValue, "we have it'oot");
 
-  if (cookieValue !== undefined) {
-    Token.findRefreshToken(cookieValue)
-      .then(data => {
-        // console.log("data from refresh token");
-        // console.log(data);
-        if (data) {
-          return res.status(200).json(data);
-        }
-      })
-      .catch(err => console.log(err));
-  } else {
-    return res.send("no cookie found");
-  }
-}
+//   if (cookieValue !== undefined) {
+//     Token.findRefreshToken(cookieValue)
+//       .then(data => {
+//         // console.log("data from refresh token");
+//         // console.log(data);
+//         if (data) {
+//           return res.status(200).json(data);
+//         }
+//       })
+//       .catch(err => console.log(err));
+//   } else {
+//     return res.send("no cookie found");
+//   }
+// }
 
 ////////////////////////////////////////////////////////////////////////////logout request
 function logOut(req, res) {
@@ -207,7 +210,7 @@ function logOut(req, res) {
 }
 //////////////////////////////////////////////////////////////////////// refresh token request
 function refreshToken(req, res) {
-  // console.log(req.cookies);
+  console.log(req.cookies);
   var refreshTokenFormCookies = req.cookies.refreshtoken;
   if (!refreshTokenFormCookies) {
     return res.send("You Dont have a refresh token , you need to login")
@@ -221,18 +224,18 @@ function refreshToken(req, res) {
       // console.log("user_id", result.user_id);
       var newDate = new Date();
       var comparison = expirydate.getTime() > newDate.getTime() ? true : false;
-      // console.log(comparison);
+      // console.log("the data is here read it",result.dataValues);
       if (comparison) {
-        models.User.findById(result.user_id)
+        models.User.findOne({where:{id:result.dataValues.user_id}})
           .then(data => {
-            // console.log(data.rows);
-            if (data.rows.length > 0) {
+            console.log(data.dataValues);
+            if (data) {
               // res.send("you logged in successfully");
               var payload = {
-                id: data.rows[0].id,
-                email: data.rows[0].email
+                id: data.dataValues.id,
+                email: data.dataValues.email
               };
-              // console.log(payload);
+              console.log(payload);
               //console.log(process.env.secretOrkey);
               jwt.sign(
                 payload,
@@ -242,13 +245,13 @@ function refreshToken(req, res) {
                   var refreshToken = randToken.uid(250);
                   var date = new Date();
                   // console.log(refreshToken);
-                  //console.log(token);
+                  // console.log('here it is');
                   Token.update(
                     token,
                     new Date(date.getTime() + 5 * 60 * 1000),
                     refreshToken,
                     new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000),
-                    data.rows[0].id
+                    data.dataValues.id
                   );
                   res.cookie("refreshtoken", refreshToken, {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -256,7 +259,7 @@ function refreshToken(req, res) {
                   });
                   res.cookie("token", token, {
                     maxAge: 60 * 60 * 1000, // keep it 60 * 60 * 1000
-                    httpOnly: false
+                    httpOnly: true
                   });
                   return res.json({
                     payload,
@@ -283,9 +286,9 @@ function refreshToken(req, res) {
 /// malik's
 
 function getAll(req, res) {
-  models.User.getAll()
+  models.User.findAll()
     .then(result => {
-      res.send(result.rows);
+      res.send(result.dataValues);
     })
     .catch(err => {
       res.send(err);
@@ -293,9 +296,9 @@ function getAll(req, res) {
 }
 function getUserByName(req, res) {
   var username = req.body.username;
-  models.User.getUserByName(username)
+  models.User.findOne({where:{username:username}})
     .then(result => {
-      res.send(result.rows);
+      res.send(result.dataValues);
     })
     .catch(err => {
       res.send(err);
@@ -304,10 +307,10 @@ function getUserByName(req, res) {
 
 function findById(req, res) {
   var user_id = req.body.user_id;
-  models.User.findById(user_id)
+  models.User.findOne({where:{id:user_id}})
     .then(result => {
-      delete result.rows[0]["password"];
-      res.send(result.rows);
+      delete result.dataValues.password;
+      res.send(result.dataValues);
     })
     .catch(err => {
       res.send(err);
@@ -318,7 +321,7 @@ function findById(req, res) {
 //   var user_id = req.body.user_id;
 //   User.findById(user_id)
 //     .then(result => {
-//       res.send(result.rows);
+//       res.send(result.dataValues);
 //     })
 //     .catch(err => {
 //       res.send(err);
@@ -349,7 +352,7 @@ function UpdateProfilePhoto(req, res) {
   form.on("end", (err, data) => {
     var userObj = { photo: link, user_id: user_id };
 
-    models.User.updatePhoto(userObj)
+    models.User.update(userObj)
       .then(data => {
         if (data) {
         }
@@ -378,7 +381,7 @@ function updatePass(req, res) {
 }
 
 function updateProfile(req, res) {
-  models.User.updateProfile(req)
+  models.User.update(req)
     .then(data => {
       res.json("Profile Updated !!");
     })
@@ -391,7 +394,7 @@ function updateProfile(req, res) {
 
 module.exports.signUp = signUp;
 module.exports.logIn = logIn;
-module.exports.enter = enter;
+// module.exports.enter = enter;
 module.exports.logOut = logOut;
 module.exports.refreshToken = refreshToken;
 //
