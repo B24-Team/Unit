@@ -1,15 +1,15 @@
 const models = require("../models");
 
 function follow(req, res) {
-  models.follow.create(req.body)
+  models.follow.create({followed_id:req.body.followed_id,follower_id:req.body.follower_id})
     .then(data => {
-      if (data.rowCount > 0) {
+      if (data) {
         return res.json("Its working");
       }
     })
     .catch(err => {
       if (err) {
-        console.error(err);
+        return res.json(err);
       }
     });
 }
