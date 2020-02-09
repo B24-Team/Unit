@@ -65,15 +65,14 @@ function  findPost(req, res) {
 
 function updatePost(req, res) {
     let { post , user_id } = req.body;
-    let {id} = req.params.id;
-    models.Post.update({post},{where:{id:id,user_id:user_id}}).then(data => {
+    models.Post.update({post},{where:{id:req.params.id,user_id:user_id}}).then(data => {
         if (data) {
-            return res.send(data)
+            return res.send('Updated')
         } 
     })
         .catch(err => {
             if (err) {
-                console.error(err)
+                return res.send(err)
             }
         })
 }
