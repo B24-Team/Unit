@@ -5,9 +5,9 @@ const uniqueId = require('uuid');
 
 function createPost(req, res) {
     const form = new IncomingForm();
-    var user_id;
-    var post;
-    var link;
+    var user_id = req.body.user_id;
+    var post = req.body.post;
+    var link = req.body.link;
     form.parse(req, function (err, fields, files) {
         user_id = fields.user_id
         post = fields.post_text
@@ -28,7 +28,9 @@ function createPost(req, res) {
     form.on('end', (err, data) => {
         var postObj = {post : post, link : link, user_id : user_id}
     models.Post.create(postObj).then(data => {
-        if (data) {}
+        if (data) {
+            res.send(data)
+        }
     })
     .catch(err => {
         if (err) {
@@ -40,16 +42,17 @@ function createPost(req, res) {
 
 function  findPost(req, res) {
     let { user_id } = req.body
-    models.Post.findAll({where:{user_id:user_id},include: {
-        model: User,
-      }}).then(data => {
+    models.Post.findAll({
+        where: { user_id:  user_id },
+        include: ['user']
+      }).then(data => {
         if (data) {
             return res.send(data)
         } 
     })
         .catch(err => {
             if (err) {
-                console.error(err)
+                return res.send(err)
             }
         })
 }
