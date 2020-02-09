@@ -469,4 +469,14 @@ app.use('', User);
 // app.post("/updatepassword", isAuth, User.updatePass);
 // app.post("/updateprofile", isAuth, User.updateProfile);
 
+
+app.delete('/deleteUser/:id',async (req,res) =>{
+  try {
+      const a = await models.User.destroy({where:{id:req.params.id}})
+      res.json({a})
+  } catch (error) {
+      return error.message
+  }
+  })
+
 app.listen(port, () => console.log(`Unit :) app listening on port ${port}!`));

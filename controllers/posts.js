@@ -8,24 +8,24 @@ function createPost(req, res) {
     var user_id = req.body.user_id;
     var post = req.body.post;
     var link = req.body.link;
-    form.parse(req, function (err, fields, files) {
-        user_id = fields.user_id
-        post = fields.post_text
+    // form.parse(req, function (err, fields, files) {
+    //     user_id = fields.user_id
+    //     post = fields.post_text
 
-        if (err) {
-            res.send(err)
-        }
-        res.end();
-    });
+    //     if (err) {
+    //         res.send(err)
+    //     }
+    //     res.end();
+    // });
 
-    form.on('fileBegin', function (name, file) {
-        var id = uniqueId()
-        file.path = 'folders/uploaded/' + id + "." + file.name.split(".")[1];
-        console.log(path.join(__dirname, "/../../../../Unit/folders/uploaded/", id + "." + file.name.split(".")[1]))
-        link = path.join(__dirname, "/../../../../Unit/folders/uploaded/", id + "." + file.name.split(".")[1])
-    });
+    // form.on('fileBegin', function (name, file) {
+    //     var id = uniqueId()
+    //     file.path = 'folders/uploaded/' + id + "." + file.name.split(".")[1];
+    //     console.log(path.join(__dirname, "/../../../../Unit/folders/uploaded/", id + "." + file.name.split(".")[1]))
+    //     link = path.join(__dirname, "/../../../../Unit/folders/uploaded/", id + "." + file.name.split(".")[1])
+    // });
    
-    form.on('end', (err, data) => {
+    // form.on('end', (err, data) => {
         var postObj = {post : post, link : link, user_id : user_id}
     models.Post.create(postObj).then(data => {
         if (data) {
@@ -34,28 +34,31 @@ function createPost(req, res) {
     })
     .catch(err => {
         if (err) {
-            console.error(err)
+            res.send(err)
         }
     })
-    })
+    // })
 }
 
 function  findPost(req, res) {
-    let { user_id } = req.body
+    let  user_id  = req.body.user_id
+    console.log(user_id)
     models.Post.findAll({
-        where: { user_id:  user_id },
-        include: ['user']
+         where:{user_id: user_id},
+         include:['user']
       }).then(data => {
         if (data) {
             return res.send(data)
         } 
     })
         .catch(err => {
-            if (err) {
+            
                 return res.send(err)
-            }
+            
         })
 }
+
+
 
 
 
@@ -63,7 +66,7 @@ function  findPost(req, res) {
 function updatePost(req, res) {
     let { post , user_id } = req.body;
     let {id} = req.params.id;
-    models.Post.update({post , user_id},{where:{id:id}}).then(data => {
+    models.Post.update({post},{where:{id:id,user_id:user_id}}).then(data => {
         if (data) {
             return res.send(data)
         } 
