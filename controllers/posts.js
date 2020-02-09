@@ -60,9 +60,6 @@ function  findPost(req, res) {
 
 
 
-
-
-
 function updatePost(req, res) {
     let { post , user_id } = req.body;
     models.Post.update({post},{where:{id:req.params.id,user_id:user_id}}).then(data => {
