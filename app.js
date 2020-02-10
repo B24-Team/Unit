@@ -76,67 +76,6 @@ const port = process.env.PORT || 5000;
 // app.post("/updatePhoto", User.UpdateProfilePhoto)
 
 
-app.post("/chat", (req, res) => {
-  let { phone,  email, first_name, last_name, middle_name, password, is_active} = req.body;
-  models.User.create({phone,  email,first_name, last_name, middle_name, password, is_active})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-})
-
-
-app.get("/chat", (req, res) => {
-  let {first_name, last_name} = req.body;
-  models.User.findOne({
-    first_name: first_name,
-    last_name: last_name
-  })
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-})
-
-
-app.patch("/:id/chat", (req, res) => {
-  let { phone,  email, first_name, last_name, middle_name, password, is_active} = req.body;
-  models.User.update({ phone:phone,password:password, is_active: is_active}, { where: { id: req.params.id }})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-})
-
-
-app.delete("/:id/chat", (req, res) => {
-  let id = req.params.id
-  models.User.destroy({
-    where: { id: id }
-  })
-  .then(deletedOwner => {
-    res.json("Done");
-  })
-})
-
 app.post("/:id/chat/user_contacts", (req, res) => {
   let {  first_name, last_name, contact_id} = req.body;
   let user_id= req.params.id;
@@ -215,7 +154,7 @@ app.post("/:id/chat/:chatId/participant", (req, res) => {
     })
     .catch(err => {
       if (err) {
-        console.error(err);
+        return res.send(err);
       }
     });
 })
@@ -231,7 +170,7 @@ app.get("/:id/chat/:chatId/participant", (req, res) => {
     })
     .catch(err => {
       if (err) {
-        console.error(err);
+        return res.send(err);
       }
     });
 })
@@ -246,7 +185,7 @@ app.patch("/:id/chat/:chatId/participant", (req, res) => {
     })
     .catch(err => {
       if (err) {
-        console.error(err);
+        return res.send(err);
       }
     });
 })
@@ -260,7 +199,7 @@ app.patch("/:id/chat/:chatId/participant", (req, res) => {
 //     })
 //     .catch(err => {
 //       if (err) {
-//         console.error(err);
+//         return res.send(err);
 //       }
 //     });
 // })
@@ -304,6 +243,7 @@ app.use('/posts', Post);
 app.use('', User);
 app.use('/:id', Conversation);
 app.use('/:id', Message);
+app.use('/:id', Conversation);
 
 //
 // app.get("/getAllUsers", isAuth, User.getAll);
