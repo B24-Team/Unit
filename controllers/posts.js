@@ -8,24 +8,24 @@ function createPost(req, res) {
     var user_id = req.body.user_id;
     var post = req.body.post;
     var link = req.body.link;
-    // form.parse(req, function (err, fields, files) {
-    //     user_id = fields.user_id
-    //     post = fields.post_text
+    form.parse(req, function (err, fields, files) {
+        user_id = fields.user_id
+        post = fields.post_text
 
-    //     if (err) {
-    //         res.send(err)
-    //     }
-    //     res.end();
-    // });
+        if (err) {
+            res.send(err)
+        }
+        res.end();
+    });
 
-    // form.on('fileBegin', function (name, file) {
-    //     var id = uniqueId()
-    //     file.path = 'folders/uploaded/' + id + "." + file.name.split(".")[1];
-    //     console.log(path.join(__dirname, "/../../../../Unit/folders/uploaded/", id + "." + file.name.split(".")[1]))
-    //     link = path.join(__dirname, "/../../../../Unit/folders/uploaded/", id + "." + file.name.split(".")[1])
-    // });
+    form.on('fileBegin', function (name, file) {
+        var id = uniqueId()
+        file.path = 'folders/uploaded/' + id + "." + file.name.split(".")[1];
+        console.log(path.join(__dirname, "/../../../../Unit/folders/uploaded/", id + "." + file.name.split(".")[1]))
+        link = path.join(__dirname, "/../../../../Unit/folders/uploaded/", id + "." + file.name.split(".")[1])
+    });
    
-    // form.on('end', (err, data) => {
+    form.on('end', (err, data) => {
         var postObj = {post : post, link : link, user_id : user_id}
     models.Post.create(postObj).then(data => {
         if (data) {
@@ -37,7 +37,7 @@ function createPost(req, res) {
             res.send(err)
         }
     })
-    // })
+    })
 }
 
 function  findPost(req, res) {

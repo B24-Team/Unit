@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
     User.hasOne(models.Token);
     User.hasMany(models.User_contact);
     User.hasMany(models.Post, {foreignKey:"user_id", as :"one"});
-    User.hasMany(models.Follow);
+    User.hasMany(models.Follow,  {foreignKey:"follower_id",foreignKey:"followed_id", as :"two"});
     User.hasMany(models.Message);
     // User.hasOne(models.User_verification);
     User.hasMany(models.Conversation);

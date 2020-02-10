@@ -39,7 +39,13 @@ function getfollowers(req, res) {
 }
 
 function getInfoOfFollowers(req, res) {
-  models.Follow.findAll({where:{follower_id:user_id}})
+  models.Follow.findAll({where:{followed_id:req.body.followed_id},
+    include: [
+    {
+    model: models.User,
+    as: 'user2',
+    attributes: {exclude:['password']}}]
+  })
     .then(data => {
       return res.send(data);
     })
@@ -51,7 +57,26 @@ function getInfoOfFollowers(req, res) {
 }
 
 
+function getfollowingList(req,res) {
+  models.Follow.findAll({where:{follower_id:req.params.id},
+    include: [
+      {
+        model: models.User,
+      as: 'user2',
+      attributes: {exclude:['password']}}]
+    })
+    .then(data => {
+      return res.send(data);
+    })
+    .catch(err => {
+      if (err) {
+        return res.send(err);
+      }
+    });
+}
+
 module.exports.create = follow;
 module.exports.delete = unfollow;
+module.exports.getfollowingList = getfollowingList;
 module.exports.getfollowers = getfollowers;
 module.exports.getInfoOfFollowers = getInfoOfFollowers;

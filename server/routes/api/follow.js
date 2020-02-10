@@ -9,7 +9,9 @@ router.post('/create', Follow.create)
 
 router.get('/getfollowers', Follow.getfollowers)
 
-router.patch('/getfollowersInfo', Follow.getInfoOfFollowers)
+router.get('/getfollowersInfo', Follow.getInfoOfFollowers)
+
+router.get('/:id/getfollowinglist', Follow.getfollowingList)
 
 router.delete('/delete',Follow.delete)
 
