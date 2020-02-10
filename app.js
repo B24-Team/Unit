@@ -11,6 +11,7 @@ const Follow = require('./server/routes/api/follow.js');
 const User = require('./server/routes/api/user.js');
 const Conversation = require('./server/routes/api/conversation.js');
 const Message = require('./server/routes/api/message.js');
+const Participant = require('./server/routes/api/participant.js');
 
 
 app.use(
@@ -143,68 +144,6 @@ app.delete("/:id/chat/user_contacts", (req, res) => {
     });
 })
 
-app.post("/:id/chat/:chatId/participant", (req, res) => {
-  let { users_id} = req.body;
-  let conversation_id= req.params.id;
-  models.Participant.create({conversation_id,users_id})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        return res.send(err);
-      }
-    });
-})
-
-app.get("/:id/chat/:chatId/participant", (req, res) => {
-  let chatId = req.body.chatId;
-
-  models.Participant.find({id},{where:{ conversation_id: chatId }})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        return res.send(err);
-      }
-    });
-})
-app.patch("/:id/chat/:chatId/participant", (req, res) => {
-  let {  users_id} = req.body;
-  let conversation_id= req.params.id;
-  models.Participant.update({conversation_id,users_id})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        return res.send(err);
-      }
-    });
-})
-// app.delete("/:id/chat/:chatId/participant", (req, res) => {
-//   let conversation_id= req.params.id;
-//   models.Participant.destroy({conversation_id})
-//     .then(data => {
-//       if (data) {
-//         return res.send(data);
-//       }
-//     })
-//     .catch(err => {
-//       if (err) {
-//         return res.send(err);
-//       }
-//     });
-// })
-
-
 
 // let newCategory = {
 //   name: "Fantasy", 
@@ -243,7 +182,7 @@ app.use('/posts', Post);
 app.use('', User);
 app.use('/:id', Conversation);
 app.use('/:id', Message);
-app.use('/:id', Conversation);
+app.use('/:id', Participant);
 
 //
 // app.get("/getAllUsers", isAuth, User.getAll);
