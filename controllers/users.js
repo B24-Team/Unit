@@ -284,6 +284,11 @@ function refreshToken(req, res) {
     .catch(err => console.log(err));
 }
 
+
+function getPhoto(req, res) {
+  res.sendFile(path.resolve("folders/uploaded", req.params.name));
+};
+
 /// malik's
 
 function getAll(req, res) {
@@ -401,6 +406,9 @@ function updateProfile(req, res) {
 
 
 module.exports.signUp = signUp;
+
+module.exports.getPhoto = getPhoto;
+
 module.exports.logIn = logIn;
 // module.exports.enter = enter;
 module.exports.logOut = logOut;
