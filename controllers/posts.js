@@ -45,7 +45,11 @@ function  findPost(req, res) {
     console.log(user_id)
     models.Post.findAll({
          where:{user_id: user_id},
-         include:['user']
+         include: [
+            {
+            model: models.User,
+            as: 'user',
+            attributes: {exclude:['password']}}]
       }).then(data => {
         if (data) {
             return res.send(data)
