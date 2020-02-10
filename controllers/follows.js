@@ -43,7 +43,7 @@ function getInfoOfFollowers(req, res) {
     include: [
     {
     model: models.User,
-    as: 'user2',
+    as: 'user',
     attributes: {exclude:['password']}}]
   })
     .then(data => {
@@ -62,7 +62,7 @@ function getfollowingList(req,res) {
     include: [
       {
         model: models.User,
-      as: 'user2',
+      as: 'user',
       attributes: {exclude:['password']}}]
     })
     .then(data => {
