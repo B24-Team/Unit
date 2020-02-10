@@ -13,6 +13,8 @@ module.exports = {
       // },
       conversation_id: {
         type: Sequelize.INTEGER,
+        onDelete:"cascade",
+        onUpdate:"cascade",
         references: {
           model: 'Conversations',
           key: 'id'
@@ -24,9 +26,6 @@ module.exports = {
           model: 'Users',
           key: 'id'
         }
-      },
-      deleted_at: {
-        type: Sequelize.DATE
       },
       // message_type: {
       //   type: Sequelize.STRING

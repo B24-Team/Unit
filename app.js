@@ -9,6 +9,8 @@ const models = require('./models');
 const Post = require('./server/routes/api/post.js');
 const Follow = require('./server/routes/api/follow.js');
 const User = require('./server/routes/api/user.js');
+const Conversation = require('./server/routes/api/conversation.js');
+const Message = require('./server/routes/api/message.js');
 
 
 app.use(
@@ -262,167 +264,8 @@ app.patch("/:id/chat/:chatId/participant", (req, res) => {
 //       }
 //     });
 // })
-app.post("/:id/chat/", (req, res) => {
-  let { title} = req.body;
-  let {creator_id} = req.params.id
-  models.Conversation.create({title,creator_id})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-})
-
-app.get("/:id/chat/", (req, res) => {
-  let { title } = req.body;
-
-  models.Conversation.findOne({ title })
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-})
-app.patch("/:id/chat/", (req, res) => {
-  let { title} = req.body;
-  let {creator_id} = req.params.id
-  models.Conversation.update({title},{where:{creator_id:creator_id}})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-})
-app.delete("/:id/chat/", (req, res) => {
-  let { title} = req.body;
-  let {creator_id} = req.params.id
-  models.Conversation.destroy({title},{where:{creator_id:creator_id}})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-})
-app.post("/:id/chat/:chatId/message", (req, res) => {
-  let {  message} = req.body;
-  let conversation_id = req.params.conId
-  let sender_id= req.params.id;
-    models.Message.create({message,conversation_id,sender_id})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-})
 
 
-// app.post("/:id/chat/:chatId/message", (req, res) => {
-//   let {id} = req.body;
-  
-//     models.Message.findByPk({id})
-//     .then(data => {
-//       if (data) {
-//         return res.send(data);
-//       }
-//     })
-//     .catch(err => {
-//       if (err) {
-//         console.error(err);
-//       }
-//     });
-// })
-
-app.patch("/:id/chat/:chatId/message", (req, res) => {
-  let {  message} = req.body;
-  let conversation_id = req.params.conId
-  let sender_id= req.params.id;
-    models.Message.update({message},{where:{sender_id:sender_id}})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-})
-
-app.delete("/:id/chat/:chatId/message", (req, res) => {
-  let {  message} = req.body;
-  let conversation_id = req.params.conId
-  let sender_id= req.params.id;
-    models.Message.destroy({message,conversation_id,sender_id})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        console.error(err);
-      }
-    });
-})
-
-// // addUser({phone:"122121",first_name:"abdlrrrahman",password:"123456789",last_name:"abdlrrrahman",middle_name:"abdlrrrahman",is_active:false})
-
-// var addUser = async (userInfo)=>{
-//   // console.log(Object.keys(models))
-//   console.log(models);
-  
-//   try {
-//       const user = await models.User.create(userInfo)
-//       console.log(user)
-//   } catch (error) {
-//       throw error
-//   }
-// }
-
-// addUser({phone:122121,email:"aslksalcas@dscs.com",password:123456789,first_name:"abdlrrrahman",last_name:"abdlrrrahman",middle_name:"abdlrrrahman",is_active:true})
-
-
-// let createCatWithProds = async(catObj, prodArr) => {
-//   let catId = await Models.User.create({
-//       phone: catObj.name,
-//       first_name:catObj.description
-//   }).then(cat => cat.id).catch(err => console.log(err));
-//   await prodArr.map(pr => {
-//       return models.Product.create({
-//           sku: pr.sku,
-//           name: pr.name,
-//           pr: pr.price,
-//           CategoryId:catId
-//       }).catch(err => console.log(err))
-//   });
-// return;
-// }
 
 // let newCategory = {
 //   name: "Fantasy", 
@@ -459,6 +302,8 @@ app.delete("/:id/chat/:chatId/message", (req, res) => {
 app.use("/follow", Follow);
 app.use('/posts', Post);
 app.use('', User);
+app.use('/:id', Conversation);
+app.use('/:id', Message);
 
 //
 // app.get("/getAllUsers", isAuth, User.getAll);
