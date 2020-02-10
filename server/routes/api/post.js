@@ -6,7 +6,7 @@ const router = express.Router();
  
 router.post('/post', Post.create)
 
-router.post('/get', Post.find)
+router.get('/get', Post.find)
 
 router.patch('/update/:id', Post.update)
 

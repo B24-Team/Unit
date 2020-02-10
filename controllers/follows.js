@@ -1,53 +1,51 @@
 const models = require("../models");
 
 function follow(req, res) {
-  models.follow.create({followed_id:req.body.followed_id,follower_id:req.body.follower_id})
+  models.Follow.create({followed_id:req.body.followed_id,follower_id:req.body.follower_id})
     .then(data => {
       if (data) {
-        return res.json("Its working");
+        return res.send("Its working");
       }
     })
     .catch(err => {
       if (err) {
-        return res.json(err);
+        return res.send(err);
       }
     });
 }
 
 function unfollow(req, res) {
-  models.follow.destroy({where:{followed_id:req.body.followed_id,follower_id:req.body.follower_id}})
+  models.Follow.destroy({where:{followed_id:req.body.followed_id,follower_id:req.body.follower_id}})
     .then(data => {
-      return res.json("Its working");
+      return res.send("Deleted");
     })
     .catch(err => {
       if (err) {
-        console.error(err);
+        return res.send(err);
       }
     });
 }
 
 function getfollowers(req, res) {
-  models.follow.find({where:{followed_id:req.body.followed_id}})
+  models.Follow.findOne({where:{followed_id:req.body.followed_id}})
     .then(data => {
-      return res.send(data.rows);
+      return res.send(data);
     })
     .catch(err => {
       if (err) {
-        console.error(err);
+        return res.send(err);
       }
     });
 }
 
 function getInfoOfFollowers(req, res) {
-  models.follow.findAll({where:{follower_id:user_id},include: {
-    model: User,
-  }})
+  models.Follow.findAll({where:{follower_id:user_id}})
     .then(data => {
-      return res.send(data.rows);
+      return res.send(data);
     })
     .catch(err => {
       if (err) {
-        console.error(err);
+        return res.send(err);
       }
     });
 }
