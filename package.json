@@ -29,6 +29,7 @@
     "rand-token": "^0.4.0",
     "save": "^2.4.0",
     "sequelize": "^5.21.3",
+    "socket.io": "^2.3.0",
     "uuid": "^3.4.0",
     "validator": "^12.2.0"
   },

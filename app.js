@@ -5,6 +5,8 @@ const dotenv = require("dotenv").config();
 const cookieParser = require("cookie-parser");
 var Sequelize = require('sequelize');
 const models = require('./models');
+const http = require("http");
+
 
 const Post = require('./server/routes/api/post.js');
 const Follow = require('./server/routes/api/follow.js');
@@ -12,6 +14,14 @@ const User = require('./server/routes/api/user.js');
 const Conversation = require('./server/routes/api/conversation.js');
 const Message = require('./server/routes/api/message.js');
 const Participant = require('./server/routes/api/participant.js');
+const Chatroom = require('./server/routes/api/chatroom.js');
+const socketIO = require("socket.io");
+
+const server = http.Server(app);
+const io = socketIO(server);
+
+
+
 
 
 app.use(
@@ -77,72 +87,72 @@ const port = process.env.PORT || 5000;
 // app.post("/updatePhoto", User.UpdateProfilePhoto)
 
 
-app.post("/:id/chat/user_contacts", (req, res) => {
-  let {  first_name, last_name, contact_id} = req.body;
-  let user_id= req.params.id;
-  console.log(req.params.id)
-  models.User_contact.create({ first_name, last_name, user_id, contact_id})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        return res.send(err);
-      }
-    });
-})
-app.get("/:id/chat/user_contacts", (req, res) => {
-  let {  id } = req.params.id;
+// app.post("/:id/chat/user_contacts", (req, res) => {
+//   let {  first_name, last_name, contact_id} = req.body;
+//   let user_id= req.params.id;
+//   console.log(req.params.id)
+//   models.User_contact.create({ first_name, last_name, user_id, contact_id})
+//     .then(data => {
+//       if (data) {
+//         return res.send(data);
+//       }
+//     })
+//     .catch(err => {
+//       if (err) {
+//         return res.send(err);
+//       }
+//     });
+// })
+// app.get("/:id/chat/user_contacts", (req, res) => {
+//   let {  id } = req.params.id;
 
-  models.User_contact.findAll({where: { user_id: id }})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-      else {
-        return res.send("Add someone first");
-      }
-    })
-    .catch(err => {
-      if (err) {
-        return res.send(err);
-      }
-    });
-})
-app.patch("/:id/chat/user_contacts", (req, res) => {
-  let {  first_name, last_name} = req.body;
-  let id= req.params.id;
-  console.log(req.params.id)
-  models.User_contact.update({ first_name, last_name},{where: { user_id: id }})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        return res.send(err);
-      }
-    });
-})
-app.delete("/:id/chat/user_contacts", (req, res) => {
-  let {  first_name, last_name} = req.body;
-  let id= req.params.id;
-  console.log(req.params.id)
-  models.User_contact.destroy({ first_name, last_name},{where: { user_id: id }})
-    .then(data => {
-      if (data) {
-        return res.send(data);
-      }
-    })
-    .catch(err => {
-      if (err) {
-        return res.send(err);
-      }
-    });
-})
+//   models.User_contact.findAll({where: { user_id: id }})
+//     .then(data => {
+//       if (data) {
+//         return res.send(data);
+//       }
+//       else {
+//         return res.send("Add someone first");
+//       }
+//     })
+//     .catch(err => {
+//       if (err) {
+//         return res.send(err);
+//       }
+//     });
+// })
+// app.patch("/:id/chat/user_contacts", (req, res) => {
+//   let {  first_name, last_name} = req.body;
+//   let id= req.params.id;
+//   console.log(req.params.id)
+//   models.User_contact.update({ first_name, last_name},{where: { user_id: id }})
+//     .then(data => {
+//       if (data) {
+//         return res.send(data);
+//       }
+//     })
+//     .catch(err => {
+//       if (err) {
+//         return res.send(err);
+//       }
+//     });
+// })
+// app.delete("/:id/chat/user_contacts", (req, res) => {
+//   let {  first_name, last_name} = req.body;
+//   let id= req.params.id;
+//   console.log(req.params.id)
+//   models.User_contact.destroy({ first_name, last_name},{where: { user_id: id }})
+//     .then(data => {
+//       if (data) {
+//         return res.send(data);
+//       }
+//     })
+//     .catch(err => {
+//       if (err) {
+//         return res.send(err);
+//       }
+//     });
+// })
 
 
 // let newCategory = {
@@ -180,9 +190,12 @@ app.delete("/:id/chat/user_contacts", (req, res) => {
 app.use("/follow", Follow);
 app.use('/posts', Post);
 app.use('', User);
-app.use('/:id', Conversation);
-app.use('/:id', Message);
-app.use('/:id', Participant);
+// app.use('/:id', Conversation);
+// app.use('/:id', Message);
+// app.use('/:id', Participant);
+
+
+// app.use('', Chatroom);
 
 //
 // app.get("/getAllUsers", isAuth, User.getAll);
