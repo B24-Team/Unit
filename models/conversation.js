@@ -2,9 +2,8 @@
 module.exports = (sequelize, DataTypes) => {
   const Conversation = sequelize.define('Conversation', {
     title: DataTypes.STRING,
-    creator_id: DataTypes.INTEGER,
-    // channel_id: DataTypes.INTEGER,
-    deleted_at: DataTypes.DATE
+    creator_id: DataTypes.INTEGER
+    // channel_id: DataTypes.INTEGER
   }, {});
   Conversation.associate = function(models) {
     Conversation.belongsTo(models.User);

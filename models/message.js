@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     // guid: DataTypes.STRING,
     conversation_id: DataTypes.INTEGER,
     sender_id: DataTypes.INTEGER,
-    deleted_at: DataTypes.DATE,
     // message_type: DataTypes.STRING,
     message: DataTypes.STRING
   }, {});
