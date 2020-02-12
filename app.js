@@ -11,10 +11,10 @@ const http = require("http");
 const Post = require('./server/routes/api/post.js');
 const Follow = require('./server/routes/api/follow.js');
 const User = require('./server/routes/api/user.js');
-const Conversation = require('./server/routes/api/conversation.js');
-const Message = require('./server/routes/api/message.js');
-const Participant = require('./server/routes/api/participant.js');
-const Chatroom = require('./server/routes/api/chatroom.js');
+// const Conversation = require('./server/routes/api/conversation.js');
+// const Message = require('./server/routes/api/message.js');
+// const Participant = require('./server/routes/api/participant.js');
+// const Chatroom = require('./server/routes/api/chatroom.js');
 const socketIO = require("socket.io");
 
 const server = http.Server(app);
