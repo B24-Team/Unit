@@ -41,6 +41,8 @@
         type="number"
         class="form-control"
         id="inputUsername"
+        min="10"
+        max="100"
         placeholder="How old Are You?"
         onkeydown="javascript: return event.keyCode === 8 || event.keyCode === 46 ? true : !isNaN(Number(event.key))"
       />
