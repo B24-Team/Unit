@@ -44,10 +44,10 @@ export class EditComponent implements OnInit {
   }
   UpdateAge(event: any) {
     this.Age = event.target.value;
-    if (this.Age.length > 2) {
+    if (this.Age.length > 2 || Number(this.Age) < 10) {
       Swal.fire({
         icon: "error",
-        titleText: "You can't be over 100 years old."
+        titleText: "invalid age"
       });
     }
     console.log("new Age", this.Age);
@@ -101,6 +101,9 @@ export class EditComponent implements OnInit {
   }
 
   onUpdateProfile() {
+    if (Number(this.Age) < 10 || Number(this.Age) > 10) {
+      return;
+    }
     var user_id = localStorage.getItem("user_id");
     var obj = {
       user_id,
