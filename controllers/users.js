@@ -14,6 +14,13 @@ const uniqueId = require("uuid");
 
 ///////////////////////////////////////////////////////////////////////////////////// SIGN UP SECTION
 var refreshTokenYolo;
+
+/**
+ * @param{name, username, email, password, confirmPassword} signUp
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function signUp(req, res) {
   let { errors, isValid } = regiteryValidation(req.body);
   console.log("it is here : ",req.body)
@@ -97,6 +104,13 @@ function signUp(req, res) {
   }
 }
 ///////////////////////////////////////////////////////////////////////////////////// LOGIN SECTION
+
+/**
+ * @param{email, password} logIn
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function logIn(req, res) {
   let { errors, isValid } = loginValidation(req.body);
   if (isValid) {
@@ -166,28 +180,15 @@ function logIn(req, res) {
     res.status(404).json(errors);
   }
 }
-/////////////////////////////////////////////////////////////////////////////////////first request
-// function enter(req, res) {
-//   //console.log(req.cookies.refreshtoken, "we have it");
-//   var cookieValue = req.cookies.refreshtoken;
-//   //console.log(cookieValue, "we have it'oot");
-
-//   if (cookieValue !== undefined) {
-//     Token.findRefreshToken(cookieValue)
-//       .then(data => {
-//         // console.log("data from refresh token");
-//         // console.log(data);
-//         if (data) {
-//           return res.status(200).json(data);
-//         }
-//       })
-//       .catch(err => console.log(err));
-//   } else {
-//     return res.json("no cookie found");
-//   }
-// }
 
 ////////////////////////////////////////////////////////////////////////////logout request
+
+/**
+ * @param{user_id} logOut
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function logOut(req, res) {
   console.log(
     "***************************logged out*****************************"
@@ -202,6 +203,13 @@ function logOut(req, res) {
     .catch(err => console.log(err));
 }
 //////////////////////////////////////////////////////////////////////// refresh token request
+
+/**
+ * @param{refreshTokenFormCookies} refreshToken
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function refreshToken(req, res) {
   console.log(req.cookies);
   var refreshTokenFormCookies = req.cookies.refreshtoken;
@@ -278,13 +286,22 @@ function refreshToken(req, res) {
     .catch(err => console.log(err));
 }
 
+/**
+ * @param{name} getPhoto
+ * @returns {string}
+ * this function will recive the params and send it to the frontend
+ */
 
 function getPhoto(req, res) {
   console.log("Photo : ",req.params.name)
   res.sendFile(path.resolve("folders/uploaded", req.params.name));
 };
 
-/// malik's
+/**
+ * @param{} getAll
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
 function getAll(req, res) {
   models.User.findAll({attributes: {
@@ -297,6 +314,13 @@ function getAll(req, res) {
       res.json(err);
     });
 }
+
+/**
+ * @param{username} getUserByName
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function getUserByName(req, res) {
   var username = req.body.username;
   models.User.findOne({attributes: {
@@ -309,6 +333,12 @@ function getUserByName(req, res) {
       res.json(err);
     });
 }
+
+/**
+ * @param{user_id} findById
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
 function findById(req, res) {
   var user_id = req.body.user_id;
@@ -324,18 +354,11 @@ function findById(req, res) {
     });
 }
 
-// function findByIdandUpdateUser(req, res) {
-//   var user_id = req.body.user_id;
-//   User.findById(user_id)
-//     .then(result => {
-//       res.json(result.dataValues);
-//     })
-//     .catch(err => {
-//       res.json(err);
-//     });
-// }
-
-//
+/**
+ * @param{user_id, link} UpdateProfilePhoto
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
 function UpdateProfilePhoto(req, res) {
   const form = new IncomingForm();
@@ -372,7 +395,12 @@ function UpdateProfilePhoto(req, res) {
   });
 }
 
-//
+/**
+ * @param{user_id, password} updatePass
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function updatePass(req, res) {
   var user_id = req.body.user_id;
   var password = req.body.password;
@@ -386,6 +414,12 @@ function updatePass(req, res) {
     });
 }
 
+/**
+ * @param{user_id, name, username, age, gender,bio} updateProfile
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function updateProfile(req, res) {
   console.log(req.body)
   var {user_id, name, username, age, gender,bio} = req.body;
@@ -398,7 +432,7 @@ function updateProfile(req, res) {
     });
 }
 
-//
+
 
 
 module.exports.signUp = signUp;

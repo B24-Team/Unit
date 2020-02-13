@@ -1,5 +1,12 @@
 const models = require("../models");
 
+
+/**
+ * @param{followed_id, follower_id} follow
+ * @returns {string}
+ * this function will recive the params and add it to the database
+ */
+
 function follow(req, res) {
   models.Follow.create({followed_id:req.body.followed_id,follower_id:req.body.follower_id})
     .then(data => {
@@ -14,6 +21,14 @@ function follow(req, res) {
     });
 }
 
+
+
+/**
+ * @param{followed_id, follower_id} unfollow
+ * @returns {string}
+ * this function will recive the params and delete it from the database
+ */
+
 function unfollow(req, res) {
   models.Follow.destroy({where:{followed_id:req.body.followed_id,follower_id:req.body.follower_id}})
     .then(data => {
@@ -26,6 +41,12 @@ function unfollow(req, res) {
     });
 }
 
+/**
+ * @param{followed_id} getfollowers
+ * @returns {string}
+ * this function will recive the params and get it from the database
+ */
+
 function getfollowers(req, res) {
   models.Follow.findAll({where:{followed_id:req.body.followed_id}})
     .then(data => {
@@ -37,6 +58,12 @@ function getfollowers(req, res) {
       }
     });
 }
+
+/**
+ * @param{} getInfoOfFollowers
+ * @returns {string}
+ * this function will recive the params and get it from the database
+ */
 
 function getInfoOfFollowers(req, res) {
   models.Follow.findAll({
@@ -56,6 +83,11 @@ function getInfoOfFollowers(req, res) {
     });
 }
 
+/**
+ * @param{} getfollowingList
+ * @returns {string}
+ * this function will recive the params and get it from the database
+ */
 
 function getfollowingList(req,res) {
   models.Follow.findAll()
