@@ -3,6 +3,7 @@ import { HttpClient, HttpEventType, HttpHeaders } from "@angular/common/http";
 
 import Swal from "sweetalert2";
 import { HttpService } from "src/app/http.service";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-post",
@@ -22,9 +23,9 @@ export class PostComponent implements OnInit {
   previewUrl: any = null;
   fileUploadProgress: string = null;
   uploadedFilePath: string = null;
-  constructor(private http: HttpClient, private _http: HttpService) {}
+  constructor(private http: HttpClient, private _http: HttpService) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   fileProgress(fileInput: any) {
     this.fileData = <File>fileInput.target.files[0];
@@ -111,7 +112,7 @@ export class PostComponent implements OnInit {
     // });
 
     this.http
-      .post("http://localhost:5000/posts/post", formData)
+      .post(`${environment["url"]}/posts/post`, formData)
       .subscribe(data => {
         this.post = "";
 

@@ -2,14 +2,8 @@
   <div class="nav-wrapper">
     <!-- ////// IN CASE NOT LOGGED IN ////// -->
 
-    <a
-      *ngIf="!token"
-      href=""
-      class="logo brand-logo center"
-      (click)="routing()"
-      routerLinkActive="router-link-active"
-      >UNIT</a
-    >
+    <a *ngIf="!token" href="" class="logo brand-logo center" (click)="routing()"
+      routerLinkActive="router-link-active">UNIT</a>
     <ul id="ul">
       <ul *ngIf="!token" id="nav-left" class="left hide-on-med-and-down">
         <li><a href="#team">Team</a></li>
@@ -18,20 +12,10 @@
 
       <ul *ngIf="!token" id="nav-right" class="right hide-on-med-and-down">
         <li>
-          <a
-            href=""
-            [routerLink]="['/login']"
-            routerLinkActive="router-link-active"
-            >Login</a
-          >
+          <a href="" [routerLink]="['/login']" routerLinkActive="router-link-active">Login</a>
         </li>
         <li>
-          <a
-            href=""
-            [routerLink]="['/signUp']"
-            routerLinkActive="router-link-active"
-            >SignUp</a
-          >
+          <a href="" [routerLink]="['/signUp']" routerLinkActive="router-link-active">SignUp</a>
         </li>
       </ul>
 
@@ -39,22 +23,11 @@
 
       <!-- ////// IN CASE LOGGED IN ////// -->
 
-      <a
-        *ngIf="token"
-        href=""
-        id="logo"
-        class="logo brand-logo left"
-        (click)="routing()"
-        routerLinkActive="router-link-active"
-        >UNIT</a
-      >
+      <a *ngIf="token" href="" id="logo" class="logo brand-logo left" (click)="routing()"
+        routerLinkActive="router-link-active">UNIT</a>
 
       <div id="searchBar">
-        <a
-          style="width: 65%; text-decoration: underline;"
-          *ngIf="token"
-          (click)="lookUp()"
-        >
+        <a style="width: 65%; text-decoration: underline;" *ngIf="token" (click)="lookUp()">
           <mat-icon>search</mat-icon>
           search
         </a>
@@ -62,11 +35,8 @@
 
       <div id="profile" *ngIf="token" ngbDropdown class="d-inline-block">
         <a [routerLink]="['/profile']" routerLinkActive="router-link-active">
-          <img
-            [src]="'http://127.0.0.1:5000/uploads/' + photo"
-            alt=""
-            style="border-radius: 100%; width: 40px; margin-bottom: 11px;"
-          />
+          <img [src]="env + '/uploads/' + photo" alt=""
+            style="border-radius: 100%; width: 40px; margin-bottom: 11px;" />
         </a>
         <!-- <div id="list" ngbDropdownMenu aria-labelledby="dropdownBasic1">
           <a

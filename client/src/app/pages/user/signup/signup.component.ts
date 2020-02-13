@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-signup",
@@ -54,7 +55,7 @@ export class SignupComponent implements OnInit {
 
   signup() {
     this.http
-      .post("http://localhost:5000/signup", this.signupForm.value)
+      .post(`${environment["url"]}/signup`, this.signupForm.value)
       .subscribe(data => {
         console.log(data);
         if (data["success"]) {

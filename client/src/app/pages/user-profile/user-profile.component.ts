@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-user-profile",
@@ -20,6 +21,8 @@ export class UserProfileComponent implements OnInit {
   followersUserNames: any = "";
   check: any;
 
+  env: any;
+
   constructor(
     private _http: HttpClient,
     private http: HttpClient,
@@ -28,6 +31,7 @@ export class UserProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.env = environment["url"]
     this.activatedRoute.params.subscribe(params => {
       var id = params["id"];
       this.check = params["id"]
@@ -41,14 +45,14 @@ export class UserProfileComponent implements OnInit {
         this.getPeopleFollowingYou()
 
         this.http
-          .post("http://localhost:5000/findById", { user_id: id })
+          .post(`${environment["url"]}/findById`, { user_id: id })
           .subscribe(data => {
             this.userData = data;
             console.log(this.userData, "FROM USER PROF");
           });
       }
       this.http
-        .post("http://localhost:5000/follow/getfollowers", {
+        .post(`${environment["url"]}/follow/getfollowers`, {
           followed_id: id
         })
         .subscribe(data => {
@@ -71,7 +75,7 @@ export class UserProfileComponent implements OnInit {
   follow(id) {
     var follower = localStorage.getItem("user_id");
     this.http
-      .post("http://localhost:5000/follow/create", {
+      .post(`${environment["url"]}/follow/create`, {
         follower_id: follower,
         followed_id: id
       })
@@ -84,7 +88,7 @@ export class UserProfileComponent implements OnInit {
   unFollow(id) {
     var follower = localStorage.getItem("user_id");
     this.http
-      .post("http://localhost:5000/follow/delete", {
+      .post(`${environment["url"]}/follow/delete`, {
         follower_id: follower,
         followed_id: id
       })
@@ -97,7 +101,7 @@ export class UserProfileComponent implements OnInit {
   getFollowing() {
     console.log("invoked 1")
     this._http
-      .get("http://localhost:5000/follow/getfollowersinfo")
+      .get(`${environment["url"]}/follow/getfollowersinfo`)
       .subscribe((data: Array<any>) => {
         data.forEach(element => {
           this.followData.push(element);
@@ -120,7 +124,7 @@ export class UserProfileComponent implements OnInit {
     console.log("invoked 2")
 
     this._http
-      .get("http://localhost:5000/follow/getfollowinglist")
+      .get(`${environment["url"]}/follow/getfollowinglist`)
       .subscribe((data: Array<any>) => {
         data.forEach(element => {
           this.followData_sec.push(element);

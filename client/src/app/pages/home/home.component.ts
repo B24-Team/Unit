@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Component, OnInit, Output, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import { HttpService } from "src/app/http.service";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-home",
@@ -25,7 +26,7 @@ export class HomeComponent implements OnInit {
     //     this.router.navigate(["/"]);
     //   }
     // }, 60000); //about 4 minsS
-    this.http.get("http://localhost:5000/refreshtoken").subscribe(data => {
+    this.http.get(`${environment["url"]}/refreshtoken`).subscribe(data => {
       console.log("we got a new token home component");
       console.log(data);
       console.log("localSrtorage");
@@ -40,7 +41,7 @@ export class HomeComponent implements OnInit {
       //this.counter++;
       //console.log(this.counter, "counter from client");
       return this.http
-        .get("http://localhost:5000/refreshtoken")
+        .get(`${environment["url"]}/refreshtoken`)
         .subscribe(data => {
           console.log("we got a new token home component");
           console.log(data);

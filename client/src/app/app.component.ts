@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-root",
@@ -13,7 +14,7 @@ export class AppComponent {
   constructor(private http: HttpClient) { }
 
   ngOnInit() {
-    this.http.get("http://localhost:5000/refreshtoken").subscribe(data => {
+    this.http.get(`${environment["url"]}/refreshtoken`).subscribe(data => {
       console.log("we got a new token");
       console.log(data);
       console.log("localSrtorage");
@@ -30,7 +31,7 @@ export class AppComponent {
       this.counter++;
       console.log(this.counter, "counter from client");
       return this.http
-        .get("http://localhost:5000/refreshtoken")
+        .get(`${environment["url"]}/refreshtoken`)
         .subscribe(data => {
           console.log("we got a new token");
           console.log(data);

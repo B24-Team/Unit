@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-main-side",
@@ -9,7 +10,7 @@ import { HttpClient } from "@angular/common/http";
 export class MainSideComponent implements OnInit {
   token;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     var check = setInterval(() => {
@@ -24,7 +25,7 @@ export class MainSideComponent implements OnInit {
     console.log("hi");
     localStorage.removeItem("token");
     const id = Number(localStorage.getItem("user_id"));
-    this.http.post("http://localhost:5000/logout", { id }).subscribe(data => {
+    this.http.post(`${environment["url"]}/logout`, { id }).subscribe(data => {
       localStorage.clear();
     });
   }

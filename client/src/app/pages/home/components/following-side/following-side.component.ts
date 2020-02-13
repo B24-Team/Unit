@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-following-side",
@@ -13,16 +14,18 @@ export class FollowingSideComponent implements OnInit {
   name: string;
   username: string;
   photo: string;
+  env: any;
 
-  constructor(private _http: HttpClient) {}
+  constructor(private _http: HttpClient) { }
 
   ngOnInit() {
+    this.env = environment["url"]
     this.getFollowing();
   }
 
   getFollowing() {
     this._http
-      .get("http://localhost:5000/follow/getfollowersinfo")
+      .get(`${environment["url"]}/follow/getfollowersinfo`)
       .subscribe((data: Array<any>) => {
         data.forEach((element, i) => {
           this.name = data[i]["name"];

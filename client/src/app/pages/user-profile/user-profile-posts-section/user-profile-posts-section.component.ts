@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import Swal from "sweetalert2";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-user-profile-posts-section",
@@ -14,6 +15,8 @@ export class UserProfilePostsSectionComponent implements OnInit {
   // user_id: any = this.userData.id;
   // userData: any;
   Filtered: any;
+
+  env: any;
 
   filter(event) {
     console.log(this.Filtered)
@@ -46,7 +49,7 @@ export class UserProfilePostsSectionComponent implements OnInit {
   getData() {
     console.log(this.userData, "tesssssssssst");
     return this.http
-      .post("http://localhost:5000/posts/get", { user_id: this.userData[0].id })
+      .post(`${environment["url"]}/posts/get`, { user_id: this.userData[0].id })
       .subscribe(data => {
         console.log(data, "brr");
         this.userData = data;
@@ -54,6 +57,7 @@ export class UserProfilePostsSectionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.env = environment["url"]
     this.getData();
     setTimeout(() => {
       this.Filtered = this.userData;
@@ -74,7 +78,7 @@ export class UserProfilePostsSectionComponent implements OnInit {
       heightAuto: true,
       width: 700,
       showConfirmButton: false,
-      imageUrl: `http://127.0.0.1:5000/uploads/${link}`
+      imageUrl: `${environment["url"]}/uploads/${link}`
     });
   }
 }

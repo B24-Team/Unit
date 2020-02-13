@@ -1,5 +1,6 @@
 import { UserService } from "../../../user.service";
 import { Component, OnInit } from "@angular/core";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-chat",
@@ -8,9 +9,11 @@ import { Component, OnInit } from "@angular/core";
 })
 export class ChatComponent implements OnInit {
   Users;
+  env: any;
   constructor(private userService: UserService) { }
 
   ngOnInit() {
+    this.env = environment["url"]
     this.userService.getUsers().subscribe(users => {
       // console.log(users.json(), "u");
       var toShow = users.json()

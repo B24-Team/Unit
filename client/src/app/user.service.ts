@@ -1,5 +1,6 @@
 import { HttpModule, Headers, Http } from "@angular/http";
 import { Injectable } from "@angular/core";
+import { environment } from 'src/environments/environment';
 
 @Injectable()
 export class UserService {
@@ -17,10 +18,10 @@ export class UserService {
   }
 
   getUsers() {
-    return this.http.get("http://localhost:5000/follow/getfollowersInfo");
+    return this.http.get(`${environment["url"]}/follow/getfollowersInfo`);
   }
 
   getChatRoomsChat(chatRoom) {
-    return this.http.get("http://localhost:5000/chatroom/" + chatRoom);
+    return this.http.get(`${environment["url"]}/chatroom/` + chatRoom);
   }
 }

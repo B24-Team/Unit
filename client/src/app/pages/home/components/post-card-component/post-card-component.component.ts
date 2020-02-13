@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output } from "@angular/core";
 import { HttpService } from "src/app/http.service";
 import Swal from "sweetalert2";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-post-card-component",
@@ -9,10 +10,12 @@ import Swal from "sweetalert2";
 })
 export class PostCardComponentComponent implements OnInit {
   @Input() posts: any;
+  env: any;
 
-  constructor(private _http: HttpService) {}
+  constructor(private _http: HttpService) { }
 
   ngOnInit() {
+    this.env = environment["url"]
     this._http.newPost.subscribe(data => {
       this.posts = data;
     });
@@ -31,7 +34,7 @@ export class PostCardComponentComponent implements OnInit {
       heightAuto: true,
       width: 700,
       showConfirmButton: false,
-      imageUrl: `http://127.0.0.1:5000/uploads/${link}`
+      imageUrl: `${environment["url"]}/uploads/${link}`
     });
   }
 }

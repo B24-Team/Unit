@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute } from "@angular/router";
+import { environment } from 'src/environments/environment';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: "app-followers",
@@ -21,12 +23,15 @@ export class FollowersComponent implements OnInit {
 
   id: Number;
 
+  env: any;
+
   constructor(
     private _http: HttpClient,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
+    this.env = environment["url"]
     this.getPeopleFollowingYou();
   }
   getPeopleFollowingYou() {
@@ -34,7 +39,7 @@ export class FollowersComponent implements OnInit {
       // console.log(params, "@@@@@@@@@@kkkekekekekekekrkrkr");
       this.id = params["id"] || localStorage.getItem("user_id");
       this._http
-        .get("http://localhost:5000/follow/getfollowinglist")
+        .get(`${environment["url"]}/follow/getfollowinglist`)
         .subscribe((data: Array<any>) => {
           data.forEach(element => {
             this.followData_sec.push(element);
