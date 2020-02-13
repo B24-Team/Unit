@@ -12,6 +12,9 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   errors: any = [];
   notifyMessage = "";
+  name = "";
+  email = "";
+  username = "";
 
   constructor(
     private fb: FormBuilder,
@@ -62,6 +65,9 @@ export class SignupComponent implements OnInit {
           localStorage.setItem("refreshtoken", data["refreshtoken"]);
           this._router.navigate(["edit"]);
         } else {
+          this.name = "";
+          this.email = "";
+          this.username = "";
           alert(data["message"] || data["email"] || data["password"] || data["confirmPassword"]);
         }
       });
