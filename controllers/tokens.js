@@ -3,7 +3,7 @@ const models = require("../models");
 /**
  * @param{ token, expiresIn, refreshToken, refreshTokenExpiresIn, user_id} createToken
  * @returns {string}
- * this function will recive the params and add it to the database
+ * this function will recive the params and send it to the database
  */
 
 function createToken(
@@ -38,7 +38,7 @@ function createToken(
 /**
  * @param{refresh_token} findRefreshToken
  * @returns {string}
- * this function will recive the params and update it in the database
+ * this function will recive the params and send it to the database
  */
 
 function findRefreshToken(refresh_token) {
@@ -56,7 +56,7 @@ function findRefreshToken(refresh_token) {
 /**
  * @param{newtoken, newExpiryTokenDate, newRefreshToken, newRefreshTokenExpiryDate, user_id} updateToken
  * @returns {string}
- * this function will recive the params and update it in the database
+ * this function will recive the params and send it to the database
  */
 
 function updateToken(
@@ -85,7 +85,7 @@ function updateToken(
 /**
  * @param{id} deleteToken
  * @returns {string}
- * this function will recive the params and delete it from the database
+ * this function will recive the params and send it to the database
  */
 
 function deleteToken(id) {

@@ -4,7 +4,7 @@ const models = require("../models");
 /**
  * @param{followed_id, follower_id} follow
  * @returns {string}
- * this function will recive the params and add it to the database
+ * this function will recive the params and send it to the database
  */
 
 function follow(req, res) {
@@ -26,7 +26,7 @@ function follow(req, res) {
 /**
  * @param{followed_id, follower_id} unfollow
  * @returns {string}
- * this function will recive the params and delete it from the database
+ * this function will recive the params and send it to the database
  */
 
 function unfollow(req, res) {
@@ -44,7 +44,7 @@ function unfollow(req, res) {
 /**
  * @param{followed_id} getfollowers
  * @returns {string}
- * this function will recive the params and get it from the database
+ * this function will recive the params and send it to the database
  */
 
 function getfollowers(req, res) {
@@ -62,7 +62,7 @@ function getfollowers(req, res) {
 /**
  * @param{} getInfoOfFollowers
  * @returns {string}
- * this function will recive the params and get it from the database
+ * this function will recive the params and send it to the database
  */
 
 function getInfoOfFollowers(req, res) {
@@ -86,7 +86,7 @@ function getInfoOfFollowers(req, res) {
 /**
  * @param{} getfollowingList
  * @returns {string}
- * this function will recive the params and get it from the database
+ * this function will recive the params and send it to the database
  */
 
 function getfollowingList(req,res) {

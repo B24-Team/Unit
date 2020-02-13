@@ -6,7 +6,7 @@ const uniqueId = require('uuid');
 /**
  * @param{user_id, post, link, type} createPost
  * @returns {string}
- * this function will recive the params and add it to the database
+ * this function will recive the params and send it to the database
  */
 
 function createPost(req, res) {
@@ -66,7 +66,7 @@ function createPost(req, res) {
 /**
  * @param{user_id} findPost
  * @returns {string}
- * this function will recive the params and get it from the database
+ * this function will recive the params and send it to the database
  */
 
 function  findPost(req, res) {
@@ -89,7 +89,7 @@ function  findPost(req, res) {
 /**
  * @param{user_id} findAll
  * @returns {string}
- * this function will recive the params and get it from the database
+ * this function will recive the params and send it to the database
  */
 
 function  findAll(req, res) {
@@ -116,7 +116,7 @@ function  findAll(req, res) {
 /**
  * @param{post, user_id} findAll
  * @returns {string}
- * this function will recive the params and update it in the database
+ * this function will recive the params and send it to the database
  */
 
 function updatePost(req, res) {
@@ -136,7 +136,7 @@ function updatePost(req, res) {
 /**
  * @param{id, user_id} deletePost
  * @returns {string}
- * this function will recive the params and delete it from the database
+ * this function will recive the params and send it to the database
  */
 
 function deletePost(req, res) {

@@ -289,7 +289,7 @@ function refreshToken(req, res) {
 /**
  * @param{name} getPhoto
  * @returns {string}
- * this function will recive the params and send it to the frontend
+ * this function will recive the params and send it to the database
  */
 
 function getPhoto(req, res) {
