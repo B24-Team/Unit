@@ -99,7 +99,7 @@ function  findAll(req, res) {
 
 function updatePost(req, res) {
     let { post , user_id } = req.body;
-    models.Post.update({post},{where:{id:req.params.id,user_id:user_id}}).then(data => {
+    models.Post.update({post : post},{where:{id:req.body.id,user_id:user_id}}).then(data => {
         if (data) {
             return res.send('Updated')
         } 
@@ -113,7 +113,7 @@ function updatePost(req, res) {
 
 function deletePost(req, res) {
 
-    models.Post.destroy({where:{id:req.params.id,user_id:req.body.user_id}}).then(data => {
+    models.Post.destroy({where:{id:req.body.id,user_id:req.body.user_id}}).then(data => {
         if (data) {
             return res.send('Deleted');
         }
