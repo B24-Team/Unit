@@ -18,22 +18,28 @@ export class UserProfileComponent implements OnInit {
   followersLength: any = 0;
   followersNames: any = "";
   followersUserNames: any = "";
+  check: any;
 
   constructor(
     private _http: HttpClient,
     private http: HttpClient,
     private activatedRoute: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(params => {
       var id = params["id"];
+      this.check = params["id"]
       var myId = localStorage.getItem("user_id");
 
       if (myId === id) {
         this.router.navigate(["/profile"]);
       } else {
+
+        this.getFollowing()
+        this.getPeopleFollowingYou()
+
         this.http
           .post("http://localhost:5000/findById", { user_id: id })
           .subscribe(data => {
@@ -58,7 +64,7 @@ export class UserProfileComponent implements OnInit {
           }
           // console.log(data, "data");
           console.log(data, "ppl followed ");
-        });
+        })
     });
   }
 
@@ -89,6 +95,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   getFollowing() {
+    console.log("invoked 1")
     this._http
       .get("http://localhost:5000/follow/getfollowersinfo")
       .subscribe((data: Array<any>) => {
@@ -98,7 +105,7 @@ export class UserProfileComponent implements OnInit {
 
         for (var i = 0; i < this.followData.length; i++) {
           if (
-            this.followData[i]["follower_id"] == localStorage.getItem("user_id")
+            this.followData[i]["follower_id"] == this.check
           ) {
             this.following.push(this.followData[i]);
             this.followingLength = this.following["length"];
@@ -110,6 +117,8 @@ export class UserProfileComponent implements OnInit {
   }
 
   getPeopleFollowingYou() {
+    console.log("invoked 2")
+
     this._http
       .get("http://localhost:5000/follow/getfollowinglist")
       .subscribe((data: Array<any>) => {
@@ -120,7 +129,7 @@ export class UserProfileComponent implements OnInit {
         for (var i = 0; i < this.followData_sec.length; i++) {
           if (
             this.followData_sec[i]["followed_id"] ==
-            localStorage.getItem("user_id")
+            this.check
           ) {
             this.followers.push(this.followData_sec[i]);
             this.followersLength = this.followers["length"];
