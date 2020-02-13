@@ -1,13 +1,17 @@
 <div id="mario-chat">
     <h2>{{ username }}</h2>
-    <span><i *ngIf="isTyping" class="isTyping">typing...</i></span>
     <div id="chat-window">
         <div *ngFor="let item of messageArray">
+            <h6 style="color:#ec1026"><i> {{ item.user}}</i></h6>
             <p [class.userMessage]="item.user == userService.getLoggedInUser().username"
-                [class.secUserMessage]="item.user != userService.getLoggedInUser().username">{{ item.message }}</p>
+                [class.secUserMessage]="item.user != userService.getLoggedInUser().username">
+                {{ item.message}} </p> {{item.Date | dateAgo}}
+            <hr>
         </div>
+
         <!-- <div id="feedback"></div> -->
     </div>
+    <span><strong><i *ngIf="isTyping" class="isTyping">Your Friend is Typing...</i></strong></span>
     <input (keypress)="Enter($event)" (keypress)="typing()" [(ngModel)]="message" name="message" type="text"
         placeholder="Message" />
     <button id="send" (click)="sendMessage()">Send</button>

@@ -46,6 +46,7 @@ export class ChatroomComponent implements OnInit {
     });
     this.userService.getChatRoomsChat(this.chatroom).subscribe(messages => {
       this.messageArray = messages.json();
+      console.log(this.messageArray)
     });
   }
   Enter(event) {

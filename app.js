@@ -118,7 +118,7 @@ io.sockets.on("connection", socket => {
     });
     chatRooms.update(
       { name: data.room },
-      { $push: { messages: { user: data.user, message: data.message } } },
+      { $push: { messages: { user: data.user, message: data.message, Date: new Date() } } },
       (err, res) => {
         if (err) {
           console.log(err);
