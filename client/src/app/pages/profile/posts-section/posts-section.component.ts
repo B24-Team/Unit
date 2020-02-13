@@ -9,22 +9,50 @@ import Swal from "sweetalert2";
   styleUrls: ["./posts-section.component.scss"]
 })
 export class PostsSectionComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   user_id: string = localStorage.getItem("user_id");
   Data: any;
+  Filtered: any = [];
 
   getData() {
     return this.http
       .post("http://localhost:5000/posts/get", { user_id: this.user_id })
       .subscribe(data => {
-        console.log(data);
         this.Data = data;
+        this.Filtered = data;
+        console.log(this.Data, "brrrrrrrrrrrrrrr");
       });
   }
 
   ngOnInit() {
     this.getData();
+  }
+  filter(event) {
+    this.Filtered = []
+    console.log(event["index"])
+    if (event["index"] == 1) {
+      for (var i = 0; i < this.Data.length; i++) {
+        if (this.Data[i]["type"] == "image") {
+          this.Filtered.push(this.Data[i])
+        }
+      }
+    } else if (event["index"] == 2) {
+      for (var i = 0; i < this.Data.length; i++) {
+        if (this.Data[i]["type"] == "video") {
+          this.Filtered.push(this.Data[i])
+        }
+      }
+    } else if (event["index"] == 3) {
+      for (var i = 0; i < this.Data.length; i++) {
+        if (this.Data[i]["type"] == "audio") {
+          this.Filtered.push(this.Data[i])
+        }
+      }
+    } else {
+      this.Filtered = this.Data
+    }
+    console.log(this.Filtered)
   }
 
   delete(item) {
@@ -67,5 +95,21 @@ export class PostsSectionComponent implements OnInit {
             });
         }
       });
+  }
+  widePost(link) {
+    console.log(link);
+    Swal.fire({
+      showClass: {
+        popup: "animated bounceIn"
+      },
+      hideClass: {
+        popup: "animated bounceOut"
+      },
+      background: "transparent",
+      heightAuto: true,
+      width: 700,
+      showConfirmButton: false,
+      imageUrl: `http://127.0.0.1:5000/uploads/${link}`
+    });
   }
 }

@@ -16,12 +16,11 @@ const uniqueId = require("uuid");
 var refreshTokenYolo;
 function signUp(req, res) {
   let { errors, isValid } = regiteryValidation(req.body);
+  console.log("it is here : ",req.body)
   if (!isValid) {
-    // console.log("not valid");
-    // console.log(errors);
+
     res.status(200).json(errors);
   } else {
-    // console.log("is valid");
     var { name, username, email, password, confirmPassword } = req.body;
     models.User.findOne({where:{email:email}})
       .then(data => {
@@ -37,6 +36,7 @@ function signUp(req, res) {
           let hash = bcrypt.hashSync(password, 12);
           var password = hash;
           models.User.create({
+            photo:'newUser.JPG',
             name: req.body.name,
             username: req.body.username,
             email: req.body.email,
@@ -44,13 +44,13 @@ function signUp(req, res) {
           })
             .then(result => {
               if (result) {
-                // res.redirect('/login')
-                // console.log("Result :",result);
+
                 var payload = {
                   id: result.id,
-                  email: result.email
+                  email: result.email,
+                  username: result.username,
+                  name: result.name
                 };
-                //console.log(process.env.secretOrkey);
                 jwt.sign(
                   payload,
                   process.env.secretOrkey,
@@ -61,7 +61,6 @@ function signUp(req, res) {
                     // console.log(refreshToken);
                     // console.log(token);
                     refreshTokenYolo = refreshToken;
-                    // console.log("the thing is :", new Date(date.getTime() + 5 * 60 * 1000))
                     Token.create(
                       token,
                       new Date(date.getTime() + 5 * 60 * 1000),
@@ -71,11 +70,11 @@ function signUp(req, res) {
                     );
                     res.cookie("refreshtoken", refreshToken, {
                       maxAge: 9000000000,
-                      httpOnly: false
+                      httpOnly: true
                     });
                     res.cookie("token", token, {
                       maxAge: 60 * 60 * 1000, // keep it  60 * 60 * 1000
-                      httpOnly: false
+                      httpOnly: true
                     });
                     return res.json({
                       payload,
@@ -83,14 +82,13 @@ function signUp(req, res) {
                       token: "Bearer " + token,
                       refreshToken: refreshTokenYolo
                     });
-                    //) res.status(200).send(result);
                   }
                 );
               }
             })
             .catch(err => {
               if (err) {
-                res.sendStatus(401);
+                res.jsonStatus(401);
               }
             });
         }
@@ -100,30 +98,26 @@ function signUp(req, res) {
 }
 ///////////////////////////////////////////////////////////////////////////////////// LOGIN SECTION
 function logIn(req, res) {
-  // console.log(req.body);
   let { errors, isValid } = loginValidation(req.body);
   if (isValid) {
     var { email, password } = req.body;
     models.User.findOne({
-      attributes:['email', 'id','password']
+      attributes:['email', 'id','password','username','name']
       ,where:{email:email}})
       .then(data => {
-        // console.log("nobody got time for this",data.dataValues);
-        // console.log("sddshsdjsdjbds",data);
+
         if (data) {
           var pass = data.dataValues.password;
           var password = req.body.password;
           bcrypt.compare(password, pass).then(isMatch => {
-            // console.log("isMatch",isMatch);
             if (isMatch) {
-              // return res.send(data);
               var payload = {
                 id: data.dataValues.id,
-                email: data.dataValues.email
+                email: data.dataValues.email,
+                username: data.dataValues.username,
+                name: data.dataValues.name
               };
               
-              // return res.send(data);
-              //console.log(process.env.secretOrkey);
               jwt.sign(
                 payload,
                 process.env.secretOrkey,
@@ -151,18 +145,16 @@ function logIn(req, res) {
                     httpOnly: true
                   });
 
-                  return res.send({
+                  return res.json({
                     payload,
                     success: true,
                     token: "Bearer " + token,
                     refreshToken: refreshToken
                   });
-                  //) res.status(200).send(result);
                 }
               );
-              // return res.send(data.dataValues);
             } else {
-              return res.send("wrong password");
+              return res.json("wrong password");
             }
           });
         } else {
@@ -191,7 +183,7 @@ function logIn(req, res) {
 //       })
 //       .catch(err => console.log(err));
 //   } else {
-//     return res.send("no cookie found");
+//     return res.json("no cookie found");
 //   }
 // }
 
@@ -214,7 +206,7 @@ function refreshToken(req, res) {
   console.log(req.cookies);
   var refreshTokenFormCookies = req.cookies.refreshtoken;
   if (!refreshTokenFormCookies) {
-    return res.send("You Dont have a refresh token , you need to login")
+    return res.json("You Dont have a refresh token , you need to login")
 
   }
 
@@ -231,10 +223,12 @@ function refreshToken(req, res) {
           .then(data => {
             // console.log(data.dataValues);
             if (data) {
-              // res.send("you logged in successfully");
+              // res.json("you logged in successfully");
               var payload = {
                 id: data.dataValues.id,
-                email: data.dataValues.email
+                email: data.dataValues.email,
+                username: data.dataValues.username,
+                name: data.dataValues.name
               };
               // console.log(payload);
               //console.log(process.env.secretOrkey);
@@ -262,19 +256,19 @@ function refreshToken(req, res) {
                     maxAge: 60 * 60 * 1000, // keep it 60 * 60 * 1000
                     httpOnly: true
                   });
-                  return res.send({
+                  return res.json({
                     payload,
                     success: true,
                     token: "Bearer " + token
                   });
-                  //) res.status(200).send(result);
+                  //) res.status(200).json(result);
                 }
               );
             } else {
               res.status(400).json("no user with such id found");
             }
           })
-          .catch(err => res.send(err));
+          .catch(err => res.json(err));
       } else {
         res
           .status(400)
@@ -286,6 +280,7 @@ function refreshToken(req, res) {
 
 
 function getPhoto(req, res) {
+  console.log("Photo : ",req.params.name)
   res.sendFile(path.resolve("folders/uploaded", req.params.name));
 };
 
@@ -296,10 +291,10 @@ function getAll(req, res) {
     include:['id','photo','username','age','is_active','bio','gender'],
     exclude: ['password','createdAt','updatedAt']}})
     .then(result => {
-      res.send(result);
+      res.json(result);
     })
     .catch(err => {
-      res.send(err);
+      res.json(err);
     });
 }
 function getUserByName(req, res) {
@@ -308,10 +303,10 @@ function getUserByName(req, res) {
     exclude: ['password','createdAt','updatedAt']
   },where:{username:username}})
     .then(result => {
-      res.send(result.dataValues);
+      res.json(result.dataValues);
     })
     .catch(err => {
-      res.send(err);
+      res.json(err);
     });
 }
 
@@ -320,11 +315,12 @@ function findById(req, res) {
   models.User.findOne({attributes: {
     exclude: ['password','createdAt','updatedAt']
   },where:{id:user_id}})
-    .then(result => {
-      res.send(result.dataValues);
+    .then(data => {
+      console.log(data.dataValues)
+      res.json(data.dataValues);
     })
     .catch(err => {
-      res.send(err);
+      res.json(err);
     });
 }
 
@@ -332,10 +328,10 @@ function findById(req, res) {
 //   var user_id = req.body.user_id;
 //   User.findById(user_id)
 //     .then(result => {
-//       res.send(result.dataValues);
+//       res.json(result.dataValues);
 //     })
 //     .catch(err => {
-//       res.send(err);
+//       res.json(err);
 //     });
 // }
 
@@ -348,7 +344,7 @@ function UpdateProfilePhoto(req, res) {
   form.parse(req, function (err, fields, files) {
     user_id = fields.user_id;
     if (err) {
-      res.send(err);
+      res.json(err);
     }
     res.end();
   });
@@ -383,22 +379,22 @@ function updatePass(req, res) {
   let hash = bcrypt.hashSync(password, 12);
   models.User.update({password:hash},{where:{id:user_id}})
     .then(data => {
-      res.send('updated');
+      res.json('Password Was Updated');
     })
     .catch(err => {
-      res.send(" something wrong happened");
+      res.json(" something wrong happened");
     });
 }
 
 function updateProfile(req, res) {
-  var id = req.params.id;
-  var {name, username, age, gender,bio} = req.body;
-  models.User.update({name:name, username:username, age:age, gender:gender, bio:bio},{where:{id:id}})
+  console.log(req.body)
+  var {user_id, name, username, age, gender,bio} = req.body;
+  models.User.update({name : name, username : username, age : age, gender : gender, bio : bio}, {where:{id:user_id}})
     .then(data => {
       res.json("Profile Updated !!");
     })
     .catch(err => {
-      res.send("err");
+      res.json(err);
     });
 }
 
@@ -410,7 +406,6 @@ module.exports.signUp = signUp;
 module.exports.getPhoto = getPhoto;
 
 module.exports.logIn = logIn;
-// module.exports.enter = enter;
 module.exports.logOut = logOut;
 module.exports.refreshToken = refreshToken;
 //
@@ -420,4 +415,3 @@ module.exports.findById = findById;
 module.exports.UpdateProfilePhoto = UpdateProfilePhoto;
 module.exports.updatePass = updatePass;
 module.exports.updateProfile = updateProfile;
-// module.exports.findByIdandUpdateUser = findByIdandUpdateUser;

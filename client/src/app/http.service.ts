@@ -13,7 +13,7 @@ export class HttpService {
   constructor(private _http: HttpClient) {}
 
   getAllPosts() {
-    return this._http.get("http://localhost:5000/getAllPosts");
+    return this._http.get("http://localhost:5000/posts/getAllPosts");
   }
 
   getAllUsers() {

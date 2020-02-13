@@ -21,14 +21,15 @@ export class UserProfileComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       var id = params["id"];
       var myId = localStorage.getItem("user_id");
-
+      console.log("qyy",id)
       if (myId === id) {
         this.router.navigate(["/profile"]);
       } else {
         this.http
           .post("http://localhost:5000/findById", { user_id: id })
           .subscribe(data => {
-            this.userData = data;
+            this.userData = [data];
+            console.log(this.userData, "FROM USER PROF");
           });
       }
       this.http
@@ -36,6 +37,8 @@ export class UserProfileComponent implements OnInit {
           followed_id: id
         })
         .subscribe(data => {
+          console.log("DATa is Here : " ,data)
+          if (data) {
           for (var i = 0; i < data["length"]; i++) {
             if (data[i]["follower_id"].myId === data[i]["followed_id"].id) {
               console.log("YOU ARE FOLLOWING HIM");
@@ -46,7 +49,8 @@ export class UserProfileComponent implements OnInit {
               return this.followed;
             }
           }
-          // console.log(data, "data");
+        }
+          console.log(data, "data");
           console.log(data, "ppl followed ");
         });
     });
@@ -73,6 +77,7 @@ export class UserProfileComponent implements OnInit {
         followed_id: id
       })
       .subscribe(data => {
+        console.log(data)
         this.followed = false;
         console.log(data, "user profile res UNFOLLOW");
       });

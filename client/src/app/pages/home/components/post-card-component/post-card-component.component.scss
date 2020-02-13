@@ -7,14 +7,19 @@
 }
 
 .example-card {
-  border: 1px solid rgba(128, 128, 128, 0.911);
+  box-shadow: 1px -1px 31px -7px rgba(0, 0, 0, 0.75);
+  border-radius: 10px;
   color: white;
   background-color: #2a263d;
-  margin-top: 2%;
-  max-width: 600px;
-  max-height: 1500px;
+  margin-top: 3%;
+  max-width: 500px;
+  max-height: 1400px;
   #content {
-    padding-top: 3%;
+    padding-top: 2%;
+  }
+  #footer {
+    text-align: center;
+    padding-bottom: 2%;
   }
 }
 

@@ -22,7 +22,7 @@ export class LoginComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private httpService: HttpService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.createForm();
@@ -56,7 +56,9 @@ export class LoginComponent implements OnInit {
     this.http
       .post("http://localhost:5000/login", this.loginForm.value, options)
       .subscribe(data => {
+        console.log(data,"sdvflkijesukhbfwkeckhwekuh")
         if (data["success"]) {
+          localStorage.setItem("user", JSON.stringify(data["payload"]));
           localStorage.setItem("user_id", data["payload"]["id"]);
           localStorage.setItem("email", data["payload"]["email"]);
           localStorage.setItem("token", data["token"]);

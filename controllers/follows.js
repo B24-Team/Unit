@@ -4,12 +4,12 @@ function follow(req, res) {
   models.Follow.create({followed_id:req.body.followed_id,follower_id:req.body.follower_id})
     .then(data => {
       if (data) {
-        return res.send("Its working");
+        return res.json("Its working");
       }
     })
     .catch(err => {
       if (err) {
-        return res.send(err);
+        return res.json(err);
       }
     });
 }
@@ -17,60 +17,54 @@ function follow(req, res) {
 function unfollow(req, res) {
   models.Follow.destroy({where:{followed_id:req.body.followed_id,follower_id:req.body.follower_id}})
     .then(data => {
-      return res.send("Deleted");
+      return res.json("Deleted");
     })
     .catch(err => {
       if (err) {
-        return res.send(err);
+        return res.json(err);
       }
     });
 }
 
 function getfollowers(req, res) {
-  models.Follow.findOne({where:{followed_id:req.body.followed_id}})
+  models.Follow.findAll({where:{followed_id:req.body.followed_id}})
     .then(data => {
-      return res.send(data);
+      return res.json(data);
     })
     .catch(err => {
       if (err) {
-        return res.send(err);
+        return res.json(err);
       }
     });
 }
 
 function getInfoOfFollowers(req, res) {
-  models.Follow.findAll({where:{followed_id:req.body.followed_id},
-    include: [
+  models.Follow.findAll({
+        include: [
     {
     model: models.User,
     as: 'user',
-    attributes: {exclude:['password']}}]
-  })
+    attributes: {exclude:['password']}
+    }]})
     .then(data => {
-      return res.send(data);
+      return res.json(data);
     })
     .catch(err => {
       if (err) {
-        return res.send(err);
+        return res.json(err);
       }
     });
 }
 
 
 function getfollowingList(req,res) {
-  models.Follow.findAll({where:{follower_id:req.params.id},
-    include: [
-      {
-        model: models.User,
-      as: 'user',
-      attributes: {exclude:['password']}}]
-    })
+  models.Follow.findAll()
     .then(data => {
-      return res.send(data);
+      return res.json(data);
     })
     .catch(err => {
       if (err) {
-        return res.send(err);
+        return res.json(err);
       }
     });
 }

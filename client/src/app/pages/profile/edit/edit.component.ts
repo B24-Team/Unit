@@ -24,12 +24,13 @@ export class EditComponent implements OnInit {
       .post("http://localhost:5000/findById", { user_id })
       .subscribe(data => {
         console.log(data);
-        this.Email = data[0]["email"];
-        this.Name = data[0]["name"];
-        this.Username = data[0]["username"];
-        this.Age = data[0]["age"];
-        this.Gender = data[0]["gender"];
-        this.Bio = data[0]["bio"];
+        this.Email = data["email"];
+        this.Name = data["name"];
+        this.Username = data["username"];
+        this.Age = data["age"];
+        this.Gender = data["gender"];
+        this.Bio = data["bio"];
+        console.log("the data is here : ",data)
       });
   }
 
@@ -44,6 +45,12 @@ export class EditComponent implements OnInit {
   }
   UpdateAge(event: any) {
     this.Age = event.target.value;
+    if (this.Age.length > 2) {
+      Swal.fire({
+        icon: "error",
+        titleText: "You can't be over 100 years old."
+      });
+    }
     console.log("new Age", this.Age);
   }
   UpdateGender(event: any) {
@@ -73,6 +80,7 @@ export class EditComponent implements OnInit {
           password: this.Pass
         })
         .subscribe(data => {
+          console.log(data)
           if (data === "Password Was Updated") {
             Swal.fire({
               position: "top",
@@ -104,9 +112,11 @@ export class EditComponent implements OnInit {
       gender: this.Gender,
       bio: this.Bio
     };
+    console.log(obj)
     this.http
       .post("http://localhost:5000/updateprofile", obj)
       .subscribe(data => {
+        console.log(data)
         if ((data = "Profile Updated !!")) {
           Swal.fire({
             position: "top",
