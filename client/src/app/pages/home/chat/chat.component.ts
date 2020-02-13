@@ -8,12 +8,20 @@ import { Component, OnInit } from "@angular/core";
 })
 export class ChatComponent implements OnInit {
   Users;
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   ngOnInit() {
     this.userService.getUsers().subscribe(users => {
-      console.log(users, "u");
-      this.Users = users.json();
+      // console.log(users.json(), "u");
+      var toShow = users.json()
+      var result = []
+      for (var i = 0; i < toShow.length; i++) {
+        if (toShow[i]["follower_id"] == localStorage.getItem("user_id")) {
+          result.push(toShow[i])
+        }
+      }
+
+      this.Users = result;
     });
   }
 
