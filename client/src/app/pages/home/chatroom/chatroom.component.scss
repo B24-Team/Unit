@@ -1,7 +1,8 @@
 h2 {
   font-size: 18px;
   padding: 10px 20px;
-  color: #0d570d;
+  color: black;
+  font-weight: bold;
 }
 
 #mario-chat {
@@ -62,7 +63,7 @@ input {
 }
 
 #send {
-  background: #0c491b;
+  background: #dc3545;
   color: #fff;
   font-size: 18px;
   border: 0;
@@ -85,7 +86,7 @@ input {
 .userMessage {
   width: fit-content;
   max-width: 70%;
-  background-color: #5b9b5b;
+  background-color: #dc3545;
   padding: 10px;
   border-radius: 5px;
   margin-top: 1px;
@@ -95,11 +96,11 @@ input {
 .secUserMessage {
   width: fit-content;
   max-width: 70%;
-  background-color: white;
+  background-color: #91474e;
   padding: 10px;
   border-radius: 5px;
   margin-top: 1px;
-  color: black;
+  color: white;
 }
 
 .isTyping {

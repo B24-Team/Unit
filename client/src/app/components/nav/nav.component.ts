@@ -20,7 +20,7 @@ export class NavComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private _http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit() {
     this._http
@@ -32,8 +32,8 @@ export class NavComponent implements OnInit {
     var check = setInterval(() => {
       this.token = localStorage.token;
       if (this.token) {
-        document.getElementById("navBarLandingPg").style.backgroundColor =
-          "#00b0ff";
+        // document.getElementById("navBarLandingPg").style.backgroundColor =
+        //   "#00b0ff";
         document.getElementById("navBarLandingPg").style.position =
           "webkit-sticky";
         document.getElementById("navBarLandingPg").style.position = "fixed";
