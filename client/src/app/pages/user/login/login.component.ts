@@ -14,6 +14,8 @@ export class LoginComponent implements OnInit {
   errors: any = [];
   notifyMessage = "";
   token = "";
+  email = "";
+  password = "";
   // x = "";
 
   constructor(
@@ -65,7 +67,10 @@ export class LoginComponent implements OnInit {
           this.token = data["token"];
           this.router.navigate(["home"]);
         } else {
+          this.email = "";
+          this.password = "";
           alert("invalid Credintials");
+
         }
       });
   }

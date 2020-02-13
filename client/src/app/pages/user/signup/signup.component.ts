@@ -18,7 +18,7 @@ export class SignupComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private _router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.createForm();
@@ -62,7 +62,7 @@ export class SignupComponent implements OnInit {
           localStorage.setItem("refreshtoken", data["refreshtoken"]);
           this._router.navigate(["edit"]);
         } else {
-          alert(data["message"]);
+          alert(data["message"] || data["email"] || data["password"] || data["confirmPassword"]);
         }
       });
     // console.log(this.signupForm.value);
