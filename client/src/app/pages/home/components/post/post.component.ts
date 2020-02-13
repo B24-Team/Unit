@@ -22,9 +22,9 @@ export class PostComponent implements OnInit {
   previewUrl: any = null;
   fileUploadProgress: string = null;
   uploadedFilePath: string = null;
-  constructor(private http: HttpClient, private _http: HttpService) { }
+  constructor(private http: HttpClient, private _http: HttpService) {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   fileProgress(fileInput: any) {
     this.fileData = <File>fileInput.target.files[0];
@@ -66,11 +66,7 @@ export class PostComponent implements OnInit {
     console.log(this.fileData);
 
     if (!this.fileData) {
-      return Swal.fire(
-        "Empty?",
-        "You Have Got To Upload Something",
-        "error"
-      );
+      return Swal.fire("Empty?", "You Have Got To Upload Something", "error");
     }
 
     var type = this.fileData.type.split("/")[0];
