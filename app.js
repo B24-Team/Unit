@@ -6,13 +6,7 @@ const cookieParser = require("cookie-parser");
 const socketIO = require("socket.io");
 const http = require("http");
 
-app.use(
-  cors({
-    preflightContinue: true,
-    credentials: true,
-    origin: "http://localhost:4200"
-  })
-);
+app.use(cors());
 app.use(cookieParser());
 app.use(express.json());
 
