@@ -14,7 +14,7 @@ function createUser(userObj) {
           return data.rows[0];
         })
         .catch(err => {
-          throw "user not Found";
+          console.log(err);
         });
     })
     .catch(err => {
@@ -25,10 +25,11 @@ function createUser(userObj) {
 function findUser(email) {
   return User.find(email)
     .then(data => {
+      console.log(data, "data from find user");
       return data;
     })
     .catch(err => {
-      throw "user not Found";
+      console.log(err);
     });
 }
 function findById(id) {
@@ -42,8 +43,8 @@ function findById(id) {
 }
 
 function updateUser(obj) {
-  var user_id = obj.user_id
-  var password = obj.password
+  var user_id = obj.user_id;
+  var password = obj.password;
   return User.update(user_id, password)
     .then(data => {
       return "Password Was Updated";
@@ -84,8 +85,8 @@ function getUsers() {
 }
 
 function updatePhoto(obj) {
-  var user_id = obj.user_id
-  var photo = obj.photo
+  var user_id = obj.user_id;
+  var photo = obj.photo;
   return User.updatePhoto(user_id, photo)
     .then(data => {
       return data;
@@ -96,12 +97,14 @@ function updatePhoto(obj) {
 }
 
 function updateProfile(obj) {
-  var { user_id, name, username, age, gender, bio } = obj.body
-  return User.updateProfile(user_id, name, username, age, gender, bio).then(data => {
-    return data;
-  }).catch(err => {
-    throw "SOMETHING WENT WRONG";
-  })
+  var { user_id, name, username, age, gender, bio } = obj.body;
+  return User.updateProfile(user_id, name, username, age, gender, bio)
+    .then(data => {
+      return data;
+    })
+    .catch(err => {
+      throw "SOMETHING WENT WRONG";
+    });
 }
 
 //

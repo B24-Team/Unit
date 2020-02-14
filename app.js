@@ -16,7 +16,7 @@ app.use(
 app.use(cookieParser());
 app.use(express.json());
 
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
   res.header(
     "Access-Control-Allow-Headers",
@@ -73,7 +73,9 @@ app.post("/updateprofile", isAuth, User.updateProfile);
 //
 const server = http.Server(app);
 const io = socketIO(server);
-
+app.get("/confirmation/:token", (req, res) => {
+  res.send("confirmed");
+});
 const chatRooms = require("./models/mogooseModels/chatRoom");
 app.get("/chatroom/:room", (req, res, next) => {
   console.log(chatRooms.find);
