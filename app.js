@@ -100,7 +100,6 @@ io.sockets.on("connection", socket => {
     console.log(chatRooms.find);
     chatRooms
       .find({})
-
       .then(rooms => {
         count = 0;
         rooms.forEach(room => {
