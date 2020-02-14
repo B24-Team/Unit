@@ -6,21 +6,12 @@ const cookieParser = require("cookie-parser");
 const socketIO = require("socket.io");
 const http = require("http");
 
-// app.use(
-//   cors({
-//     preflightContinue: true,
-//     credentials: true,
-//     origin: "http://localhost:4200"
-//   })
-// );
 app.use(cookieParser());
 app.use(express.json());
-
+app.use(cors());
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "https://unit-is-online.herokuapp.com"); // update to match the domain you will make the request from
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-
-  //
   next();
 });
 
