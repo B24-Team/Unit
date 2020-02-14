@@ -139,7 +139,7 @@ io.sockets.on("connection", socket => {
   });
 });
 app.get(/.*/, function (req, res, next) {
-  res.sendFile('/client/dist/Unit/index.html')
+  res.sendFile(path.join(__dirname + '/client/dist/Unit/index.html'))
 })
 
 server.listen(port, () =>
