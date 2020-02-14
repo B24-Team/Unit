@@ -56,9 +56,10 @@ export class UserProfileComponent implements OnInit {
           followed_id: id
         })
         .subscribe(data => {
-          // console.log("my id", myId, " - ", " his id ", id)
+          console.log(data, "yolo")
+          console.log("my id", myId, " - ", " his id ", id)
           for (var i = 0; i < data["length"]; i++) {
-            if (data[i]["follower_id"].myId === data[i]["followed_id"].id) {
+            if (data[i]["follower_id"] == myId && data[i]["followed_id"] == id) {
               console.log("YOU ARE FOLLOWING HIM");
               this.followed = true;
               return this.followed;
@@ -66,6 +67,8 @@ export class UserProfileComponent implements OnInit {
               console.log("YOU ARE NOT FOLLOWING HIM");
             }
           }
+          this.followed = false;
+          return this.followed;
           // console.log(data, "data");
           console.log(data, "ppl followed ");
         })
