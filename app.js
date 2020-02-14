@@ -33,7 +33,7 @@ const Follow = require("./server/routes/api/follow.js");
 const path = require("path");
 const isAuth = require("./server/validation/tokenValidation");
 
-app.use(express.static(__dirname + '/client/dist/Unit'))
+app.use(express.static(__dirname + '/client/test'))
 
 
 
@@ -139,7 +139,7 @@ io.sockets.on("connection", socket => {
   });
 });
 app.get(/.*/, function (req, res, next) {
-  res.sendFile(path.join(__dirname + '/client/dist/Unit/index.html'))
+  res.sendFile(path.join(__dirname + '/client/test/index.html'))
 })
 
 server.listen(port, () =>
