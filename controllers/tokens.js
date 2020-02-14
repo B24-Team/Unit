@@ -1,4 +1,11 @@
 const models = require("../models");
+
+/**
+ * @param{ token, expiresIn, refreshToken, refreshTokenExpiresIn, user_id} createToken
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function createToken(
   token,
   expiresIn,
@@ -28,6 +35,12 @@ function createToken(
     });
 }
 
+/**
+ * @param{refresh_token} findRefreshToken
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function findRefreshToken(refresh_token) {
   return models.Token.findOne({
     attributes:['user_id','refresh_token_expires_at']
@@ -39,6 +52,12 @@ function findRefreshToken(refresh_token) {
       return "refresh token not Found";
     });
 }
+
+/**
+ * @param{newtoken, newExpiryTokenDate, newRefreshToken, newRefreshTokenExpiryDate, user_id} updateToken
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
 function updateToken(
   newtoken,
@@ -62,6 +81,12 @@ function updateToken(
       return "USER NOT FOUND";
     });
 }
+
+/**
+ * @param{id} deleteToken
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
 function deleteToken(id) {
   // console.log("zezooooo", id)

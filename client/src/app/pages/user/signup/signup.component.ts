@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-signup",
@@ -12,13 +13,16 @@ export class SignupComponent implements OnInit {
   signupForm: FormGroup;
   errors: any = [];
   notifyMessage = "";
+  name = "";
+  email = "";
+  username = "";
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private http: HttpClient,
     private _router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.createForm();
@@ -51,17 +55,21 @@ export class SignupComponent implements OnInit {
 
   signup() {
     this.http
-      .post("http://localhost:5000/signup", this.signupForm.value)
+      .post(`${environment["url"]}/signup`, this.signupForm.value)
       .subscribe(data => {
         console.log(data);
         if (data["success"]) {
+          localStorage.setItem("user", JSON.stringify(data["payload"]));
           localStorage.setItem("user_id", data["payload"]["id"]);
           localStorage.setItem("email", data["payload"]["email"]);
           localStorage.setItem("token", data["token"]);
           localStorage.setItem("refreshtoken", data["refreshtoken"]);
           this._router.navigate(["edit"]);
         } else {
-          alert(data["message"]);
+          this.name = "";
+          this.email = "";
+          this.username = "";
+          alert(data["message"] || data["email"] || data["password"] || data["confirmPassword"]);
         }
       });
     // console.log(this.signupForm.value);

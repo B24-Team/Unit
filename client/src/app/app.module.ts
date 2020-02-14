@@ -29,10 +29,24 @@ import { PostCardComponentComponent } from "./pages/home/components/post-card-co
 import { HttpRequestInterceptor } from "./HttpRequestInterceptor";
 import { SweetAlert2Module } from "@sweetalert2/ngx-sweetalert2";
 import { SafePipe } from "./pipes/safe.pipe";
-import { ReversePipe } from './pipes/reverse.pipe';
-import { DateAgoPipe } from './pipes/date-ago.pipe';
-import { UsersListComponent } from './pages/home/components/users-list/users-list.component';
-import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { ReversePipe } from "./pipes/reverse.pipe";
+import { DateAgoPipe } from "./pipes/date-ago.pipe";
+import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
+import { UserProfilePostsSectionComponent } from "./pages/user-profile/user-profile-posts-section/user-profile-posts-section.component";
+import { MatSidenavModule, MatListModule } from "@angular/material";
+import { ChatComponent } from "./pages/home/chat/chat.component";
+import { ChatroomComponent } from "./pages/home/chatroom/chatroom.component";
+import { UserService } from "./user.service";
+import { WebsocketService } from "./websocket.service";
+import {
+  FlashMessagesModule,
+  FlashMessagesService
+} from "angular2-flash-messages/module";
+import { HttpModule } from "@angular/http";
+import { MainSideComponent } from "./pages/home/components/main-side/main-side.component";
+import { FollowingSideComponent } from "./pages/home/components/following-side/following-side.component";
+import { FollowersComponent } from './pages/profile/info-section/followers/followers.component';
+import { FollowingComponent } from './pages/profile/info-section/following/following.component';
 
 @NgModule({
   declarations: [
@@ -52,10 +66,18 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     SafePipe,
     ReversePipe,
     DateAgoPipe,
-    UsersListComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    UserProfilePostsSectionComponent,
+    ChatComponent,
+    ChatroomComponent,
+    MainSideComponent,
+    FollowingSideComponent,
+    FollowersComponent,
+    FollowingComponent
   ],
   imports: [
+    MatListModule,
+    MatSidenavModule,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -69,12 +91,16 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     FontAwesomeModule,
     MatIconModule,
     MatCardModule,
-    SweetAlert2Module
+    SweetAlert2Module,
+    HttpModule
   ],
   providers: [
     LoginComponent,
     AuthGuard,
-
+    FlashMessagesService,
+    UserService,
+    AuthGuard,
+    WebsocketService,
     [
       {
         provide: HTTP_INTERCEPTORS,

@@ -7,12 +7,12 @@ const router = express.Router();
  
 router.post('/create', Follow.create)
 
-router.get('/getfollowers', Follow.getfollowers)
+router.post('/getfollowers', Follow.getfollowers)
 
-router.get('/getfollowersInfo', Follow.getInfoOfFollowers)
+router.get('/getfollowersinfo', Follow.getInfoOfFollowers)
 
-router.get('/:id/getfollowinglist', Follow.getfollowingList)
+router.get('/getfollowinglist', Follow.getfollowingList)
 
-router.delete('/delete',Follow.delete)
+router.post('/delete',Follow.delete)
 
 module.exports = router

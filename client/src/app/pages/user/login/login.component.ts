@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { Router, ActivatedRoute } from "@angular/router";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { HttpService } from "src/app/http.service";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-login",
@@ -14,6 +15,8 @@ export class LoginComponent implements OnInit {
   errors: any = [];
   notifyMessage = "";
   token = "";
+  email = "";
+  password = "";
   // x = "";
 
   constructor(
@@ -22,7 +25,7 @@ export class LoginComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private httpService: HttpService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.createForm();
@@ -54,9 +57,10 @@ export class LoginComponent implements OnInit {
     };
 
     this.http
-      .post("http://localhost:5000/login", this.loginForm.value, options)
+      .post(`${environment["url"]}/login`, this.loginForm.value, options)
       .subscribe(data => {
         if (data["success"]) {
+          localStorage.setItem("user", JSON.stringify(data["payload"]));
           localStorage.setItem("user_id", data["payload"]["id"]);
           localStorage.setItem("email", data["payload"]["email"]);
           localStorage.setItem("token", data["token"]);
@@ -64,7 +68,10 @@ export class LoginComponent implements OnInit {
           this.token = data["token"];
           this.router.navigate(["home"]);
         } else {
+          this.email = "";
+          this.password = "";
           alert("invalid Credintials");
+
         }
       });
   }

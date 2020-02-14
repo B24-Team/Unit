@@ -6,24 +6,8 @@ const cookieParser = require("cookie-parser");
 var Sequelize = require('sequelize');
 const models = require('./models');
 const http = require("http");
-
-
-const Post = require('./server/routes/api/post.js');
-const Follow = require('./server/routes/api/follow.js');
-const User = require('./server/routes/api/user.js');
-// const Conversation = require('./server/routes/api/conversation.js');
-// const Message = require('./server/routes/api/message.js');
-// const Participant = require('./server/routes/api/participant.js');
-// const Chatroom = require('./server/routes/api/chatroom.js');
 const socketIO = require("socket.io");
-
-const server = http.Server(app);
-const io = socketIO(server);
-
-
-
-
-
+const isAuth = require("./server/validation/tokenValidation");
 app.use(
   cors({
     preflightContinue: true,
@@ -43,168 +27,95 @@ app.use(function (req, res, next) {
   next();
 });
 
+
+
+const Post = require('./server/routes/api/post.js');
+const Follow = require('./server/routes/api/follow.js');
+const User = require('./server/routes/api/user.js');
+
+const server = http.Server(app);
+const io = socketIO(server);
+
+
+app.get("/auth", isAuth, (req, res) => {
+  console.log(req.cookies);
+  res.json({
+    message: "all good"
+  });
+});
+
+
+
 const port = process.env.PORT || 5000;
 
 
 
-// const User = require("./server/routes/api/user");
-// const Post = require("./server/routes/api/post.js");
-// const Follow = require("./server/routes/api/follow.js");
-// const path = require("path");
-// const isAuth = require("./server/validation/tokenValidation");
 
-// //////////////////// routes
-// app.post("/auth", isAuth, (req, res) => {
-//   res.json({
-//     message: "all good"
-//   });
-// });
+const chatRooms = require("./mogooseModels/chatRoom");
+app.get("/chatroom/:room", (req, res, next) => {
+  console.log(chatRooms.find);
+  let room = req.params.room;
+  chatRooms
+    .find({ name: room })
+    .then(chatroom => {
+      console.log(chatroom);
 
-// // app.post("/getuser", User.find);
-// app.post("/signup", User.signUp);
-// app.post("/login", User.logIn);
-// //app.get("/", User.enter);
-// app.post("/logout", User.logOut);
-// app.get("/refreshtoken", User.refreshToken);
-// app.get("/uploads/:name", (req, res) => {
-//   res.sendFile(path.resolve("folders/uploaded", req.params.name));
-// });
-// app.post("/posts/post", isAuth, Post.create);
-// app.post("/posts/get", Post.find);
-// app.patch("/posts/update/:id", isAuth, Post.update);
-// app.delete("/posts/delete/:id", isAuth, Post.delete);
-// app.get("/getAllPosts", Post.getAllPosts);
-// //
-// app.post("/follow/create", isAuth, Follow.create);
-// app.post("/follow/delete", isAuth, Follow.delete);
-// app.post("/follow/getfollowers", isAuth, Follow.getfollowers);
-// const { Sequelize, Model, DataTypes } = require('sequelize');
+      res.json(chatroom[0].messages);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+});
 
-// //
-// app.get("/getAllUsers", User.getAll);
-// app.post("/findUser", User.getUserByName);
-// app.post("/findById", User.findById);
-// app.post("/updatePhoto", User.UpdateProfilePhoto)
+io.sockets.on("connection", socket => {
+  socket.on("join", data => {
+    socket.join(data.room);
+    console.log(chatRooms.find);
+    chatRooms
+      .find({})
 
+      .then(rooms => {
+        count = 0;
+        rooms.forEach(room => {
+          if (room.name == data.room) {
+            count++;
+          }
+        });
+        if (count == 0) {
+          chatRooms.create({ name: data.room, messages: [] });
+        }
+      })
+      .catch(err => console.log(err));
+  });
+  socket.on("message", data => {
+    console.log(data);
+    io.in(data.room).emit("new message", {
+      user: data.user,
+      message: data.message
+    });
+    chatRooms.update(
+      { name: data.room },
+      { $push: { messages: { user: data.user, message: data.message } } },
+      (err, res) => {
+        if (err) {
+          console.log(err);
+          return false;
+        }
+        console.log("Document updated");
+      }
+    );
+  });
+  socket.on("typing", data => {
+    socket.broadcast
+      .in(data.room)
+      .emit("typing", { data: data, isTyping: true });
+  });
+});
 
-// app.post("/:id/chat/user_contacts", (req, res) => {
-//   let {  first_name, last_name, contact_id} = req.body;
-//   let user_id= req.params.id;
-//   console.log(req.params.id)
-//   models.User_contact.create({ first_name, last_name, user_id, contact_id})
-//     .then(data => {
-//       if (data) {
-//         return res.send(data);
-//       }
-//     })
-//     .catch(err => {
-//       if (err) {
-//         return res.send(err);
-//       }
-//     });
-// })
-// app.get("/:id/chat/user_contacts", (req, res) => {
-//   let {  id } = req.params.id;
-
-//   models.User_contact.findAll({where: { user_id: id }})
-//     .then(data => {
-//       if (data) {
-//         return res.send(data);
-//       }
-//       else {
-//         return res.send("Add someone first");
-//       }
-//     })
-//     .catch(err => {
-//       if (err) {
-//         return res.send(err);
-//       }
-//     });
-// })
-// app.patch("/:id/chat/user_contacts", (req, res) => {
-//   let {  first_name, last_name} = req.body;
-//   let id= req.params.id;
-//   console.log(req.params.id)
-//   models.User_contact.update({ first_name, last_name},{where: { user_id: id }})
-//     .then(data => {
-//       if (data) {
-//         return res.send(data);
-//       }
-//     })
-//     .catch(err => {
-//       if (err) {
-//         return res.send(err);
-//       }
-//     });
-// })
-// app.delete("/:id/chat/user_contacts", (req, res) => {
-//   let {  first_name, last_name} = req.body;
-//   let id= req.params.id;
-//   console.log(req.params.id)
-//   models.User_contact.destroy({ first_name, last_name},{where: { user_id: id }})
-//     .then(data => {
-//       if (data) {
-//         return res.send(data);
-//       }
-//     })
-//     .catch(err => {
-//       if (err) {
-//         return res.send(err);
-//       }
-//     });
-// })
-
-
-// let newCategory = {
-//   name: "Fantasy", 
-//   description:"Fantasy genre of the book"
-// };
-// let newProducts = [
-//   {
-//    sku: "nvw1",
-//    name: "Neverwhere",
-//    price: 10.99
-//   },
-//   {
-//    sku: "nrl2",
-//    name: "Northern Lights",
-//    price: 8.99    
-// }
-// ];
-// createCatWithProds(newCategory, newProducts)
-// app.post("/getuser", User.find);
-// app.post("/signup", User.signUp);
-// app.post("/login", User.logIn);
-// //app.get("/", User.enter);
-// app.post("/logout", User.logOut);
-// app.get("/refreshtoken", User.refreshToken);
-// app.get("/uploads/:name", (req, res) => {
-//   res.sendFile(path.resolve("folders/uploaded", req.params.name));
-// });
-// app.post("/posts/post", isAuth, Post.create);
-// app.post("/posts/get", isAuth, Post.find);
-// app.patch("/posts/update/:id", isAuth, Post.update);
-// app.post("/posts/delete", isAuth, Post.delete);
-// app.get("/getAllPosts", isAuth, Post.getAllPosts);
 //
 app.use("/follow", Follow);
 app.use('/posts', Post);
 app.use('', User);
-// app.use('/:id', Conversation);
-// app.use('/:id', Message);
-// app.use('/:id', Participant);
-
-
-// app.use('', Chatroom);
-
-//
-// app.get("/getAllUsers", isAuth, User.getAll);
-// app.post("/findUser", isAuth, User.getUserByName);
-// app.post("/findById/", isAuth, User.findById); // doesnt return password
-// // app.post("/findByIdandUpdateUser", User.findByIdandUpdateUser); // returns password too
-// app.post("/updatePhoto", isAuth, User.UpdateProfilePhoto);
-// app.post("/updatepassword", isAuth, User.updatePass);
-// app.post("/updateprofile", isAuth, User.updateProfile);
 
 
 app.delete('/deleteUser/:id',async (req,res) =>{
@@ -216,4 +127,4 @@ app.delete('/deleteUser/:id',async (req,res) =>{
   }
   })
 
-app.listen(port, () => console.log(`Unit :) app listening on port ${port}!`));
+server.listen(port, () => console.log(`Unit :) app listening on port ${port}!`));

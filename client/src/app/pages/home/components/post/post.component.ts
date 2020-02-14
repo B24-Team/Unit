@@ -3,6 +3,7 @@ import { HttpClient, HttpEventType, HttpHeaders } from "@angular/common/http";
 
 import Swal from "sweetalert2";
 import { HttpService } from "src/app/http.service";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-post",
@@ -35,6 +36,10 @@ export class PostComponent implements OnInit {
   }
 
   preview() {
+    if (this.fileData == null) {
+      this.previewUrl = "";
+      return;
+    }
     // Show preview
     var mimeType = this.fileData.type.split("/")[0];
 
@@ -61,18 +66,10 @@ export class PostComponent implements OnInit {
     const formData = new FormData();
     console.log(this.fileData);
 
-    if (!this.fileData && !this.post) {
-      return Swal.fire(
-        "Empty?",
-        "You have to write or upload something",
-        "error"
-      );
-      // alert("you have to upload something");
+    if (!this.fileData) {
+      return Swal.fire("Empty?", "You Have Got To Upload Something", "error");
     }
-    // if (!this.post) {
-    //   return Swal.fire("No Post ??", "You have to write something", "info");
-    //   // alert("you have to write something");
-    // }
+
     var type = this.fileData.type.split("/")[0];
     var size = this.fileData.size;
 
@@ -82,7 +79,6 @@ export class PostComponent implements OnInit {
         ` Your ${type} Can't be larger than 10MB`,
         "warning"
       );
-      // alert(` your ${type} cant be bigger than 10MB`);
     }
     if (size > 30000000 && type === "audio") {
       return Swal.fire(
@@ -90,7 +86,6 @@ export class PostComponent implements OnInit {
         ` Your ${type} Can't be larger than 3MB`,
         "warning"
       );
-      // alert(` your ${type} cant be bigger than 3MB`);
     }
     if (size > 5000000 && type === "image") {
       return Swal.fire(
@@ -98,14 +93,12 @@ export class PostComponent implements OnInit {
         ` Your ${type} Can't be larger than 5MB`,
         "warning"
       );
-      // alert(` your ${type} cant be bigger than 5MB`);
     }
     if (type !== "image" && type !== "video" && type !== "audio") {
       return Swal.fire(
         "You only can post Images / Videos and Audios",
         "warning"
       );
-      // alert(" You can only post images / videos and audios");
     }
 
     formData.append("files", this.fileData); // here we pass the file
@@ -119,7 +112,7 @@ export class PostComponent implements OnInit {
     // });
 
     this.http
-      .post("http://localhost:5000/posts/post", formData)
+      .post(`${environment["url"]}/posts/post`, formData)
       .subscribe(data => {
         this.post = "";
 
@@ -155,6 +148,8 @@ export class PostComponent implements OnInit {
           .then(() => {
             console.log(data, "from post component");
             this._http.newPost.next(data);
+            this.fileData = null;
+            this.preview();
           });
       });
   }

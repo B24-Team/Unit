@@ -3,6 +3,12 @@ const IncomingForm = require('formidable').IncomingForm;
 const path = require('path')
 const uniqueId = require('uuid'); 
 
+/**
+ * @param{user_id, post, link, type} createPost
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function createPost(req, res) {
     const form = new IncomingForm();
     var user_id;
@@ -57,6 +63,12 @@ function createPost(req, res) {
     })
 }
 
+/**
+ * @param{user_id} findPost
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function  findPost(req, res) {
     let  user_id  = req.body.user_id
     console.log(user_id)
@@ -74,9 +86,13 @@ function  findPost(req, res) {
         })
 }
 
+/**
+ * @param{user_id} findAll
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function  findAll(req, res) {
-    let  user_id  = req.body.user_id
-    console.log(user_id)
     models.Post.findAll({
         include: [
             {
@@ -95,11 +111,15 @@ function  findAll(req, res) {
         })
 }
 
-
+/**
+ * @param{post, user_id} findAll
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
 function updatePost(req, res) {
     let { post , user_id } = req.body;
-    models.Post.update({post},{where:{id:req.params.id,user_id:user_id}}).then(data => {
+    models.Post.update({post : post},{where:{id:req.body.id,user_id:user_id}}).then(data => {
         if (data) {
             return res.send('Updated')
         } 
@@ -111,9 +131,14 @@ function updatePost(req, res) {
         })
 }
 
-function deletePost(req, res) {
+/**
+ * @param{id, user_id} deletePost
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
-    models.Post.destroy({where:{id:req.params.id,user_id:req.body.user_id}}).then(data => {
+function deletePost(req, res) {
+    models.Post.destroy({where:{id:req.body.id,user_id:req.body.user_id}}).then(data => {
         if (data) {
             return res.send('Deleted');
         }

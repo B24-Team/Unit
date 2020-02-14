@@ -10,8 +10,8 @@ router.post('/get', Post.find)
 
 router.get('/getAllPosts', Post.findAll)
 
-router.patch('/update/:id', Post.update)
+router.post('/update', Post.update)
 
-router.delete('/delete/:id',Post.remove)
+router.post('/delete',Post.remove)
 
 module.exports = router
