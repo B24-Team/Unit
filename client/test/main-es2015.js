@@ -1343,11 +1343,11 @@ let ChatroomComponent = class ChatroomComponent {
         this.username = this.route.snapshot.queryParamMap.get("name");
         this.email = this.route.snapshot.queryParamMap.get("email");
         const currentUser = this.userService.getLoggedInUser();
-        if (currentUser.username < this.username) {
-            this.chatroom = currentUser.username.concat(this.username);
+        if (currentUser.email < this.email) {
+            this.chatroom = currentUser.email.concat(this.email);
         }
         else {
-            this.chatroom = this.username.concat(currentUser.username);
+            this.chatroom = this.email.concat(currentUser.email);
         }
         this.webSocketService.joinRoom({
             user: this.userService.getLoggedInUser().username,
@@ -2861,9 +2861,10 @@ let UserProfileComponent = class UserProfileComponent {
                 followed_id: id
             })
                 .subscribe(data => {
-                // console.log("my id", myId, " - ", " his id ", id)
+                console.log(data, "yolo");
+                console.log("my id", myId, " - ", " his id ", id);
                 for (var i = 0; i < data["length"]; i++) {
-                    if (data[i]["follower_id"].myId === data[i]["followed_id"].id) {
+                    if (data[i]["follower_id"] == myId && data[i]["followed_id"] == id) {
                         console.log("YOU ARE FOLLOWING HIM");
                         this.followed = true;
                         return this.followed;
@@ -2872,6 +2873,8 @@ let UserProfileComponent = class UserProfileComponent {
                         console.log("YOU ARE NOT FOLLOWING HIM");
                     }
                 }
+                this.followed = false;
+                return this.followed;
                 // console.log(data, "data");
                 console.log(data, "ppl followed ");
             });

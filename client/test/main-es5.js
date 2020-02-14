@@ -2451,10 +2451,10 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
           this.email = this.route.snapshot.queryParamMap.get("email");
           var currentUser = this.userService.getLoggedInUser();
 
-          if (currentUser.username < this.username) {
-            this.chatroom = currentUser.username.concat(this.username);
+          if (currentUser.email < this.email) {
+            this.chatroom = currentUser.email.concat(this.email);
           } else {
-            this.chatroom = this.username.concat(currentUser.username);
+            this.chatroom = this.email.concat(currentUser.email);
           }
 
           this.webSocketService.joinRoom({
@@ -4797,17 +4797,21 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             _this25.http.post("".concat(src_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"]["url"], "/follow/getfollowers"), {
               followed_id: id
             }).subscribe(function (data) {
-              // console.log("my id", myId, " - ", " his id ", id)
+              console.log(data, "yolo");
+              console.log("my id", myId, " - ", " his id ", id);
+
               for (var i = 0; i < data["length"]; i++) {
-                if (data[i]["follower_id"].myId === data[i]["followed_id"].id) {
+                if (data[i]["follower_id"] == myId && data[i]["followed_id"] == id) {
                   console.log("YOU ARE FOLLOWING HIM");
                   _this25.followed = true;
                   return _this25.followed;
                 } else {
                   console.log("YOU ARE NOT FOLLOWING HIM");
                 }
-              } // console.log(data, "data");
+              }
 
+              _this25.followed = false;
+              return _this25.followed; // console.log(data, "data");
 
               console.log(data, "ppl followed ");
             });

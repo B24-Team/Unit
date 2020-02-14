@@ -35,10 +35,10 @@ export class ChatroomComponent implements OnInit {
     this.username = this.route.snapshot.queryParamMap.get("name");
     this.email = this.route.snapshot.queryParamMap.get("email");
     const currentUser = this.userService.getLoggedInUser();
-    if (currentUser.username < this.username) {
-      this.chatroom = currentUser.username.concat(this.username);
+    if (currentUser.email < this.email) {
+      this.chatroom = currentUser.email.concat(this.email);
     } else {
-      this.chatroom = this.username.concat(currentUser.username);
+      this.chatroom = this.email.concat(currentUser.email);
     }
     this.webSocketService.joinRoom({
       user: this.userService.getLoggedInUser().username,
