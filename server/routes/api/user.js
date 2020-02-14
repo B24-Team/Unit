@@ -51,10 +51,10 @@ function signUp(req, res) {
                   username: result.username,
                   name: result.name
                 };
-                //console.log(process.env.secretOrkey);
+                //console.log('this is a secret key');
                 jwt.sign(
                   payload,
-                  process.env.secretOrkey,
+                  'this is a secret key',
                   { expiresIn: 300 },
                   (err, token) => {
                     var refreshToken = randToken.uid(250);
@@ -120,10 +120,10 @@ function logIn(req, res) {
                 username: data.rows[0].username,
                 name: data.rows[0].name
               };
-              //console.log(process.env.secretOrkey);
+              //console.log('this is a secret key');
               jwt.sign(
                 payload,
-                process.env.secretOrkey,
+                'this is a secret key',
                 { expiresIn: 300 },
                 (err, token) => {
                   var refreshToken = randToken.uid(250);
@@ -232,10 +232,10 @@ function refreshToken(req, res) {
                 email: data.rows[0].email
               };
               // console.log(payload);
-              //console.log(process.env.secretOrkey);
+              //console.log('this is a secret key');
               jwt.sign(
                 payload,
-                process.env.secretOrkey,
+                'this is a secret key',
                 { expiresIn: 300 },
                 (err, token) => {
                   var refreshToken = randToken.uid(250);
