@@ -33,6 +33,10 @@ const Follow = require("./server/routes/api/follow.js");
 const path = require("path");
 const isAuth = require("./server/validation/tokenValidation");
 
+app.use(express.static(__dirname + '/client/dist/Unit'))
+
+
+
 //////////////////// routes
 app.get("/auth", isAuth, (req, res) => {
   console.log(req.cookies);
@@ -134,6 +138,9 @@ io.sockets.on("connection", socket => {
       .emit("typing", { data: data, isTyping: true });
   });
 });
+app.get(/.*/, function (req, res, next) {
+  res.sendFile(path.join(__dirname + '/client/dist/Unit/index.html'))
+})
 
 server.listen(port, () =>
   console.log(`Unit :) app listening on port ${port}!`)
