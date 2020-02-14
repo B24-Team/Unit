@@ -9,7 +9,7 @@ function isAuth(req, res, next) {
   // console.log(req.cookies.token, "auth token yo"); here
 
   if (token) {
-    jwt.verify(token, process.env.secretOrKey, function (err, decoded) {
+    jwt.verify(token, 'this is a secret key', function (err, decoded) {
       // console.log(decoded);
       if (err) {
         return res.status(200).json({
