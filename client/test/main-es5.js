@@ -4797,6 +4797,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
             _this25.http.post("".concat(src_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"]["url"], "/follow/getfollowers"), {
               followed_id: id
             }).subscribe(function (data) {
+              // console.log("my id", myId, " - ", " his id ", id)
               for (var i = 0; i < data["length"]; i++) {
                 if (data[i]["follower_id"].myId === data[i]["followed_id"].id) {
                   console.log("YOU ARE FOLLOWING HIM");
@@ -4804,7 +4805,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
                   return _this25.followed;
                 } else {
                   console.log("YOU ARE NOT FOLLOWING HIM");
-                  return _this25.followed;
                 }
               } // console.log(data, "data");
 
