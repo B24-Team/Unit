@@ -26,7 +26,6 @@ function createPost(postObj) {
  * this function will recive the params and send it to the model
  */
 
-
 function findPost(user_id) {
   return Post.find(user_id)
     .then(data => {
