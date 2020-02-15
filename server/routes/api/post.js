@@ -96,6 +96,12 @@ function updatePost(req, res) {
     });
 }
 
+/**
+ * @param{req, res} deletePost
+ * @returns {array}
+ * this function will recive the params and send it to the controller
+ */
+
 function deletePost(req, res) {
   var { user_id, id } = req.body;
   Post.delete(id, user_id)
