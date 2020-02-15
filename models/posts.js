@@ -64,7 +64,7 @@ function deletepost(id, user_id) {
 
 /**
  * @param{post, id, user_id} updatepost
- * @returns {string}
+ * @returns {array}
  * this function will recive the params and send it to the database
  */
 
