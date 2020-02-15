@@ -22,7 +22,7 @@ function createPost(postObj) {
 
 /**
  * @param{user_id} findPost
- * @returns {string}
+ * @returns {array}
  * this function will recive the params and send it to the model
  */
 
