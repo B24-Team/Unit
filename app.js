@@ -10,7 +10,7 @@ app.use(
   cors({
     preflightContinue: true,
     credentials: true,
-    origin: "http://localhost:4200"
+    origin: "*"
   })
 );
 app.use(cookieParser());
