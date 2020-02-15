@@ -45,7 +45,7 @@ export class UserProfileComponent implements OnInit {
         this.getPeopleFollowingYou()
 
         this.http
-          .post(`${environment["url"]}/findById`, { id })
+          .post(`${environment["url"]}/findById`, { id:id })
           .subscribe(data => {
             console.log("hjukukk",data)
             this.userData = data;

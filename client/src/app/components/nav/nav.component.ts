@@ -28,7 +28,7 @@ export class NavComponent implements OnInit {
     this._http
       .post(`${environment["url"]}/findById`, { user_id: this.user_id })
       .subscribe(data => {
-        console.log(data);
+        console.log('sddssddssd',data);
         this.photo = data["photo"];
       });
     var check = setInterval(() => {

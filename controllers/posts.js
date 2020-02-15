@@ -71,12 +71,11 @@ function createPost(req, res) {
 
 function  findPost(req, res) {
     let  user_id  = req.body.user_id
-    console.log(user_id)
     models.Post.findAll({
-         where:{user_id: user_id}
+         where:{user_id}
       }).then(data => {
         if (data) {
-            return res.send(data)
+            return res.json(data)
         } 
     })
         .catch(err => {

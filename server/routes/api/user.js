@@ -6,7 +6,7 @@ const path = require('path');
 
 router.get("/getAllUsers", User.getAll);
 router.post("/findUser", isAuth, User.getUserByName);
-router.post("/findById", isAuth, User.findById); // doesnt return password
+router.post("/findById/", isAuth, User.findById); // doesnt return password
 router.post("/updatePhoto", isAuth, User.UpdateProfilePhoto);
 router.post("/updatepassword", isAuth, User.updatePass);
 router.post("/updateprofile", isAuth, User.updateProfile);

@@ -28,6 +28,7 @@ export class AppComponent {
       return this.http
         .get(`${environment["url"]}/refreshtoken`)
         .subscribe(data => {
+          console.log("Here you go ",data)
           localStorage.setItem("user_id", data["payload"]["id"]);
           localStorage.setItem("email", data["payload"]["email"]);
           localStorage.setItem("token", data["token"]);

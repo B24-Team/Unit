@@ -344,7 +344,8 @@ function findById(req, res) {
     exclude: ['password','createdAt','updatedAt']
   },where:{id:req.body.id}})
     .then(data => {
-      res.json(data.dataValues);
+      console.log("the data : ",data)
+      res.json(data);
     })
     .catch(err => {
       res.json(err);

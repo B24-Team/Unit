@@ -21,7 +21,7 @@ export class UserProfilePostsSectionComponent implements OnInit {
   filter(event) {
     console.log(this.Filtered)
     this.Filtered = []
-    console.log(event)
+    console.log('utdddddddkkkklufuigig',event)
     if (event["index"] == 1) {
       for (var i = 0; i < this.userData.length; i++) {
         if (this.userData[i]["type"] == "image") {
@@ -43,11 +43,11 @@ export class UserProfilePostsSectionComponent implements OnInit {
     } else {
       this.Filtered = this.userData
     }
-    console.log(this.Filtered)
+    console.log("the data is here : ",this.Filtered)
   }
 
   getData() {
-    console.log(this.userData, "tesssssssssst");
+    console.log("ufyifffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",this.userData, "tesssssssssst");
     return this.http
       .post(`${environment["url"]}/posts/get`, { user_id: this.userData.id })
       .subscribe(data => {
@@ -60,6 +60,7 @@ export class UserProfilePostsSectionComponent implements OnInit {
     this.env = environment["url"]
     this.getData();
     setTimeout(() => {
+      console.log("dskldnlkdvikhkkslkvdmdsv",this.userData)
       this.Filtered = this.userData;
 
     }, 1000);
