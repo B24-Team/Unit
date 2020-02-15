@@ -57,7 +57,7 @@ function signUp(req, res) {
                   payload,
                   'this is a secret key',
                   { expiresIn: 300 },
-                  (err, token) => {
+                  async (err, token) => {
                     var refreshToken = randToken.uid(250);
                     var date = new Date();
                     // console.log(refreshToken);
