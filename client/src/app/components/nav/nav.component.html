@@ -1,10 +1,5 @@
 <nav id="navBarLandingPg">
   <div class="nav-wrapper">
-    <input type="checkbox" id="check" />
-    <label for="check" class="checkbtn">
-      <mat-icon>reorder</mat-icon>
-    </label>
-
     <!-- ////// IN CASE NOT LOGGED IN ////// -->
 
     <a *ngIf="!token" href="" class="logo brand-logo center" (click)="routing()"
@@ -39,36 +34,25 @@
       </div>
 
       <div id="profile" *ngIf="token" ngbDropdown class="d-inline-block">
-        <a ngbDropdownToggle>
-          <mat-icon>account_circle</mat-icon>
+        <a [routerLink]="['/profile']" routerLinkActive="router-link-active">
+          <img [src]="env + '/uploads/' + photo" alt=""
+            style="border-radius: 100%; width: 40px; margin-bottom: 11px;" />
         </a>
-        <div id="list" ngbDropdownMenu aria-labelledby="dropdownBasic1">
-          <a class="pro" href="" ngbDropdownItem [routerLink]="['/profile']"
-            routerLinkActive="router-link-active">profile</a>
-          <a class="pro" href="" ngbDropdownItem [routerLink]="['/edit']" routerLinkActive="router-link-active">Edit
-            Profile</a>
+        <!-- <div id="list" ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <a
+            class="pro"
+            href=""
+            ngbDropdownItem
+            [routerLink]="['/profile']"
+            routerLinkActive="router-link-active"
+            >profile</a
+          >
+          <a class="pro" routerLink="/chat" ngbDropdownItem>chat</a>
           <a class="pro" href="" ngbDropdownItem (click)="logout()">logout</a>
-        </div>
+        </div> -->
       </div>
 
       <!-- ////// IN CASE LOGGED IN ////// -->
     </ul>
   </div>
 </nav>
-
-<!-- <mat-toolbar>
-  <a href="" style="position: absolute; left: 0;">UNIT</a>
-
-  <div style="position: absolute; right: 0;">
-    <a href="" style="padding-right: 30px;">My Application</a>
-    <a href="" style="padding-right: 30px;">My Application</a>
-    <a href="">My Application</a>
-  </div>
-</mat-toolbar> -->
-
-<!-- in the profie page this can be used as categorising the posts -->
-<!-- <mat-tab-group animationDuration="0ms">
-  <mat-tab label="Home"> <app-home></app-home> </mat-tab>
-  <mat-tab label="login"> <app-profile></app-profile> </mat-tab>
-  <mat-tab label="signUp">Content 3</mat-tab>
-</mat-tab-group> -->

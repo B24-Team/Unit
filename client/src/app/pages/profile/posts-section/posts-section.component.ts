@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ObservableLike } from "rxjs";
 import Swal from "sweetalert2";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-posts-section",
@@ -9,22 +10,50 @@ import Swal from "sweetalert2";
   styleUrls: ["./posts-section.component.scss"]
 })
 export class PostsSectionComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   user_id: string = localStorage.getItem("user_id");
   Data: any;
+  Filtered: any = [];
+
+  env: any;
 
   getData() {
     return this.http
-      .post("http://localhost:5000/posts/get", { user_id: this.user_id })
+      .post(`${environment["url"]}/posts/get`, { user_id: this.user_id })
       .subscribe(data => {
-        console.log(data);
         this.Data = data;
+        this.Filtered = data;
       });
   }
 
   ngOnInit() {
+    this.env = environment["url"]
     this.getData();
+  }
+  filter(event) {
+    this.Filtered = []
+    if (event["index"] == 1) {
+      for (var i = 0; i < this.Data.length; i++) {
+        if (this.Data[i]["type"] == "image") {
+          this.Filtered.push(this.Data[i])
+        }
+      }
+    } else if (event["index"] == 2) {
+      for (var i = 0; i < this.Data.length; i++) {
+        if (this.Data[i]["type"] == "video") {
+          this.Filtered.push(this.Data[i])
+        }
+      }
+    } else if (event["index"] == 3) {
+      for (var i = 0; i < this.Data.length; i++) {
+        if (this.Data[i]["type"] == "audio") {
+          this.Filtered.push(this.Data[i])
+        }
+      }
+    } else {
+      this.Filtered = this.Data
+    }
   }
 
   delete(item) {
@@ -56,7 +85,7 @@ export class PostsSectionComponent implements OnInit {
       .then(() => {
         if (resultOp) {
           this.http
-            .post("http://localhost:5000/posts/delete", {
+            .post(`${environment["url"]}/posts/delete`, {
               user_id: this.user_id,
               id: footage
             })
@@ -67,5 +96,20 @@ export class PostsSectionComponent implements OnInit {
             });
         }
       });
+  }
+  widePost(link) {
+    Swal.fire({
+      showClass: {
+        popup: "animated bounceIn"
+      },
+      hideClass: {
+        popup: "animated bounceOut"
+      },
+      background: "transparent",
+      heightAuto: true,
+      width: 700,
+      showConfirmButton: false,
+      imageUrl: `${environment["url"]}/uploads/${link}`
+    });
   }
 }

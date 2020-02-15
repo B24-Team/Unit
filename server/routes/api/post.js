@@ -6,10 +6,12 @@ const router = express.Router();
  
 router.post('/post', Post.create)
 
-router.get('/get', Post.find)
+router.post('/get', Post.find)
 
-router.patch('/update/:id', Post.update)
+router.get('/getAllPosts', Post.findAll)
 
-router.delete('/delete/:id',Post.remove)
+router.post('/update', Post.update)
+
+router.post('/delete',Post.remove)
 
 module.exports = router

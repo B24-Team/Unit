@@ -21,9 +21,6 @@ module.exports = {
       // channel_id: {
       //   type: Sequelize.INTEGER
       // },
-      deleted_at: {
-        type: Sequelize.DATE
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

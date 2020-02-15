@@ -1,4 +1,11 @@
-const Tokens = require("../models/token");
+const models = require("../models");
+
+/**
+ * @param{ token, expiresIn, refreshToken, refreshTokenExpiresIn, user_id} createToken
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function createToken(
   token,
   expiresIn,
@@ -6,21 +13,21 @@ function createToken(
   refreshTokenExpiresIn,
   user_id
 ) {
-  return Tokens.create(
-    token,
-    expiresIn,
-    refreshToken,
-    refreshTokenExpiresIn,
-    user_id
-  )
+  return models.Token.create({
+    tokenValue : token,
+    token_expires_at : expiresIn,
+    refresh_token : refreshToken,
+    refresh_token_expires_at : refreshTokenExpiresIn,
+    user_id : user_id
+  })
     .then(data => {
       // console.log(data);
-      return Tokens.findtoken(user_id)
+      return models.Token.findOne({where:{user_id:user_id}})
         .then(data => {
-          return data.rows[0];
+          return data;
         })
         .catch(err => {
-          throw "no token found";
+          return err;
         });
     })
     .catch(err => {
@@ -28,15 +35,29 @@ function createToken(
     });
 }
 
+/**
+ * @param{refresh_token} findRefreshToken
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function findRefreshToken(refresh_token) {
-  return Tokens.findRefreshToken(refresh_token)
+  return models.Token.findOne({
+    attributes:['user_id','refresh_token_expires_at']
+    ,where:{refresh_token:refresh_token}})
     .then(data => {
-      return data.rows[0];
+      return data;
     })
     .catch(err => {
-      throw "refresh token not Found";
+      return "refresh token not Found";
     });
 }
+
+/**
+ * @param{newtoken, newExpiryTokenDate, newRefreshToken, newRefreshTokenExpiryDate, user_id} updateToken
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
 function updateToken(
   newtoken,
@@ -45,33 +66,40 @@ function updateToken(
   newRefreshTokenExpiryDate,
   user_id
 ) {
-  return Tokens.updateToken(
-    newtoken,
-    newExpiryTokenDate,
-    newRefreshToken,
-    newRefreshTokenExpiryDate,
-    user_id
+  // console.log("it works")
+  return models.Token.update({
+    tokenValue : newtoken,
+    token_expires_at : newExpiryTokenDate,
+    refresh_token : newRefreshToken,
+    refresh_token_expires_at : newRefreshTokenExpiryDate},
+    {where:{user_id:user_id}}
   )
     .then(data => {
-      return "user was updates";
+      return "user was updated";
     })
     .catch(err => {
-      throw "USER NOT FOUND";
+      return "USER NOT FOUND";
     });
 }
 
+/**
+ * @param{id} deleteToken
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function deleteToken(id) {
   // console.log("zezooooo", id)
-  return Tokens.deleteToken(id)
+  return models.Token.destroy({where:{id:id}})
     .then(data => {
-      return " token was deleted successfully";
+      return "token was deleted successfully";
     })
     .catch(err => {
-      throw "token NOT FOUND";
+      return "token NOT FOUND";
     });
 }
 
 module.exports.create = createToken;
 module.exports.findRefreshToken = findRefreshToken;
 module.exports.deleteIT = deleteToken;
-module.exports.update = updateToken;
+module.exports.updateToken = updateToken;

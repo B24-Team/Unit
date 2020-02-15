@@ -3,10 +3,10 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const randToken = require("rand-token");
 
-const User = require("./../../../controllers/users");
-const Token = require("./../../../controllers/tokens");
-const regiteryValidation = require("./../../validation/registryValidation");
-const loginValidation = require("./../../validation/loginValidation");
+const Token = require("./tokens.js");
+
+const regiteryValidation = require("./../server/validation/registryValidation");
+const loginValidation = require("./../server/validation/loginValidation");
 //
 const IncomingForm = require("formidable").IncomingForm;
 const path = require("path");
@@ -14,19 +14,25 @@ const uniqueId = require("uuid");
 
 ///////////////////////////////////////////////////////////////////////////////////// SIGN UP SECTION
 var refreshTokenYolo;
+
+/**
+ * @param{name, username, email, password, confirmPassword} signUp
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function signUp(req, res) {
   let { errors, isValid } = regiteryValidation(req.body);
+  console.log("it is here : ",req.body)
   if (!isValid) {
-    // console.log("not valid");
-    // console.log(errors);
+
     res.status(200).json(errors);
   } else {
-    // console.log("is valid");
-    var { name, username, email, password, ConfirmPassword } = req.body;
-    models.User.find(email)
+    var { name, username, email, password, confirmPassword } = req.body;
+    models.User.findOne({where:{email:email}})
       .then(data => {
         //console.log(data);
-        if (data.rows.length > 0) {
+        if (data) {
           res
             .status(200)
             .json({ message: "user already exists", success: false });
@@ -37,6 +43,7 @@ function signUp(req, res) {
           let hash = bcrypt.hashSync(password, 12);
           var password = hash;
           models.User.create({
+            photo:'newUser.JPG',
             name: req.body.name,
             username: req.body.username,
             email: req.body.email,
@@ -44,13 +51,13 @@ function signUp(req, res) {
           })
             .then(result => {
               if (result) {
-                // res.redirect('/login')
-                //console.log(result);
+
                 var payload = {
                   id: result.id,
-                  email: result.email
+                  email: result.email,
+                  username: result.username,
+                  name: result.name
                 };
-                //console.log(process.env.secretOrkey);
                 jwt.sign(
                   payload,
                   process.env.secretOrkey,
@@ -59,7 +66,7 @@ function signUp(req, res) {
                     var refreshToken = randToken.uid(250);
                     var date = new Date();
                     // console.log(refreshToken);
-                    //console.log(token);
+                    // console.log(token);
                     refreshTokenYolo = refreshToken;
                     Token.create(
                       token,
@@ -70,11 +77,11 @@ function signUp(req, res) {
                     );
                     res.cookie("refreshtoken", refreshToken, {
                       maxAge: 9000000000,
-                      httpOnly: false
+                      httpOnly: true
                     });
                     res.cookie("token", token, {
                       maxAge: 60 * 60 * 1000, // keep it  60 * 60 * 1000
-                      httpOnly: false
+                      httpOnly: true
                     });
                     return res.json({
                       payload,
@@ -82,14 +89,13 @@ function signUp(req, res) {
                       token: "Bearer " + token,
                       refreshToken: refreshTokenYolo
                     });
-                    //) res.status(200).send(result);
                   }
                 );
               }
             })
             .catch(err => {
               if (err) {
-                res.sendStatus(401);
+                res.jsonStatus(401);
               }
             });
         }
@@ -98,26 +104,34 @@ function signUp(req, res) {
   }
 }
 ///////////////////////////////////////////////////////////////////////////////////// LOGIN SECTION
+
+/**
+ * @param{email, password} logIn
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function logIn(req, res) {
-  console.log(req.body);
   let { errors, isValid } = loginValidation(req.body);
   if (isValid) {
     var { email, password } = req.body;
-    User.find(email)
+    models.User.findOne({
+      attributes:['email', 'id','password','username','name']
+      ,where:{email:email}})
       .then(data => {
-        // console.log(data.rows);
-        if (data.rows.length > 0) {
-          var pass = data.rows[0].password;
+
+        if (data) {
+          var pass = data.dataValues.password;
           var password = req.body.password;
           bcrypt.compare(password, pass).then(isMatch => {
-            // console.log(isMatch);
             if (isMatch) {
-              //return res.send("you logged in successfully");
               var payload = {
-                id: data.rows[0].id,
-                email: data.rows[0].email
+                id: data.dataValues.id,
+                email: data.dataValues.email,
+                username: data.dataValues.username,
+                name: data.dataValues.name
               };
-              //console.log(process.env.secretOrkey);
+              
               jwt.sign(
                 payload,
                 process.env.secretOrkey,
@@ -133,61 +147,48 @@ function logIn(req, res) {
                     new Date(date.getTime() + 5 * 60 * 1000),
                     refreshToken,
                     new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000),
-                    data.rows[0].id
+                    data.dataValues.id
                   );
+                  console.log('that is it',refreshTokenYolo);
                   res.cookie("refreshtoken", refreshToken, {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
-                    httpOnly: false
+                    httpOnly: true
                   });
                   res.cookie("token", token, {
                     maxAge: 60 * 60 * 1000, // 60 * 60 * 1000
-                    httpOnly: false
+                    httpOnly: true
                   });
 
                   return res.json({
                     payload,
                     success: true,
                     token: "Bearer " + token,
-                    refreshToken: refreshTokenYolo
+                    refreshToken: refreshToken
                   });
-                  //) res.status(200).send(result);
                 }
               );
             } else {
-              return res.send("wrong password");
+              return res.json("wrong password");
             }
           });
         } else {
           res.status(200).json("no user with such email found");
         }
-      })
+       })
       .catch(err => console.log(err));
   } else {
     res.status(404).json(errors);
   }
 }
-/////////////////////////////////////////////////////////////////////////////////////first request
-function enter(req, res) {
-  //console.log(req.cookies.refreshtoken, "we have it");
-  var cookieValue = req.cookies.refreshtoken;
-  //console.log(cookieValue, "we have it'oot");
-
-  if (cookieValue !== undefined) {
-    Token.findRefreshToken(cookieValue)
-      .then(data => {
-        // console.log("data from refresh token");
-        // console.log(data);
-        if (data) {
-          return res.status(200).json(data);
-        }
-      })
-      .catch(err => console.log(err));
-  } else {
-    return res.send("no cookie found");
-  }
-}
 
 ////////////////////////////////////////////////////////////////////////////logout request
+
+/**
+ * @param{user_id} logOut
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function logOut(req, res) {
   console.log(
     "***************************logged out*****************************"
@@ -202,11 +203,18 @@ function logOut(req, res) {
     .catch(err => console.log(err));
 }
 //////////////////////////////////////////////////////////////////////// refresh token request
+
+/**
+ * @param{refreshTokenFormCookies} refreshToken
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function refreshToken(req, res) {
-  // console.log(req.cookies);
+  console.log(req.cookies);
   var refreshTokenFormCookies = req.cookies.refreshtoken;
   if (!refreshTokenFormCookies) {
-    return res.send("You Dont have a refresh token , you need to login")
+    return res.json("You Dont have a refresh token , you need to login")
 
   }
 
@@ -217,16 +225,18 @@ function refreshToken(req, res) {
       // console.log("user_id", result.user_id);
       var newDate = new Date();
       var comparison = expirydate.getTime() > newDate.getTime() ? true : false;
-      // console.log(comparison);
+      // console.log("the data is here read it",result.dataValues);
       if (comparison) {
-        User.findById(result.user_id)
+        models.User.findOne({where:{id:result.dataValues.user_id}})
           .then(data => {
-            // console.log(data.rows);
-            if (data.rows.length > 0) {
-              // res.send("you logged in successfully");
+            // console.log(data.dataValues);
+            if (data) {
+              // res.json("you logged in successfully");
               var payload = {
-                id: data.rows[0].id,
-                email: data.rows[0].email
+                id: data.dataValues.id,
+                email: data.dataValues.email,
+                username: data.dataValues.username,
+                name: data.dataValues.name
               };
               // console.log(payload);
               //console.log(process.env.secretOrkey);
@@ -237,14 +247,14 @@ function refreshToken(req, res) {
                 (err, token) => {
                   var refreshToken = randToken.uid(250);
                   var date = new Date();
-                  // console.log(refreshToken);
-                  //console.log(token);
-                  Token.update(
+                  // console.log(data.dataValues.id);
+                  // console.log(token);
+                  Token.updateToken(
                     token,
                     new Date(date.getTime() + 5 * 60 * 1000),
                     refreshToken,
                     new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000),
-                    data.rows[0].id
+                    data.dataValues.id
                   );
                   res.cookie("refreshtoken", refreshToken, {
                     maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -252,21 +262,21 @@ function refreshToken(req, res) {
                   });
                   res.cookie("token", token, {
                     maxAge: 60 * 60 * 1000, // keep it 60 * 60 * 1000
-                    httpOnly: false
+                    httpOnly: true
                   });
                   return res.json({
                     payload,
                     success: true,
                     token: "Bearer " + token
                   });
-                  //) res.status(200).send(result);
+                  //) res.status(200).json(result);
                 }
               );
             } else {
               res.status(400).json("no user with such id found");
             }
           })
-          .catch(err => res.send(err));
+          .catch(err => res.json(err));
       } else {
         res
           .status(400)
@@ -276,52 +286,77 @@ function refreshToken(req, res) {
     .catch(err => console.log(err));
 }
 
-/// malik's
+/**
+ * @param{name} getPhoto
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
+function getPhoto(req, res) {
+  res.sendFile(path.resolve("folders/uploaded", req.params.name));
+};
+
+/**
+ * @param{} getAll
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
 function getAll(req, res) {
-  User.getAll()
+  models.User.findAll({attributes: {
+    include:['id','photo','username','age','is_active','bio','gender'],
+    exclude: ['password','createdAt','updatedAt']}})
     .then(result => {
-      res.send(result.rows);
+      res.json(result);
     })
     .catch(err => {
-      res.send(err);
+      res.json(err);
     });
 }
+
+/**
+ * @param{username} getUserByName
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function getUserByName(req, res) {
   var username = req.body.username;
-  User.getUserByName(username)
+  models.User.findOne({attributes: {
+    exclude: ['password','createdAt','updatedAt']
+  },where:{username:username}})
     .then(result => {
-      res.send(result.rows);
+      res.json(result.dataValues);
     })
     .catch(err => {
-      res.send(err);
+      res.json(err);
     });
 }
+
+/**
+ * @param{user_id} findById
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
 function findById(req, res) {
-  var user_id = req.body.user_id;
-  User.findById(user_id)
-    .then(result => {
-      delete result.rows[0]["password"];
-      res.send(result.rows);
+  models.User.findOne({attributes: {
+    exclude: ['password','createdAt','updatedAt']
+  },where:{id:req.body.id}})
+    .then(data => {
+      console.log("the data : ",data)
+      res.json(data);
     })
     .catch(err => {
-      res.send(err);
+      res.json(err);
     });
 }
 
-// function findByIdandUpdateUser(req, res) {
-//   var user_id = req.body.user_id;
-//   User.findById(user_id)
-//     .then(result => {
-//       res.send(result.rows);
-//     })
-//     .catch(err => {
-//       res.send(err);
-//     });
-// }
-
-//
+/**
+ * @param{user_id, link} UpdateProfilePhoto
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
 
 function UpdateProfilePhoto(req, res) {
   const form = new IncomingForm();
@@ -330,7 +365,7 @@ function UpdateProfilePhoto(req, res) {
   form.parse(req, function (err, fields, files) {
     user_id = fields.user_id;
     if (err) {
-      res.send(err);
+      res.json(err);
     }
     res.end();
   });
@@ -343,9 +378,9 @@ function UpdateProfilePhoto(req, res) {
   });
 
   form.on("end", (err, data) => {
-    var userObj = { photo: link, user_id: user_id };
+    // var userObj = { photo: link, user_id: user_id };
 
-    User.updatePhoto(userObj)
+    models.User.update({photo:link},{where:{id:user_id}})
       .then(data => {
         if (data) {
         }
@@ -358,36 +393,51 @@ function UpdateProfilePhoto(req, res) {
   });
 }
 
-//
+/**
+ * @param{user_id, password} updatePass
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function updatePass(req, res) {
   var user_id = req.body.user_id;
   var password = req.body.password;
   let hash = bcrypt.hashSync(password, 12);
-  var obj = { user_id, password: hash };
-  User.update(obj)
+  models.User.update({password:hash},{where:{id:user_id}})
     .then(data => {
-      res.json(data);
+      res.json('Password Was Updated');
     })
     .catch(err => {
-      res.send(" something wrong happened");
+      res.json(" something wrong happened");
     });
 }
 
+/**
+ * @param{user_id, name, username, age, gender,bio} updateProfile
+ * @returns {string}
+ * this function will recive the params and send it to the database
+ */
+
 function updateProfile(req, res) {
-  User.updateProfile(req)
+  console.log(req.body)
+  var {user_id, name, username, age, gender,bio} = req.body;
+  models.User.update({name : name, username : username, age : age, gender : gender, bio : bio}, {where:{id:user_id}})
     .then(data => {
       res.json("Profile Updated !!");
     })
     .catch(err => {
-      res.send("err");
+      res.json(err);
     });
 }
 
-//
+
+
 
 module.exports.signUp = signUp;
+
+module.exports.getPhoto = getPhoto;
+
 module.exports.logIn = logIn;
-module.exports.enter = enter;
 module.exports.logOut = logOut;
 module.exports.refreshToken = refreshToken;
 //
@@ -397,4 +447,3 @@ module.exports.findById = findById;
 module.exports.UpdateProfilePhoto = UpdateProfilePhoto;
 module.exports.updatePass = updatePass;
 module.exports.updateProfile = updateProfile;
-// module.exports.findByIdandUpdateUser = findByIdandUpdateUser;
