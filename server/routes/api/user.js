@@ -195,7 +195,7 @@ function signUp(req, res) {
                     });
                     console.log("after cookies");
                     let transporter = nodemailer.createTransport({
-                      host: "smtp.gmail.com",
+                      host: req.get("host"),
                       port: 465,
                       secure: false, // true for 465, false for other ports
                       service: "gmail",
