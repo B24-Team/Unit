@@ -201,7 +201,7 @@ function signUp(req, res) {
                       service: "gmail",
                       auth: {
                         user: "unitwebsite2020@gmail.com", // generated ethereal user
-                        pass: "09009900" // generated ethereal password
+                        pass: "passpass@0" // generated ethereal password
                       },
                       tls: {
                         rejectUnauthorized: false
