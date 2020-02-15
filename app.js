@@ -10,7 +10,7 @@ app.use(
   cors({
     // preflightContinue: false,
     credentials: true,
-    origin: "http://unit-is-online.herokuapp.com"
+    origin: "https://unit-is-online.herokuapp.com"
   })
 );
 app.use(cookieParser());
