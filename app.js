@@ -7,7 +7,11 @@ const socketIO = require("socket.io");
 const http = require("http");
 
 app.use(
-  cors({})
+  cors({
+    // preflightContinue: false,
+    credentials: true,
+    origin: "https://unit-is-online.herokuapp.com"
+  })
 );
 app.use(cookieParser());
 app.use(express.json());
