@@ -7,11 +7,7 @@ const socketIO = require("socket.io");
 const http = require("http");
 
 app.use(
-  cors({
-    preflightContinue: false,
-    credentials: false
-    // origin: "http://localhost:4200"
-  })
+  cors({})
 );
 app.use(cookieParser());
 app.use(express.json());
