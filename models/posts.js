@@ -52,7 +52,7 @@ function createpost(post, link, user_id, type) {
 
 /**
  * @param{id, user_id} createpost
- * @returns {string}
+ * @returns {array}
  * this function will recive the params and send it to the database
  */
 
