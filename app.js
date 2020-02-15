@@ -7,19 +7,23 @@ const socketIO = require("socket.io");
 const http = require("http");
 
 app.use(
-  cors()
+  cors({
+    preflightContinue: true,
+    credentials: true,
+    origin: "https://unit-is-online.herokuapp.com/*"
+  })
 );
 app.use(cookieParser());
 app.use(express.json());
 
-// app.use(function (req, res, next) {
-//   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept"
-//   );
-//   next();
-// });
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://unit-is-online.herokuapp.com/*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
 
 const port = process.env.PORT || 5000;
 
