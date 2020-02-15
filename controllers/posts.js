@@ -36,6 +36,12 @@ function findPost(user_id) {
     });
 }
 
+/**
+ * @param{} getAllPosts
+ * @returns {string}
+ * this function will recive the params and send it to the model
+ */
+
 function getAllPosts() {
   return Post.getAllPosts()
     .then(data => {
