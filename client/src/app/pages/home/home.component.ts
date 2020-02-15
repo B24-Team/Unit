@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private _http: HttpService,
     private http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit() {
     // setInterval(() => {

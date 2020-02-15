@@ -10,7 +10,7 @@ export class AppComponent {
   title = "Unit";
   refreshValue = "";
   counter: number = 0;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     this.http.get("http://localhost:5000/refreshtoken").subscribe(data => {

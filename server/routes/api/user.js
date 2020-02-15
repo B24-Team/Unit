@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const randToken = require("rand-token");
+const nodemailer = require("nodemailer");
 
 const User = require("./../../../controllers/users");
 const Token = require("./../../../controllers/tokens");
@@ -12,7 +13,7 @@ const path = require("path");
 const uniqueId = require("uuid");
 
 ///////////////////////////////////////////////////////////////////////////////////// SIGN UP SECTION
-var refreshTokenYolo;
+
 function signUp(req, res) {
   let { errors, isValid } = regiteryValidation(req.body);
   if (!isValid) {
@@ -47,14 +48,16 @@ function signUp(req, res) {
                 //console.log(result);
                 var payload = {
                   id: result.id,
-                  email: result.email
+                  email: result.email,
+                  username: result.username,
+                  name: result.name
                 };
                 //console.log(process.env.secretOrkey);
                 jwt.sign(
                   payload,
                   process.env.secretOrkey,
                   { expiresIn: 300 },
-                  (err, token) => {
+                  async (err, token) => {
                     var refreshToken = randToken.uid(250);
                     var date = new Date();
                     // console.log(refreshToken);
@@ -75,15 +78,48 @@ function signUp(req, res) {
                       maxAge: 60 * 60 * 1000, // keep it  60 * 60 * 1000
                       httpOnly: true
                     });
-                    return res.json({
-                      payload,
-                      success: true,
-                      token: "Bearer " + token,
-                      refreshToken: refreshTokenYolo
+                    console.log("after cookies");
+                    let transporter = nodemailer.createTransport({
+                      host: req.get("host"),
+                      port: 465,
+                      secure: false, // true for 465, false for other ports
+                      service: "gmail",
+                      auth: {
+                        user: "ziedbarhoumi1989@gmail.com", // generated ethereal user
+                        pass: "000000" // generated ethereal password
+                      },
+                      tls: {
+                        rejectUnauthorized: false
+                      }
                     });
-                    //) res.status(200).send(result);
+                    console;
+                    console.log(transporter);
+
+                    // send mail with defined transport object
+                    let info = await transporter.sendMail({
+                      from: "no-reply@codemoto.io",
+                      to: result.email,
+                      subject: "Account Verification Token",
+                      text:
+                        "Hello,\n\n" +
+                        "Please verify your account by clicking the link: \nhttp://" +
+                        req.headers.host +
+                        "/confirmation/:" +
+                        token +
+                        ".\n"
+                    });
+                    console.log("Message sent: %s", info.messageId);
+                    res.status(200).json("email sent");
                   }
                 );
+
+                // return res.json({
+                //   payload,
+                //   success: true,
+                //   token: "Bearer " + token,
+                //   refreshToken: refreshTokenYolo
+                // });
+                //) res.status(200).send(result);
               }
             })
             .catch(err => {
@@ -114,7 +150,9 @@ function logIn(req, res) {
               //return res.send("you logged in successfully");
               var payload = {
                 id: data.rows[0].id,
-                email: data.rows[0].email
+                email: data.rows[0].email,
+                username: data.rows[0].username,
+                name: data.rows[0].name
               };
               //console.log(process.env.secretOrkey);
               jwt.sign(
@@ -210,8 +248,9 @@ function refreshToken(req, res) {
 
   Token.findRefreshToken(refreshTokenFormCookies)
     .then(result => {
-      // console.log("results *******************", result);
+      console.log("results *******************", result);
       var expirydate = result.refresh_token_expires_at;
+
       // console.log("user_id", result.user_id);
       var newDate = new Date();
       var comparison = expirydate.getTime() > newDate.getTime() ? true : false;
@@ -245,7 +284,7 @@ function refreshToken(req, res) {
                     data.rows[0].id
                   );
                   res.cookie("refreshtoken", refreshToken, {
-                    maxAge: 30 * 24 * 60 * 60 * 1000,
+                    maxAge: 9000000000,
                     httpOnly: true
                   });
                   res.cookie("token", token, {
