@@ -1,5 +1,11 @@
 const Post = require("../models/posts");
 
+/**
+ * @param{post, link, user_id, type} createPost
+ * @returns {string}
+ * this function will recive the params and send it to the model
+ */
+
 function createPost(postObj) {
   var post = postObj.post;
   var link = postObj.link;
