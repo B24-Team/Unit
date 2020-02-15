@@ -92,7 +92,6 @@ function signUp(req, res) {
                         rejectUnauthorized: false
                       }
                     });
-                    console;
                     console.log(transporter);
 
                     // send mail with defined transport object
