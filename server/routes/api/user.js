@@ -170,7 +170,7 @@ function signUp(req, res) {
                 //console.log(process.env.secretOrkey);
                 jwt.sign(
                   payload,
-                  process.env.secretOrkey,
+                  'this is a secret key',
                   { expiresIn: 300 },
                   async (err, token) => {
                     var refreshToken = randToken.uid(250);
