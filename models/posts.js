@@ -39,7 +39,7 @@ function getAllPosts() {
 
 /**
  * @param{post, link, user_id, type} createpost
- * @returns {string}
+ * @returns {array}
  * this function will recive the params and send it to the database
  */
 
