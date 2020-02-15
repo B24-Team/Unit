@@ -11,7 +11,7 @@ function follow(req, res) {
   models.Follow.create({followed_id:req.body.followed_id,follower_id:req.body.follower_id})
     .then(data => {
       if (data) {
-        return res.send("Its working");
+        return res.json("Its working");
       }
     })
     .catch(err => {
@@ -32,7 +32,7 @@ function follow(req, res) {
 function unfollow(req, res) {
   models.Follow.destroy({where:{followed_id:req.body.followed_id,follower_id:req.body.follower_id}})
     .then(data => {
-      return res.send("Deleted");
+      return res.json("Deleted");
     })
     .catch(err => {
       if (err) {
@@ -50,7 +50,7 @@ function unfollow(req, res) {
 function getfollowers(req, res) {
   models.Follow.findAll({where:{followed_id:req.body.followed_id}})
     .then(data => {
-      return res.send(data);
+      return res.json(data);
     })
     .catch(err => {
       if (err) {
@@ -74,7 +74,7 @@ function getInfoOfFollowers(req, res) {
     attributes: {exclude:['password']}
     }]})
     .then(data => {
-      return res.send(data);
+      return res.json(data);
     })
     .catch(err => {
       if (err) {
@@ -92,7 +92,7 @@ function getInfoOfFollowers(req, res) {
 function getfollowingList(req,res) {
   models.Follow.findAll()
     .then(data => {
-      return res.send(data);
+      return res.json(data);
     })
     .catch(err => {
       if (err) {
