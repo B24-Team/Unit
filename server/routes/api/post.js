@@ -53,6 +53,12 @@ function createPost(req, res) {
   });
 }
 
+/**
+ * @param{req, res} findPost
+ * @returns {array}
+ * this function will recive the params and send it to the controller
+ */
+
 function findPost(req, res) {
   let { user_id } = req.body;
   Post.find(user_id)
