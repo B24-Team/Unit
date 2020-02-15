@@ -74,6 +74,12 @@ function findPost(req, res) {
     });
 }
 
+/**
+ * @param{req, res} updatePost
+ * @returns {array}
+ * this function will recive the params and send it to the controller
+ */
+
 function updatePost(req, res) {
   let { post, user_id } = req.body;
   let id = req.params.id;
