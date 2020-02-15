@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const randToken = require("rand-token");
+const nodemailer = require("nodemailer");
 
 const User = require("./../../../controllers/users");
 const Token = require("./../../../controllers/tokens");
@@ -77,6 +78,36 @@ function signUp(req, res) {
                       maxAge: 60 * 60 * 1000, // keep it  60 * 60 * 1000
                       httpOnly: true
                     });
+                    //
+                    let transporter = nodemailer.createTransport({
+                      host: req.get("host"),
+                      port: 465,
+                      secure: false, // true for 465, false for other ports
+                      service: "gmail",
+                      auth: {
+                        user: "unitwebsite2020@gmail.com", // generated ethereal user
+                        pass: "09009900" // generated ethereal password
+                      },
+                      tls: {
+                        rejectUnauthorized: false
+                      }
+                    });
+                    console;
+                    console.log(transporter);
+
+                    // send mail with defined transport object
+                    let info = await transporter.sendMail({
+                      from: "no-reply@codemoto.io",
+                      to: result.email,
+                      subject: "unit membership",
+                      text: "Hello  " + result.username + ",\n\n" + "Have fun"
+                      // "Please verify your account by clicking the link: \nhttp://" +
+                      // req.headers.host +
+                      // "/confirmation/:" +
+                      // token +
+                      // ".\n"
+                    });
+                    //
                     return res.json({
                       payload,
                       success: true,

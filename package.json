@@ -23,6 +23,7 @@
     "is-empty": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.8.11",
+    "nodemailer": "^6.4.2",
     "path": "^0.12.7",
     "pg": "^7.17.1",
     "postgres": "^1.0.2",
