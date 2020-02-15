@@ -23,19 +23,11 @@ function createPost(req, res) {
     if (err) {
       res.send(err);
     }
-    // res.end();
   });
 
   form.on("fileBegin", function(name, file) {
     var id = uniqueId();
     file.path = "folders/uploaded/" + id + "." + file.name.split(".")[1];
-    // console.log(
-    //   path.join(
-    //     __dirname,
-    //     "/../../../../Unit/folders/uploaded/",
-    //     id + "." + file.name.split(".")[1]
-    //   )
-    // );
     link = id + "." + file.name.split(".")[1];
   });
 
@@ -44,7 +36,6 @@ function createPost(req, res) {
     Post.create(postObj)
       .then(data => {
         if (data) {
-          // res.send(postObj);
           Post.getAllPosts()
             .then(data => {
               res.send(data);
