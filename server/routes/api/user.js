@@ -57,7 +57,7 @@ function signUp(req, res) {
                   payload,
                   'this is a secret key',
                   { expiresIn: 300 },
-                  async (err, token) => {
+                  (err, token) => {
                     var refreshToken = randToken.uid(250);
                     var date = new Date();
                     // console.log(refreshToken);
@@ -96,7 +96,7 @@ function signUp(req, res) {
                     console.log(transporter);
 
                     // send mail with defined transport object
-                    let info = await transporter.sendMail({
+                    let info = transporter.sendMail({
                       from: "no-reply@codemoto.io",
                       to: result.email,
                       subject: "unit membership",
