@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  url: 'https://unit-is-online.herokuapp.com'
+  url: 'http://unit-is-online.herokuapp.com'
+
 };
 
 /*

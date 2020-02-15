@@ -32,6 +32,11 @@ export class ChatroomComponent implements OnInit {
   }
 
   ngOnInit() {
+    window.setInterval(function () {
+      var elem = document.getElementById("chat-window")
+      elem.scrollTop = elem.scrollHeight
+    }, 2000)
+
     this.username = this.route.snapshot.queryParamMap.get("name");
     this.email = this.route.snapshot.queryParamMap.get("email");
     const currentUser = this.userService.getLoggedInUser();

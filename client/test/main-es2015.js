@@ -1340,6 +1340,10 @@ let ChatroomComponent = class ChatroomComponent {
         });
     }
     ngOnInit() {
+        window.setInterval(function () {
+            var elem = document.getElementById("chat-window");
+            elem.scrollTop = elem.scrollHeight;
+        }, 2000);
         this.username = this.route.snapshot.queryParamMap.get("name");
         this.email = this.route.snapshot.queryParamMap.get("email");
         const currentUser = this.userService.getLoggedInUser();
@@ -3448,7 +3452,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const environment = {
     production: false,
-    url: 'https://unit-is-online.herokuapp.com'
+    url: 'http://unit-is-online.herokuapp.com'
 };
 /*
  * For easier debugging in development mode, you can import the following file
