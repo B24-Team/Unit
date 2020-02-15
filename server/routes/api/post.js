@@ -4,6 +4,12 @@ const IncomingForm = require("formidable").IncomingForm;
 const path = require("path");
 const uniqueId = require("uuid");
 
+/**
+ * @param{req, res} createPost
+ * @returns {object}
+ * this function will recive the params and send it to the controller
+ */
+
 function createPost(req, res) {
   const form = new IncomingForm();
   var user_id;
