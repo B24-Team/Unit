@@ -5,7 +5,6 @@
 export const environment = {
   production: false,
   url: 'https://unit-is-online.herokuapp.com'
-
 };
 
 /*

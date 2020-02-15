@@ -51,7 +51,6 @@ export class ChatroomComponent implements OnInit {
   }
   Enter(event) {
     if (event.keyCode === 13) {
-      event.preventDefault();
       this.sendMessage()
     }
   }
@@ -64,7 +63,10 @@ export class ChatroomComponent implements OnInit {
     this.message = "";
   }
 
-  typing() {
+  typing(event) {
+    if (event.keyCode === 13) {
+      return
+    }
     this.webSocketService.typing({
       room: this.chatroom,
       user: this.userService.getLoggedInUser().username

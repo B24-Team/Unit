@@ -131,7 +131,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<div id=\"mario-chat\">\r\n    <h2>{{ username }}</h2>\r\n    <div id=\"chat-window\">\r\n        <div *ngFor=\"let item of messageArray\">\r\n            <h6 style=\"color:#ec1026\"><i> {{ item.user}}</i></h6>\r\n            <p [class.userMessage]=\"item.user == userService.getLoggedInUser().username\"\r\n                [class.secUserMessage]=\"item.user != userService.getLoggedInUser().username\">\r\n                {{ item.message}} </p> {{item.Date | dateAgo}}\r\n            <hr>\r\n        </div>\r\n\r\n        <!-- <div id=\"feedback\"></div> -->\r\n    </div>\r\n    <span><strong><i *ngIf=\"isTyping\" class=\"isTyping\">Your Friend is Typing...</i></strong></span>\r\n    <input (keypress)=\"Enter($event)\" (keypress)=\"typing()\" [(ngModel)]=\"message\" name=\"message\" type=\"text\"\r\n        placeholder=\"Message\" />\r\n    <button id=\"send\" (click)=\"sendMessage()\">Send</button>\r\n</div>";
+    __webpack_exports__["default"] = "<div id=\"mario-chat\">\r\n    <h2>{{ username }}</h2>\r\n    <div id=\"chat-window\">\r\n        <div *ngFor=\"let item of messageArray\">\r\n            <h6 style=\"color:#ec1026\"><i> {{ item.user}}</i></h6>\r\n            <p [class.userMessage]=\"item.user == userService.getLoggedInUser().username\"\r\n                [class.secUserMessage]=\"item.user != userService.getLoggedInUser().username\">\r\n                {{ item.message}} </p> {{item.Date | dateAgo}}\r\n            <hr>\r\n        </div>\r\n\r\n        <!-- <div id=\"feedback\"></div> -->\r\n    </div>\r\n    <span><strong><i *ngIf=\"isTyping\" class=\"isTyping\">Your Friend is Typing...</i></strong></span>\r\n    <input (keypress)=\"Enter($event)\" (keypress)=\"typing($event)\" [(ngModel)]=\"message\" name=\"message\" type=\"text\"\r\n        placeholder=\"Message\" />\r\n    <button id=\"send\" (click)=\"sendMessage()\">Send</button>\r\n</div>";
     /***/
   },
 
@@ -2470,7 +2470,6 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         key: "Enter",
         value: function Enter(event) {
           if (event.keyCode === 13) {
-            event.preventDefault();
             this.sendMessage();
           }
         }
@@ -2486,7 +2485,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
         }
       }, {
         key: "typing",
-        value: function typing() {
+        value: function typing(event) {
+          if (event.keyCode === 13) {
+            return;
+          }
+
           this.webSocketService.typing({
             room: this.chatroom,
             user: this.userService.getLoggedInUser().username
