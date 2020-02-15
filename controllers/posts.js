@@ -2,7 +2,7 @@ const Post = require("../models/posts");
 
 /**
  * @param{post, link, user_id, type} createPost
- * @returns {string}
+ * @returns {array}
  * this function will recive the params and send it to the model
  */
 
