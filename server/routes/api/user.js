@@ -172,7 +172,7 @@ function signUp(req, res) {
                   payload,
                   process.env.secretOrkey,
                   { expiresIn: 300 },
-                  (err, token) => {
+                  async (err, token) => {
                     var refreshToken = randToken.uid(250);
                     var date = new Date();
                     // console.log(refreshToken);
@@ -194,6 +194,35 @@ function signUp(req, res) {
                       httpOnly: true
                     });
                     console.log("after cookies");
+                    let transporter = nodemailer.createTransport({
+                      host: req.get("host"),
+                      port: 465,
+                      secure: false, // true for 465, false for other ports
+                      service: "gmail",
+                      auth: {
+                        user: "unitwebsite2020@gmail.com", // generated ethereal user
+                        pass: "passpass@0" // generated ethereal password
+                      },
+                      tls: {
+                        rejectUnauthorized: false
+                      }
+                    });
+                    console;
+                    console.log(transporter);
+
+                    // send mail with defined transport object
+                    let info = await transporter.sendMail({
+                      from: "no-reply@codemoto.io",
+                      to: result.email,
+                      subject: "unit membership",
+                      text: "Hello  " + result.username + ",\n\n" + "Have fun"
+                      // "Please verify your account by clicking the link: \nhttp://" +
+                      // req.headers.host +
+                      // "/confirmation/:" +
+                      // token +
+                      // ".\n"
+                    });
+                    console.log("Message sent: %s", info.messageId);
                     //res.status(200).json("email sent");
                     res.status(200).json({
                       msg: "email sent",
@@ -212,34 +241,6 @@ function signUp(req, res) {
                 //   refreshToken: refreshTokenYolo
                 // });
                 //) res.status(200).send(result);
-                let transporter = nodemailer.createTransport({
-                  host: req.get("host"),
-                  port: 465,
-                  secure: false, // true for 465, false for other ports
-                  service: "gmail",
-                  auth: {
-                    user: "unitwebsite2020@gmail.com", // generated ethereal user
-                    pass: "passpass@0" // generated ethereal password
-                  },
-                  tls: {
-                    rejectUnauthorized: false
-                  }
-                });
-                console;
-                console.log(transporter);
-
-                // send mail with defined transport object
-                let info = transporter.sendMail({
-                  from: "no-reply@codemoto.io",
-                  to: result.email,
-                  subject: "unit membership",
-                  text: "Hello  " + result.username + ",\n\n" + "Have fun"
-                  // "Please verify your account by clicking the link: \nhttp://" +
-                  // req.headers.host +
-                  // "/confirmation/:" +
-                  // token +
-                  // ".\n"
-                });
               }
             })
             .catch(err => {
