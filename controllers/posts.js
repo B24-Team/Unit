@@ -68,6 +68,12 @@ function updatePost(post, id, user_id) {
     });
 }
 
+/**
+ * @param{id, user_id} deletePost
+ * @returns {string}
+ * this function will recive the params and send it to the model
+ */
+
 function deletePost(id, user_id) {
   return Post.delete(id, user_id)
     .then(data => {
