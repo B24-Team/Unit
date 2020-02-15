@@ -52,6 +52,12 @@ function getAllPosts() {
     });
 }
 
+/**
+ * @param{post, id, user_id} updatePost
+ * @returns {string}
+ * this function will recive the params and send it to the model
+ */
+
 function updatePost(post, id, user_id) {
   return Post.update(post, id, user_id)
     .then(data => {
