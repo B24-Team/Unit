@@ -6,6 +6,5 @@ let ChatRoomSchema = mongoose.Schema({
   Date: Date
 });
 let ChatRoomModel = mongoose.model("chatrooms", ChatRoomSchema);
-// ChatRoomModel.create({ name: "raghda", messages: [] });
 console.log("char room created");
 module.exports = ChatRoomModel;
