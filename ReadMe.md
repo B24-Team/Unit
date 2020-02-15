@@ -1,6 +1,6 @@
 # Unit Project
 
-One Paragraph of project description goes here
+This is a social media platform where you can share whatever you want without having the negative side of the number of likes and comments, and you can follow anyone and if the other in individual follows you back you can chat together.
 
 ## Getting Started
 
