@@ -117,6 +117,12 @@ function deletePost(req, res) {
     });
 }
 
+/**
+ * @param{req, res} getAllPosts
+ * @returns {array}
+ * this function will recive the params and send it to the controller
+ */
+
 function getAllPosts(req, res) {
   Post.getAllPosts()
     .then(data => {
