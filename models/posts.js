@@ -28,7 +28,7 @@ function getposts(user_id) {
 
 /**
  * @param{} getAllPosts
- * @returns {string}
+ * @returns {array}
  * this function will recive the params and send it to the database
  */
 
