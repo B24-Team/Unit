@@ -18,7 +18,7 @@ conn.query(postsSchema, (err, data) => {
 //posts functionality
 /**
  * @param{user_id} getposts
- * @returns {string}
+ * @returns {array}
  * this function will recive the params and send it to the database
  */
 
