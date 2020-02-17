@@ -1,6 +1,7 @@
 # Unit Project -
 
 This is a social media platform where you can share whatever you want without having the negative side of the number of likes and comments, and you can follow anyone and if the other individual follows you back you can chat together.
+visit https://unit-site.herokuapp.com for live demo
 
 ## Getting Started
 
