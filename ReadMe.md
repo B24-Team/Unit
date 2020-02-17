@@ -1,18 +1,10 @@
 # Unit Project -
 
-This is a social media platform where you can share whatever you want without having the negative side of the number of likes and comments, and you can follow anyone and if the other in individual follows you back you can chat together.
+This is a social media platform where you can share whatever you want without having the negative side of the number of likes and comments, and you can follow anyone and if the other individual follows you back you can chat together.
 
 ## Getting Started
 
-npm i
-
-cd client
-
-npm i
-
-cd ..
-
-npm start
+npm i --> cd client -->  npm i  --> cd .. --> npm start
 
 ### Prerequisites
 
