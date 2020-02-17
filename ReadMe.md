@@ -6,8 +6,13 @@ visit https://unit-site.herokuapp.com for live demo
 ## Getting Started
 
 To Run the APP locally , change each of origin in [app.js] line 13 and url in [client\src\environments\environment.ts] to localhost:5000 
-and then cd client =>> ng Build =>> npm start in client 
-cd .. =>> npm start in Unit 
+and then
+1- cd client 
+2- npm i 
+3- npm start
+4- open another teminal in unit folder 
+5- npm i 
+6- npm start
 
 ### Prerequisites
 
@@ -15,8 +20,7 @@ node js
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
-to deploy , you will only need to change each of the following to ur hostname 
+you will only need to change each of the following to ur hostname 
 1- origin in [app.js] line 13  
 2- and url in [client\src\environments\environment.ts] 
 
