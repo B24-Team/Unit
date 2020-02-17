@@ -5,56 +5,22 @@ visit https://unit-site.herokuapp.com for live demo
 
 ## Getting Started
 
-npm i --> cd client -->  npm i  --> cd .. --> npm start
+To Run the APP locally , change each of origin in [app.js] line 13 and url in [client\src\environments\environment.ts] to localhost:5000 
+and then cd client =>> ng Build =>> npm start in client 
+cd .. =>> npm start in Unit 
 
 ### Prerequisites
 
 node js
 
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
 ## Deployment
 
 Add additional notes about how to deploy this on a live system
+to deploy , you will only need to change each of the following to ur hostname 
+1- origin in [app.js] line 13  
+2- and url in [client\src\environments\environment.ts] 
 
 ## Built With
-
 * postgresql
 * mongodb
 * bootstrap
