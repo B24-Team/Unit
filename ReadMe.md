@@ -23,6 +23,7 @@ node js
 you will only need to change each of the following to ur hostname 
 1- origin in [app.js] line 13  
 2- and url in [client\src\environments\environment.ts] 
+- then copy the conent of [client\dist\Unit] and pase it in [client\test]
 
 ## Built With
 * postgresql
