@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const socketIO = require("socket.io");
 const http = require("http");
 
+// allowing access to the website
 app.use(
   cors({
     credentials: true,
@@ -14,19 +15,17 @@ app.use(
 );
 app.use(cookieParser());
 app.use(express.json());
-
-
 const port = process.env.PORT || 5000;
 
+// requiring the APIs
 const User = require("./server/routes/api/user");
 const Post = require("./server/routes/api/post.js");
 const Follow = require("./server/routes/api/follow.js");
 const path = require("path");
 const isAuth = require("./server/validation/tokenValidation");
 
+// serving the client folder
 app.use(express.static(__dirname + '/client/test'))
-
-
 
 //////////////////// routes
 app.get("/auth", isAuth, (req, res) => {
@@ -69,6 +68,7 @@ app.post("/updateprofile", isAuth, User.updateProfile);
 const server = http.Server(app);
 const io = socketIO(server);
 
+// requiring the chat connection
 const chatRooms = require("./models/mogooseModels/chatRoom");
 app.get("/chatroom/:room", (req, res, next) => {
   console.log(chatRooms.find);
@@ -128,6 +128,8 @@ io.sockets.on("connection", socket => {
       .emit("typing", { data: data, isTyping: true });
   });
 });
+
+// serving client on first get 
 app.get(/.*/, function (req, res, next) {
   res.sendFile(path.join(__dirname + '/client/test/index.html'))
 })
