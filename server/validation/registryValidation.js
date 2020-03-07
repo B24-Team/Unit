@@ -1,3 +1,8 @@
+//this middleware validates the registery input.once the user submits the sign up form . a post request will be sent to the signup route
+//this middleware checks if the input fields are filled,if they are,a boolean value will be set to true(valid) as a signup successs indicator
+//otherwise, a bunch of errors will be returned
+
+
 const isEmpty = require("is-empty");
 const Validator = require("validator");
 const registeryInputValidation = function(data) {

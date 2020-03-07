@@ -16,14 +16,32 @@ conn.query(postsSchema, (err, data) => {
 });
 
 //posts functionality
+/**
+ * @param{user_id} getposts
+ * @returns {array}
+ * this function will recive the params and send it to the database
+ */
 
 function getposts(user_id) {
   return conn.query(`SELECT * FROM posts WHERE user_id = $1`, [user_id]);
 }
+
+/**
+ * @param{} getAllPosts
+ * @returns {array}
+ * this function will recive the params and send it to the database
+ */
+
 function getAllPosts() {
   return conn.query(`select u.id, u.name, u.username, u.photo, p.post, p.link , p.type , p.created_at
   from users As u JOIN posts AS p ON u.id = p.user_id;`);
 }
+
+/**
+ * @param{post, link, user_id, type} createpost
+ * @returns {array}
+ * this function will recive the params and send it to the database
+ */
 
 function createpost(post, link, user_id, type) {
   return conn.query(
@@ -32,17 +50,30 @@ function createpost(post, link, user_id, type) {
   );
 }
 
+/**
+ * @param{id, user_id} createpost
+ * @returns {array}
+ * this function will recive the params and send it to the database
+ */
+
 function deletepost(id, user_id) {
   return conn.query(
     `DELETE FROM posts WHERE id = '${id}' AND user_id = '${user_id}'`
   );
 }
 
+/**
+ * @param{post, id, user_id} updatepost
+ * @returns {array}
+ * this function will recive the params and send it to the database
+ */
+
 function updatepost(post, id, user_id) {
   return conn.query(
     `UPDATE posts SET post ='${post}' WHERE id = '${id}' AND user_id = '${user_id}'`
   );
 }
+
 module.exports.find = getposts;
 module.exports.create = createpost;
 module.exports.delete = deletepost;

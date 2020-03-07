@@ -1,7 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const randToken = require("rand-token");
+<<<<<<< HEAD
 const nodemailer = require("nodemailer");
+=======
+// const nodemailer = require("nodemailer");
+>>>>>>> a8ac1fba34ab76606f52c7636e9cb10786cecca1
 
 const User = require("./../../../controllers/users");
 const Token = require("./../../../controllers/tokens");
@@ -52,10 +56,10 @@ function signUp(req, res) {
                   username: result.username,
                   name: result.name
                 };
-                //console.log(process.env.secretOrkey);
+                //console.log('this is a secret key');
                 jwt.sign(
                   payload,
-                  process.env.secretOrkey,
+                  'this is a secret key',
                   { expiresIn: 300 },
                   async (err, token) => {
                     var refreshToken = randToken.uid(250);
@@ -78,6 +82,7 @@ function signUp(req, res) {
                       maxAge: 60 * 60 * 1000, // keep it  60 * 60 * 1000
                       httpOnly: true
                     });
+<<<<<<< HEAD
                     console.log("after cookies");
                     let transporter = nodemailer.createTransport({
                       host: req.get("host"),
@@ -107,6 +112,42 @@ function signUp(req, res) {
                         "/confirmation/:" +
                         token +
                         ".\n"
+=======
+                    //
+                    // let transporter = nodemailer.createTransport({
+                    //   host: req.get("host"),
+                    //   port: 465,
+                    //   secure: false, // true for 465, false for other ports
+                    //   service: "gmail",
+                    //   auth: {
+                    //     user: "unitwebsite2020@gmail.com", // generated ethereal user
+                    //     pass: "09009900" // generated ethereal password
+                    //   },
+                    //   tls: {
+                    //     rejectUnauthorized: false
+                    //   }
+                    // });
+                    // console.log(transporter);
+
+                    // // send mail with defined transport object
+                    // let info = transporter.sendMail({
+                    //   from: "no-reply@codemoto.io",
+                    //   to: result.email,
+                    //   subject: "unit membership",
+                    //   text: "Hello  " + result.username + ",\n\n" + "Have fun"
+                    //   // "Please verify your account by clicking the link: \nhttp://" +
+                    //   // req.headers.host +
+                    //   // "/confirmation/:" +
+                    //   // token +
+                    //   // ".\n"
+                    // });
+                    //
+                    return res.json({
+                      payload,
+                      success: true,
+                      token: "Bearer " + token,
+                      refreshToken: refreshTokenYolo
+>>>>>>> a8ac1fba34ab76606f52c7636e9cb10786cecca1
                     });
                     console.log("Message sent: %s", info.messageId);
                     res.status(200).json("email sent");
@@ -132,6 +173,131 @@ function signUp(req, res) {
       .catch(err => console.log(err));
   }
 }
+
+// function signUp(req, res) {
+//   let { errors, isValid } = regiteryValidation(req.body);
+//   if (!isValid) {
+//     // console.log("not valid");
+//     // console.log(errors);
+//     res.status(200).json(errors);
+//   } else {
+//     // console.log("is valid");
+//     var { name, username, email, password, ConfirmPassword } = req.body;
+//     User.find(email)
+//       .then(data => {
+//         //console.log(data);
+//         if (data.rows.length > 0) {
+//           res
+//             .status(200)
+//             .json({ message: "user already exists", success: false });
+//         } else {
+//           //if no user with this email we will hash the password,save the
+//           //user data in the database and generate the authentication token
+//           var password = req.body.password;
+//           let hash = bcrypt.hashSync(password, 12);
+//           var password = hash;
+//           User.create({
+//             name: req.body.name,
+//             username: req.body.username,
+//             email: req.body.email,
+//             password: hash
+//           })
+//             .then(result => {
+//               if (result) {
+//                 // res.redirect('/login')
+//                 //console.log(result);
+//                 var payload = {
+//                   id: result.id,
+//                   email: result.email,
+//                   username: result.username,
+//                   name: result.name
+//                 };
+//                 //console.log(process.env.secretOrkey);
+//                 jwt.sign(
+//                   payload,
+//                   'this is a secret key',
+//                   { expiresIn: 300 },
+//                   async (err, token) => {
+//                     var refreshToken = randToken.uid(250);
+//                     var date = new Date();
+//                     // console.log(refreshToken);
+//                     //console.log(token);
+//                     refreshTokenYolo = refreshToken;
+//                     Token.create(
+//                       token,
+//                       new Date(date.getTime() + 5 * 60 * 1000),
+//                       refreshToken,
+//                       new Date(date.getTime() + 30 * 24 * 60 * 60 * 1000),
+//                       result.id
+//                     );
+//                     res.cookie("refreshtoken", refreshToken, {
+//                       maxAge: 9000000000,
+//                       httpOnly: true
+//                     });
+//                     res.cookie("token", token, {
+//                       maxAge: 60 * 60 * 1000, // keep it  60 * 60 * 1000
+//                       httpOnly: true
+//                     });
+//                     console.log("after cookies");
+//                     let transporter = nodemailer.createTransport({
+//                       host: req.get("host"),
+//                       port: 465,
+//                       secure: false, // true for 465, false for other ports
+//                       service: "gmail",
+//                       auth: {
+//                         user: "unitwebsite2020@gmail.com", // generated ethereal user
+//                         pass: "passpass@0" // generated ethereal password
+//                       },
+//                       tls: {
+//                         rejectUnauthorized: false
+//                       }
+//                     });
+//                     console;
+//                     console.log(transporter);
+
+//                     // send mail with defined transport object
+//                     let info = await transporter.sendMail({
+//                       from: "no-reply@codemoto.io",
+//                       to: result.email,
+//                       subject: "unit membership",
+//                       text: "Hello  " + result.username + ",\n\n" + "Have fun"
+//                       // "Please verify your account by clicking the link: \nhttp://" +
+//                       // req.headers.host +
+//                       // "/confirmation/:" +
+//                       // token +
+//                       // ".\n"
+//                     });
+//                     console.log("Message sent: %s", info.messageId);
+//                     //res.status(200).json("email sent");
+//                     res.status(200).json({
+//                       msg: "email sent",
+//                       payload,
+//                       success: true,
+//                       token: "Bearer " + token,
+//                       refreshToken: refreshTokenYolo
+//                     });
+//                   }
+//                 );
+
+//                 // return res.json({
+//                 //   payload,
+//                 //   success: true,
+//                 //   token: "Bearer " + token,
+//                 //   refreshToken: refreshTokenYolo
+//                 // });
+//                 //) res.status(200).send(result);
+//               }
+//             })
+//             .catch(err => {
+//               if (err) {
+//                 res.sendStatus(401);
+//               }
+//             });
+//         }
+//       })
+//       .catch(err => console.log(err));
+//   }
+// }
 ///////////////////////////////////////////////////////////////////////////////////// LOGIN SECTION
 function logIn(req, res) {
   console.log(req.body);
@@ -154,10 +320,10 @@ function logIn(req, res) {
                 username: data.rows[0].username,
                 name: data.rows[0].name
               };
-              //console.log(process.env.secretOrkey);
+              //console.log('this is a secret key');
               jwt.sign(
                 payload,
-                process.env.secretOrkey,
+                'this is a secret key',
                 { expiresIn: 300 },
                 (err, token) => {
                   var refreshToken = randToken.uid(250);
@@ -266,10 +432,10 @@ function refreshToken(req, res) {
                 email: data.rows[0].email
               };
               // console.log(payload);
-              //console.log(process.env.secretOrkey);
+              //console.log('this is a secret key');
               jwt.sign(
                 payload,
-                process.env.secretOrkey,
+                'this is a secret key',
                 { expiresIn: 300 },
                 (err, token) => {
                   var refreshToken = randToken.uid(250);

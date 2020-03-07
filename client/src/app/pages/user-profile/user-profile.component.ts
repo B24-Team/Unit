@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ActivatedRoute, Router } from "@angular/router";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-user-profile",
@@ -10,53 +11,74 @@ import { ActivatedRoute, Router } from "@angular/router";
 export class UserProfileComponent implements OnInit {
   userData: any;
   followed = false;
+  followingLength: any = 0;
+  followData: Array<any> = [];
+  following: Array<any> = [];
+  followData_sec: Array<any> = [];
+  followers: Array<any> = [];
+  followersLength: any = 0;
+  followersNames: any = "";
+  followersUserNames: any = "";
+  check: any;
+
+  env: any;
 
   constructor(
+    private _http: HttpClient,
     private http: HttpClient,
     private activatedRoute: ActivatedRoute,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
+    this.env = environment["url"]
     this.activatedRoute.params.subscribe(params => {
       var id = params["id"];
+      this.check = params["id"]
       var myId = localStorage.getItem("user_id");
 
       if (myId === id) {
         this.router.navigate(["/profile"]);
       } else {
+
+        this.getFollowing()
+        this.getPeopleFollowingYou()
+
         this.http
-          .post("http://localhost:5000/findById", { user_id: id })
+          .post(`${environment["url"]}/findById`, { user_id: id })
           .subscribe(data => {
             this.userData = data;
             console.log(this.userData, "FROM USER PROF");
           });
       }
       this.http
-        .post("http://localhost:5000/follow/getfollowers", {
+        .post(`${environment["url"]}/follow/getfollowers`, {
           followed_id: id
         })
         .subscribe(data => {
+          console.log(data, "yolo")
+          console.log("my id", myId, " - ", " his id ", id)
           for (var i = 0; i < data["length"]; i++) {
-            if (data[i]["follower_id"].myId === data[i]["followed_id"].id) {
+            if (data[i]["follower_id"] == myId && data[i]["followed_id"] == id) {
               console.log("YOU ARE FOLLOWING HIM");
               this.followed = true;
               return this.followed;
             } else {
               console.log("YOU ARE NOT FOLLOWING HIM");
-              return this.followed;
             }
           }
+          this.followed = false;
+          return this.followed;
           // console.log(data, "data");
           console.log(data, "ppl followed ");
-        });
+        })
     });
   }
 
   follow(id) {
     var follower = localStorage.getItem("user_id");
     this.http
-      .post("http://localhost:5000/follow/create", {
+      .post(`${environment["url"]}/follow/create`, {
         follower_id: follower,
         followed_id: id
       })
@@ -69,13 +91,67 @@ export class UserProfileComponent implements OnInit {
   unFollow(id) {
     var follower = localStorage.getItem("user_id");
     this.http
-      .post("http://localhost:5000/follow/delete", {
+      .post(`${environment["url"]}/follow/delete`, {
         follower_id: follower,
         followed_id: id
       })
       .subscribe(data => {
         this.followed = false;
         console.log(data, "user profile res UNFOLLOW");
+      });
+  }
+
+  getFollowing() {
+    console.log("invoked 1")
+    this._http
+      .get(`${environment["url"]}/follow/getfollowersinfo`)
+      .subscribe((data: Array<any>) => {
+        data.forEach(element => {
+          this.followData.push(element);
+        });
+
+        for (var i = 0; i < this.followData.length; i++) {
+          if (
+            this.followData[i]["follower_id"] == this.check
+          ) {
+            this.following.push(this.followData[i]);
+            this.followingLength = this.following["length"];
+          }
+        }
+        // this.followingLength = this.followData["length"];
+      });
+    console.log("people u follow", this.following);
+  }
+
+  getPeopleFollowingYou() {
+    console.log("invoked 2")
+
+    this._http
+      .get(`${environment["url"]}/follow/getfollowinglist`)
+      .subscribe((data: Array<any>) => {
+        data.forEach(element => {
+          this.followData_sec.push(element);
+        });
+
+        for (var i = 0; i < this.followData_sec.length; i++) {
+          if (
+            this.followData_sec[i]["followed_id"] ==
+            this.check
+          ) {
+            this.followers.push(this.followData_sec[i]);
+            this.followersLength = this.followers["length"];
+            console.log("ayy", this.followersLength);
+
+            this.followers.forEach(element => {
+              this.followersNames += element.name;
+              this.followersUserNames += element.username;
+              // this.followersUserNames += element.username + "<br>";
+              // this.followersPhoto +=
+              //   `http://127.0.0.1:5000/uploads/${element.photo}` + "<br>";
+            });
+          }
+        }
+        console.log("************* people that follow u", this.followers);
       });
   }
 }

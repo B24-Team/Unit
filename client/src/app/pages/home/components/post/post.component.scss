@@ -1,11 +1,10 @@
 #uploadContainer {
   box-shadow: 1px -1px 31px -7px rgba(0, 0, 0, 0.75);
-  height: 2.7%;
+  height: 200px;
+  width: 500px;
   margin-top: 2%;
-  // border: 1px solid #2a263d;
-  text-align: center;
   margin-left: 23%;
-  width: 42%;
+  text-align: center;
   color: white;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -20,6 +19,9 @@
     border: none;
     width: 95%;
     text-decoration: none;
+   
+      resize: none;
+   
     &:focus {
       outline: 0px;
     }
@@ -34,7 +36,6 @@
     p {
       color: rgb(246, 246, 246);
     }
-    // margin-left: 17%;
     #uploadIcon {
       padding: 0;
       margin: 0;
@@ -69,4 +70,8 @@
       transition: 0.3s;
     }
   }
+
+  // #image-preview {
+  //   z-index: 1;
+  // }
 }

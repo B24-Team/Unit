@@ -4,8 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+<<<<<<< HEAD
     "start": "concurrently \"nodemon app.js\" \"npm run client\"",
     "test": "node test.js",
+=======
+    "start": "node app",
+    "test": "echo \"Error: no test specified\" && exit 1",
+>>>>>>> a8ac1fba34ab76606f52c7636e9cb10786cecca1
     "client": "npm run start --prefix client"
   },
   "author": "",

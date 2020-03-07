@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import Swal from "sweetalert2";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-edit",
@@ -17,11 +18,11 @@ export class EditComponent implements OnInit {
   Pass: string = "";
   ConfirmPass: string = "";
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
   ngOnInit() {
     var user_id = localStorage.getItem("user_id");
     this.http
-      .post("http://localhost:5000/findById", { user_id })
+      .post(`${environment["url"]}/findById`, { user_id })
       .subscribe(data => {
         console.log(data);
         this.Email = data[0]["email"];
@@ -74,7 +75,7 @@ export class EditComponent implements OnInit {
     var user_id = localStorage.getItem("user_id");
     if (this.Pass.length >= 6 && this.Pass === this.ConfirmPass) {
       this.http
-        .post("http://localhost:5000/updatepassword", {
+        .post(`${environment["url"]}/updatepassword`, {
           user_id,
           password: this.Pass
         })
@@ -114,7 +115,7 @@ export class EditComponent implements OnInit {
       bio: this.Bio
     };
     this.http
-      .post("http://localhost:5000/updateprofile", obj)
+      .post(`${environment["url"]}/updateprofile`, obj)
       .subscribe(data => {
         if ((data = "Profile Updated !!")) {
           Swal.fire({

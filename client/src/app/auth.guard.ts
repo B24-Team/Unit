@@ -4,6 +4,7 @@ import { CanActivate, Router, UrlTree } from "@angular/router";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
 import { UserService } from "./user.service";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: "root"
@@ -18,14 +19,14 @@ export class AuthGuard implements CanActivate {
     private _router: Router,
     private http: HttpClient,
     private userService: UserService
-  ) {}
+  ) { }
 
   canActivate(): any {
     // if (localStorage.getItem("token")) {
     //   this.tokenValue = localStorage.getItem("token").slice(7);
     // }
     console.log(this.tokenValue, "token from client");
-    return this.http.get("http://localhost:5000/auth").pipe(
+    return this.http.get(`${environment["url"]}/auth`).pipe(
       map(data => {
         console.log(data["message"]);
         if (data["message"] === "all good") {

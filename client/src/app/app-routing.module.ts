@@ -9,8 +9,10 @@ import { AuthGuard } from "./auth.guard";
 import { ProfileComponent } from "./pages/profile/profile.component";
 import { EditComponent } from "./pages/profile/edit/edit.component";
 import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
-import { ChatComponent } from "./chat/chat.component";
-import { ChatroomComponent } from "./chatroom/chatroom.component";
+import { ChatComponent } from "./pages/home/chat/chat.component";
+import { ChatroomComponent } from "./pages/home/chatroom/chatroom.component";
+import { FollowersComponent } from "./pages/profile/info-section/followers/followers.component";
+import { FollowingComponent } from "./pages/profile/info-section/following/following.component";
 const routes: Routes = [
   {
     path: "",
@@ -27,8 +29,30 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: "edit", component: EditComponent, canActivate: [AuthGuard] },
-  { path: "chat", component: ChatComponent },
-  { path: "chatroom", component: ChatroomComponent },
+  { path: "chat", component: ChatComponent, canActivate: [AuthGuard] },
+  { path: "chatroom", component: ChatroomComponent, canActivate: [AuthGuard] },
+  {
+    path: "followers",
+    component: FollowersComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "following",
+    component: FollowingComponent,
+    canActivate: [AuthGuard]
+  },
+
+  {
+    path: "users/:id/followers",
+    component: FollowersComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: "users/:id/following",
+    component: FollowingComponent,
+    canActivate: [AuthGuard]
+  },
+
   { path: "**", component: LandingPageComponent }
 ];
 

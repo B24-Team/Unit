@@ -4,6 +4,12 @@ const IncomingForm = require("formidable").IncomingForm;
 const path = require("path");
 const uniqueId = require("uuid");
 
+/**
+ * @param{req, res} createPost
+ * @returns {object}
+ * this function will recive the params and send it to the controller
+ */
+
 function createPost(req, res) {
   const form = new IncomingForm();
   var user_id;
@@ -17,19 +23,11 @@ function createPost(req, res) {
     if (err) {
       res.send(err);
     }
-    // res.end();
   });
 
   form.on("fileBegin", function(name, file) {
     var id = uniqueId();
     file.path = "folders/uploaded/" + id + "." + file.name.split(".")[1];
-    // console.log(
-    //   path.join(
-    //     __dirname,
-    //     "/../../../../Unit/folders/uploaded/",
-    //     id + "." + file.name.split(".")[1]
-    //   )
-    // );
     link = id + "." + file.name.split(".")[1];
   });
 
@@ -38,7 +36,6 @@ function createPost(req, res) {
     Post.create(postObj)
       .then(data => {
         if (data) {
-          // res.send(postObj);
           Post.getAllPosts()
             .then(data => {
               res.send(data);
@@ -56,6 +53,12 @@ function createPost(req, res) {
   });
 }
 
+/**
+ * @param{req, res} findPost
+ * @returns {array}
+ * this function will recive the params and send it to the controller
+ */
+
 function findPost(req, res) {
   let { user_id } = req.body;
   Post.find(user_id)
@@ -70,6 +73,12 @@ function findPost(req, res) {
       }
     });
 }
+
+/**
+ * @param{req, res} updatePost
+ * @returns {array}
+ * this function will recive the params and send it to the controller
+ */
 
 function updatePost(req, res) {
   let { post, user_id } = req.body;
@@ -87,6 +96,12 @@ function updatePost(req, res) {
     });
 }
 
+/**
+ * @param{req, res} deletePost
+ * @returns {array}
+ * this function will recive the params and send it to the controller
+ */
+
 function deletePost(req, res) {
   var { user_id, id } = req.body;
   Post.delete(id, user_id)
@@ -101,6 +116,12 @@ function deletePost(req, res) {
       }
     });
 }
+
+/**
+ * @param{req, res} getAllPosts
+ * @returns {array}
+ * this function will recive the params and send it to the controller
+ */
 
 function getAllPosts(req, res) {
   Post.getAllPosts()

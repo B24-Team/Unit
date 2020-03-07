@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Router } from "@angular/router";
 import Swal from "sweetalert2";
 import { AbsoluteSourceSpan } from "@angular/compiler";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-nav",
@@ -15,16 +16,17 @@ export class NavComponent implements OnInit {
   photo: string;
 
   token;
-
+  env: any;
   constructor(
     private http: HttpClient,
     private router: Router,
     private _http: HttpClient
-  ) {}
+  ) { }
 
   ngOnInit() {
+    this.env = environment.url
     this._http
-      .post("http://localhost:5000/findById", { user_id: this.user_id })
+      .post(`${environment["url"]}/findById`, { user_id: this.user_id })
       .subscribe(data => {
         console.log(data);
         this.photo = data[0]["photo"];
@@ -32,8 +34,8 @@ export class NavComponent implements OnInit {
     var check = setInterval(() => {
       this.token = localStorage.token;
       if (this.token) {
-        document.getElementById("navBarLandingPg").style.backgroundColor =
-          "#00b0ff";
+        // document.getElementById("navBarLandingPg").style.backgroundColor =
+        //   "#00b0ff";
         document.getElementById("navBarLandingPg").style.position =
           "webkit-sticky";
         document.getElementById("navBarLandingPg").style.position = "fixed";
@@ -46,7 +48,7 @@ export class NavComponent implements OnInit {
     localStorage.removeItem("token");
     const id = Number(localStorage.getItem("user_id"));
     console.log("idddd", id);
-    this.http.post("http://localhost:5000/logout", { id }).subscribe(data => {
+    this.http.post(`${environment["url"]}/logout`, { id }).subscribe(data => {
       console.log(data);
       localStorage.clear();
     });
@@ -78,7 +80,7 @@ export class NavComponent implements OnInit {
       showLoaderOnConfirm: true,
       preConfirm: username => {
         return this.http
-          .post("http://localhost:5000/findUser", { username: username })
+          .post(`${environment["url"]}/findUser`, { username: username })
           .subscribe(response => {
             console.log(response, "ressssponnnnnse");
             if (response["length"] < 1) {
@@ -90,7 +92,7 @@ export class NavComponent implements OnInit {
               console.log(response);
               Swal.fire({
                 title: `${response[0].username}`,
-                imageUrl: `http://127.0.0.1:5000/uploads/${response[0].photo}`,
+                imageUrl: `${environment["url"]}/uploads/${response[0].photo}`,
                 showCancelButton: true,
                 cancelButtonText: "close",
                 confirmButtonText: "view profile"

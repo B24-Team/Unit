@@ -6,15 +6,16 @@ const cookieParser = require("cookie-parser");
 const socketIO = require("socket.io");
 const http = require("http");
 
+// allowing access to the website
 app.use(
   cors({
-    preflightContinue: true,
     credentials: true,
-    origin: "http://localhost:4200"
+    origin: "http://unit-is-online.herokuapp.com"
   })
 );
 app.use(cookieParser());
 app.use(express.json());
+<<<<<<< HEAD
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://localhost:4200");
@@ -25,13 +26,19 @@ app.use(function(req, res, next) {
   next();
 });
 
+=======
+>>>>>>> a8ac1fba34ab76606f52c7636e9cb10786cecca1
 const port = process.env.PORT || 5000;
 
+// requiring the APIs
 const User = require("./server/routes/api/user");
 const Post = require("./server/routes/api/post.js");
 const Follow = require("./server/routes/api/follow.js");
 const path = require("path");
 const isAuth = require("./server/validation/tokenValidation");
+
+// serving the client folder
+app.use(express.static(__dirname + '/client/test'))
 
 //////////////////// routes
 app.get("/auth", isAuth, (req, res) => {
@@ -73,9 +80,14 @@ app.post("/updateprofile", isAuth, User.updateProfile);
 //
 const server = http.Server(app);
 const io = socketIO(server);
+<<<<<<< HEAD
 app.get("/confirmation/:token", (req, res) => {
   res.send("confirmed");
 });
+=======
+
+// requiring the chat connection
+>>>>>>> a8ac1fba34ab76606f52c7636e9cb10786cecca1
 const chatRooms = require("./models/mogooseModels/chatRoom");
 app.get("/chatroom/:room", (req, res, next) => {
   console.log(chatRooms.find);
@@ -98,7 +110,6 @@ io.sockets.on("connection", socket => {
     console.log(chatRooms.find);
     chatRooms
       .find({})
-
       .then(rooms => {
         count = 0;
         rooms.forEach(room => {
@@ -120,7 +131,7 @@ io.sockets.on("connection", socket => {
     });
     chatRooms.update(
       { name: data.room },
-      { $push: { messages: { user: data.user, message: data.message } } },
+      { $push: { messages: { user: data.user, message: data.message, Date: new Date() } } },
       (err, res) => {
         if (err) {
           console.log(err);
@@ -136,6 +147,11 @@ io.sockets.on("connection", socket => {
       .emit("typing", { data: data, isTyping: true });
   });
 });
+
+// serving client on first get 
+app.get(/.*/, function (req, res, next) {
+  res.sendFile(path.join(__dirname + '/client/test/index.html'))
+})
 
 server.listen(port, () =>
   console.log(`Unit :) app listening on port ${port}!`)

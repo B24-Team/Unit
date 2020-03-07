@@ -1,5 +1,11 @@
 const Post = require("../models/posts");
 
+/**
+ * @param{post, link, user_id, type} createPost
+ * @returns {array}
+ * this function will recive the params and send it to the model
+ */
+
 function createPost(postObj) {
   var post = postObj.post;
   var link = postObj.link;
@@ -14,6 +20,12 @@ function createPost(postObj) {
     });
 }
 
+/**
+ * @param{user_id} findPost
+ * @returns {array}
+ * this function will recive the params and send it to the model
+ */
+
 function findPost(user_id) {
   return Post.find(user_id)
     .then(data => {
@@ -23,6 +35,12 @@ function findPost(user_id) {
       throw "post not Found";
     });
 }
+
+/**
+ * @param{} getAllPosts
+ * @returns {array}
+ * this function will recive the params and send it to the model
+ */
 
 function getAllPosts() {
   return Post.getAllPosts()
@@ -34,6 +52,12 @@ function getAllPosts() {
     });
 }
 
+/**
+ * @param{post, id, user_id} updatePost
+ * @returns {string}
+ * this function will recive the params and send it to the model
+ */
+
 function updatePost(post, id, user_id) {
   return Post.update(post, id, user_id)
     .then(data => {
@@ -43,6 +67,12 @@ function updatePost(post, id, user_id) {
       throw "post not found";
     });
 }
+
+/**
+ * @param{id, user_id} deletePost
+ * @returns {string}
+ * this function will recive the params and send it to the model
+ */
 
 function deletePost(id, user_id) {
   return Post.delete(id, user_id)

@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { ObservableLike } from "rxjs";
 import Swal from "sweetalert2";
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: "app-posts-section",
@@ -15,9 +16,11 @@ export class PostsSectionComponent implements OnInit {
   Data: any;
   Filtered: any = [];
 
+  env: any;
+
   getData() {
     return this.http
-      .post("http://localhost:5000/posts/get", { user_id: this.user_id })
+      .post(`${environment["url"]}/posts/get`, { user_id: this.user_id })
       .subscribe(data => {
         this.Data = data;
         this.Filtered = data;
@@ -26,6 +29,7 @@ export class PostsSectionComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.env = environment["url"]
     this.getData();
   }
   filter(event) {
@@ -84,7 +88,7 @@ export class PostsSectionComponent implements OnInit {
       .then(() => {
         if (resultOp) {
           this.http
-            .post("http://localhost:5000/posts/delete", {
+            .post(`${environment["url"]}/posts/delete`, {
               user_id: this.user_id,
               id: footage
             })
@@ -109,7 +113,7 @@ export class PostsSectionComponent implements OnInit {
       heightAuto: true,
       width: 700,
       showConfirmButton: false,
-      imageUrl: `http://127.0.0.1:5000/uploads/${link}`
+      imageUrl: `${environment["url"]}/uploads/${link}`
     });
   }
 }

@@ -1,3 +1,9 @@
+// this function checks if the the user enters a valid data once he wants to signin 
+//first step: if the email or the password are empty  it returs an error
+//if the daa is provided,a boolean value set to true will be passed to the login function in the user file
+
+
+
 const isEmpty = require("is-empty");
 const Validator = require("validator");
 const loginInputValidation = function(data) {

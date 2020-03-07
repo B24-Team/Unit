@@ -1,6 +1,8 @@
 .container {
   margin-top: 5%;
   padding-left: 17.5%;
+  color: white;
+ 
   .example-card {
     border-radius: 20px;
     color: white;
@@ -30,4 +32,8 @@
     // background-image: url("https://material.angular.io/assets/img/examples/shiba1.jpg");
     background-size: cover;
   }
+
 }
+
+  ::ng-deep .mat-tab-list .mat-tab-labels .mat-tab-label {
+    color:rgb(255, 255, 255);}
